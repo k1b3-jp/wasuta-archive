@@ -13,7 +13,8 @@ create table Events (
     event_name text,
     event_time timestamp,
     date timestamp,
-    location text
+    location text,
+    image_url text -- 画像のURLを保存する新しいカラム
 );
 
 -- Event_Tag_Namesテーブルの作成

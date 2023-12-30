@@ -1,16 +1,15 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import supabase from '../utils/supabaseClient'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'わーすたアーカイブ',
-  description: 'わーすたの過去のイベントや撮影動画が見つかるWebサイトです。',
-}
+// export const metadata: Metadata = {
+//   title: 'わーすたアーカイブ',
+//   description: 'わーすたの過去のイベントや撮影動画が見つかるWebサイトです。',
+// }
 
 export default function RootLayout({
   children,
@@ -18,9 +17,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        {children}
+    <html lang="en" style={{ backgroundColor: '#F5F5F7', color: '#1C1C1E' }}>
+      <head>
+      </head>
+      <body className={inter.className} style={{ fontFamily: '"Your Custom Font", sans-serif', margin: 0 }}>
+        <header style={{ padding: '20px', textAlign: 'center' }}>
+          ヘッダーが入る
+        </header>
+        <main>
+          {children}
+        </main>
+        <footer>
+          フッターが入る？
+        </footer>
         <Analytics />
       </body>
     </html>
