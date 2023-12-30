@@ -7,7 +7,12 @@ interface EventCardProps {
   imageUrl: string;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl }) => {
+const EventCard: React.FC<EventCardProps> = ({
+  title,
+  location,
+  date,
+  imageUrl,
+}) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-sm relative">
       <img src={imageUrl} alt={title} className="w-full" />

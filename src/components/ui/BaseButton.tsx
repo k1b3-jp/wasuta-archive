@@ -6,7 +6,11 @@ interface BaseButtonProps {
   disabled?: boolean;
 }
 
-const BaseButton: React.FC<BaseButtonProps> = ({ label, onClick, disabled }) => {
+const BaseButton: React.FC<BaseButtonProps> = ({
+  label,
+  onClick,
+  disabled,
+}) => {
   return (
     <button
       onClick={onClick}
@@ -21,4 +25,3 @@ const BaseButton: React.FC<BaseButtonProps> = ({ label, onClick, disabled }) => 
 };
 
 export default BaseButton;
-
