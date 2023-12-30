@@ -26,7 +26,7 @@ const config: StorybookConfig = {
   },
   webpackFinal: async (config) => {
     // Use PostCSS loader with Tailwind CSS and Autoprefixer
-    config.module.rules.push({
+    config.module?.rules?.push({
       test: /\.css$/,
       use: [
         {

@@ -17,21 +17,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" style={{ backgroundColor: '#F5F5F7', color: '#1C1C1E' }}>
-      <head>
-      </head>
-      <body className={inter.className} style={{ fontFamily: '"Your Custom Font", sans-serif', margin: 0 }}>
-        <header style={{ padding: '20px', textAlign: 'center' }}>
-          ヘッダーが入る
-        </header>
-        <main>
-          {children}
-        </main>
-        <footer>
-          フッターが入る？
-        </footer>
-        <Analytics />
-      </body>
-    </html>
+    <>
+      <header style={{ padding: '20px', textAlign: 'center' }}>
+        ヘッダーが入る
+      </header>
+      <main className={inter.className} style={{ fontFamily: '"Your Custom Font", sans-serif', margin: 0, backgroundColor: '#F5F5F7', color: '#1C1C1E' }}>
+        {children}
+      </main>
+      <footer>
+        フッターが入る？
+      </footer>
+      <Analytics />
+    </>
   )
 }
