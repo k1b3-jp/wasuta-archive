@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import formatDate from '@/utils/formatDate';
 import Image from 'next/image';
+import DefaultLayout from '@/app/layout';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -27,7 +28,7 @@ export const getStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps = async (context) => {
+export const getStaticProps = async (context: any) => {
   console.log('params', context.params.id);
   const { id } = context.params;
 
@@ -100,49 +101,51 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   };
 
   return (
-    <div>
-      {/* 編集モードのUIを条件に応じて表示 */}
-      {isEditMode ? (
-        // イベント詳細の編集フォーム
-        <form onSubmit={handleEditSubmit}>{/* 編集フィールド */}</form>
-      ) : (
-        // イベント詳細の表示
-        <div>
-          <h1>{event.event_name}</h1>
-          <p>{formatDate(event.event_time)}</p>
-          <p>{event.location}</p>
-          <Image
-            src={event.image_url || defaultImageUrl}
-            alt={event.event_name}
-            width={500}
-            height={300}
-          />
-          {/* YouTubeリンクの表示 */}
-          {youtubeLinks.map((link) => (
-            <div key={link.youtube_link_id}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                {link.url}
-              </a>
-            </div>
-          ))}
-        </div>
-      )}
+    <DefaultLayout>
+      <div>
+        {/* 編集モードのUIを条件に応じて表示 */}
+        {isEditMode ? (
+          // イベント詳細の編集フォーム
+          <form onSubmit={handleEditSubmit}>{/* 編集フィールド */}</form>
+        ) : (
+          // イベント詳細の表示
+          <div>
+            <h1>{event.event_name}</h1>
+            <p>{formatDate(event.event_time)}</p>
+            <p>{event.location}</p>
+            <Image
+              src={event.image_url || defaultImageUrl}
+              alt={event.event_name}
+              width={500}
+              height={300}
+            />
+            {/* YouTubeリンクの表示 */}
+            {youtubeLinks.map((link) => (
+              <div key={link.youtube_link_id}>
+                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.url}
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
 
-      {/* 編集モード切替ボタン */}
-      <button onClick={toggleEditMode}>
-        {isEditMode ? '編集をキャンセル' : 'イベントを編集'}
-      </button>
+        {/* 編集モード切替ボタン */}
+        <button onClick={toggleEditMode}>
+          {isEditMode ? '編集をキャンセル' : 'イベントを編集'}
+        </button>
 
-      {/* 編集モード時にYouTubeリンク追加UIを表示 */}
-      {isEditMode && (
-        <div>
-          {/* 新しいYouTubeリンク追加フォーム */}
-          <form onSubmit={handleAddYoutubeLink}>
-            {/* YouTubeリンク入力フィールド */}
-          </form>
-        </div>
-      )}
-    </div>
+        {/* 編集モード時にYouTubeリンク追加UIを表示 */}
+        {isEditMode && (
+          <div>
+            {/* 新しいYouTubeリンク追加フォーム */}
+            <form onSubmit={handleAddYoutubeLink}>
+              {/* YouTubeリンク入力フィールド */}
+            </form>
+          </div>
+        )}
+      </div>
+    </DefaultLayout>
   );
 };
 
