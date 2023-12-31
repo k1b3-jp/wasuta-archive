@@ -4,7 +4,14 @@ import Image from 'next/image';
 
 const defaultImageUrl = '/event-placeholder.png';
 
-const EventCard: React.FC<Event> = ({ title, location, date, imageUrl }) => {
+const EventCard: React.FC<Event> = ({
+  key,
+  title,
+  location,
+  date,
+  imageUrl,
+  id,
+}) => {
   const formattedDate = new Date(date).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: '2-digit',
@@ -27,9 +34,11 @@ const EventCard: React.FC<Event> = ({ title, location, date, imageUrl }) => {
           <div className="text-lg font-semibold">{title}</div>
         </div>
         <div className="text-gray-500 mb-4">{location}</div>
-        <button className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors">
-          詳細を見る
-        </button>
+        <a href={`/events/${id}`}>
+          <button className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors">
+            詳細を見る
+          </button>
+        </a>
       </div>
     </div>
   );

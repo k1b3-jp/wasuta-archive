@@ -3,7 +3,7 @@ import { getEvents } from '../lib/supabase/getEvents';
 import EventCard from '../components/events/EventCard';
 import { Event } from '../types/event';
 interface HomeProps {
-  events: Event[];
+  events: any[];
 }
 
 export async function getStaticProps() {
@@ -41,11 +41,12 @@ const HomePage: React.FC<HomeProps> = ({ events }) => {
           <div className="grid grid-cols-2 gap-4">
             {events?.map((event) => (
               <EventCard
-                key={event.id}
-                title={event.title}
+                key={event.event_id}
+                title={event.event_name}
                 location={event.location}
                 date={event.date}
-                imageUrl={event.imageUrl}
+                imageUrl={event.image_url}
+                id={event.event_id}
               />
             ))}
           </div>
