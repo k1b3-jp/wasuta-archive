@@ -8,14 +8,19 @@ interface GetEventsOptions {
   filterBy?: string;
   filterValue?: any;
   byToday?: boolean;
+  keyword?: string;
 }
 
 export async function getEvents(options?: GetEventsOptions) {
   let query = supabase.from('events').select('*');
 
   // 条件があればクエリに適用します
-  if (options?.filterBy && options?.filterValue !== undefined) {
-    query = query.eq(options.filterBy, options.filterValue);
+  // if (options?.filterBy && options?.filterValue !== undefined) {
+  //   query = query.ilike(options.filterBy, options.filterValue);
+  // }
+
+  if (options?.keyword) {
+    query = query.ilike('event_name', `%${options?.keyword}%`);
   }
 
   // 今日までのイベントを取得する
