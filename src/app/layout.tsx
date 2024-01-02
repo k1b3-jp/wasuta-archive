@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
@@ -21,8 +22,25 @@ export default function RootLayout({
   return (
     <>
       <div className={styles.container}>
-        <header style={{ padding: '20px', textAlign: 'center' }}>
-          ヘッダーが入る
+        <header className="bg-white flex justify-between items-center p-4">
+          <div className="flex">
+            <button className="text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 6h13M8 12h13m-13 6h13"
+                />
+              </svg>
+            </button>
+          </div>
         </header>
         <main
           style={{
