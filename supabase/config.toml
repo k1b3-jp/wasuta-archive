@@ -128,6 +128,12 @@ redirect_uri = ""
 # or any other third-party OIDC providers.
 url = ""
 
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_SECRET)"
+redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
+
 [analytics]
 enabled = false
 port = 54327
