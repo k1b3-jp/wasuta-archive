@@ -1,7 +1,6 @@
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const utcDate = new Date(date.toUTCString());
-  utcDate.setHours(utcDate.getHours() + 9); // UTCからJST（UTC+9時間）に変換
   const jstDate = new Date(utcDate);
 
   const options = {
