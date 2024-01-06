@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import DefaultLayout from '@/app/layout';
 import createEvent from '@/lib/supabase/createEvent';
+import { getEventTags } from '@/lib/supabase/getEventTags';
+import Tag from '@/components/ui/Tag';
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('');
@@ -9,42 +12,87 @@ const CreateEvent = () => {
   const [location, setLocation] = useState('');
   // const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [allTags, setAllTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
-  // 現在ログインしているユーザーを取得する処理
-  const getCurrentUser = async () => {
-    // ログインのセッションを取得する処理
-    const { data } = await supabase.auth.getSession();
-    // セッションがあるときだけ現在ログインしているユーザーを取得する
-    if (data.session !== null) {
-      // supabaseに用意されている現在ログインしているユーザーを取得する関数
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      // currentUserにユーザーのメールアドレスを格納
-      setcurrentUser(user.email);
-      console.log(user);
+  useEffect(() => {
+    //エラーをリセットする
+    setErrorMessage('');
+    fetchAllTags();
+  }, []);
+
+  const fetchAllTags = async () => {
+    const tags = await getEventTags();
+    setAllTags(tags);
+  };
+
+  const handleTagSelect = (tag) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
     }
+  };
+
+  // TODO: ログインしているユーザーの情報を取得する
+  const user = {
+    id: 1,
+    name: 'test user',
+  };
+
+  // 日付と時刻をISO 8601形式に変換します
+  let combinedDateTime = null;
+  if (date && eventTime) {
+    let [year, month, day] = date.split('-');
+    let [hour, minute] = eventTime.split(':');
+    combinedDateTime = new Date(
+      Date.UTC(year, month - 1, day, hour, minute),
+    ).toISOString();
+  }
+
+  // Validation function
+  const validateFields = (fields) => {
+    let errors = [];
+    for (let fieldName in fields) {
+      if (!fields[fieldName]) {
+        errors.push(`${fieldName}は必須です。`);
+      }
+    }
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(' '));
+      return false;
+    }
+    return true;
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    getCurrentUser();
-    const { user } = await supabase.auth.session();
 
     if (user) {
+      // Check if required fields are filled
+      const fields = {
+        イベント名: eventName,
+        日付: date,
+      };
+      if (!validateFields(fields)) return;
+
       try {
         const eventData = {
           eventName,
-          eventTime,
+          eventTime: combinedDateTime,
           date,
           location,
           // imageUrl,
           description,
         };
-        const insertedData = await createEvent(eventData, user.id);
-        console.log('Event created successfully', insertedData);
-        // Reset form or redirect user
+        const insertedData = await createEvent(
+          eventData,
+          user.id,
+          selectedTags,
+        );
+        // TODO: Reset form or redirect user
       } catch (error) {
         console.error('Error creating event', error);
       }
@@ -54,71 +102,72 @@ const CreateEvent = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Create Event</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="eventName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Event Name
-          </label>
-          <input
-            id="eventName"
-            type="text"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="eventTime"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Event Time
-          </label>
-          <input
-            id="eventTime"
-            type="time"
-            value={eventTime}
-            onChange={(e) => setEventTime(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="date"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Date
-          </label>
-          <input
-            id="date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Location
-          </label>
-          <input
-            id="location"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div>
-          {/* <label
+    <DefaultLayout>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Create Event</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="eventName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Event Name
+            </label>
+            <input
+              id="eventName"
+              type="text"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="eventTime"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Event Time
+            </label>
+            <input
+              id="eventTime"
+              type="time"
+              value={eventTime}
+              onChange={(e) => setEventTime(e.target.value)}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date
+            </label>
+            <input
+              id="date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Location
+            </label>
+            <input
+              id="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div>
+            {/* <label
             htmlFor="imageUrl"
             className="block text-sm font-medium text-gray-700"
           >
@@ -131,30 +180,43 @@ const CreateEvent = () => {
             onChange={(e) => setImageUrl(e.target.value)}
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
           /> */}
-        </div>
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
+          </div>
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            ></textarea>
+          </div>
+          <div className="flex flex-wrap gap-2 my-4">
+            {allTags.map((tag) => (
+              <Tag
+                key={tag.id} // タグのIDをkeyプロパティとして使用
+                label={tag.label} // タグの名前をlabelプロパティとして使用
+                selected={selectedTags.includes(tag.id)}
+                onSelect={() => handleTagSelect(tag.id)}
+              />
+            ))}
+          </div>
+          {errorMessage && <p>{errorMessage}</p>}
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Create Event
-        </button>
-      </form>
-    </div>
+            Create Event
+          </button>
+        </form>
+      </div>
+    </DefaultLayout>
   );
 };
 
