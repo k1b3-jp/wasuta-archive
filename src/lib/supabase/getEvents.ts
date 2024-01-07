@@ -5,13 +5,12 @@ interface GetEventsOptions {
   limit?: number;
   sortBy?: string;
   ascending?: boolean;
-  filterBy?: string;
-  filterValue?: any;
   byToday?: boolean;
   keyword?: string;
   startDate?: string;
   endDate?: string;
   tags?: string[];
+  eventId?: number;
 }
 
 export async function getEvents(options?: GetEventsOptions) {
@@ -26,11 +25,12 @@ export async function getEvents(options?: GetEventsOptions) {
     `);
   }
 
-  // 条件があればクエリに適用します
-  // if (options?.filterBy && options?.filterValue !== undefined) {
-  //   query = query.ilike(options.filterBy, options.filterValue);
-  // }
+  // イベントIDでフィルタリング
+  if (options?.eventId) {
+    query = query.match({ event_id: options.eventId });
+  }
 
+  // キーワードでフィルタリング
   if (options?.keyword) {
     query = query.ilike('event_name', `%${options?.keyword}%`);
   }
