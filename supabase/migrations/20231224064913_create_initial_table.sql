@@ -12,7 +12,7 @@ create table Events (
     user_id integer references Users(user_id),
     event_name text,
     event_time timestamp,
-    date timestamp,
+    date date,
     location text,
     image_url text,
     description text
