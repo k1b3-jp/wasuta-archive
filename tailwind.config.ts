@@ -14,6 +14,16 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        ruka: '#F2A2C8',
+        hazuki: '#FBCC7E',
+        ririka: '#7EC8D9',
+        nanase: '#8ABF92',
+        miri: '#C6A4C6',
+      },
+      fontFamily: {
+        NotoSansJP: ['var(--font-NotoSansJP)'],
+      },
     },
   },
   plugins: [],
