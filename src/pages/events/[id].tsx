@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient';
 import formatDate from '@/utils/formatDate';
 import Image from 'next/image';
 import DefaultLayout from '@/app/layout';
+import Link from 'next/link';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -29,7 +30,6 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (context: any) => {
-  console.log('params', context.params.id);
   const { id } = context.params;
 
   let event = null;
@@ -83,67 +83,33 @@ export const getStaticProps = async (context: any) => {
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  // 編集モードの切り替え
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
-  };
-
-  // イベント編集フォームの送信処理
-  const handleEditSubmit = async (updatedEvent) => {
-    // Supabaseを使った更新ロジックを実装してください
-  };
-
-  // 新しいYouTubeリンクの追加処理
-  const handleAddYoutubeLink = async (url) => {
-    // Supabaseを使って新しいYouTubeリンクを追加するロジックを実装してください
-  };
+  const id = event.event_id;
 
   return (
     <DefaultLayout>
       <div>
-        {/* 編集モードのUIを条件に応じて表示 */}
-        {isEditMode ? (
-          // イベント詳細の編集フォーム
-          <form onSubmit={handleEditSubmit}>{/* 編集フィールド */}</form>
-        ) : (
-          // イベント詳細の表示
-          <div>
-            <h1>{event.event_name}</h1>
-            <p>{formatDate(event.event_time)}</p>
-            <p>{event.location}</p>
-            <Image
-              src={event.image_url || defaultImageUrl}
-              alt={event.event_name}
-              width={500}
-              height={300}
-            />
-            {/* YouTubeリンクの表示 */}
-            {youtubeLinks.map((link) => (
-              <div key={link.youtube_link_id}>
-                <a href={link.url} target="_blank" rel="noopener noreferrer">
-                  {link.url}
-                </a>
-              </div>
-            ))}
-          </div>
-        )}
+        <div>
+          <h1>{event.event_name}</h1>
+          <p>{formatDate(event.event_time)}</p>
+          <p>{event.location}</p>
+          <Image
+            src={event.image_url || defaultImageUrl}
+            alt={event.event_name}
+            width={500}
+            height={300}
+          />
+          {/* YouTubeリンクの表示 */}
+          {youtubeLinks.map((link) => (
+            <div key={link.youtube_link_id}>
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.url}
+              </a>
+            </div>
+          ))}
+        </div>
 
         {/* 編集モード切替ボタン */}
-        <button onClick={toggleEditMode}>
-          {isEditMode ? '編集をキャンセル' : 'イベントを編集'}
-        </button>
-
-        {/* 編集モード時にYouTubeリンク追加UIを表示 */}
-        {isEditMode && (
-          <div>
-            {/* 新しいYouTubeリンク追加フォーム */}
-            <form onSubmit={handleAddYoutubeLink}>
-              {/* YouTubeリンク入力フィールド */}
-            </form>
-          </div>
-        )}
+        <Link href={`/events/${id}/edit`}>イベントを編集</Link>
       </div>
     </DefaultLayout>
   );

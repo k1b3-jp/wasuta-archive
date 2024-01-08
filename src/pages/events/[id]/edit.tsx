@@ -42,9 +42,11 @@ const EditEvent = () => {
       setEventName(event[0].event_name);
 
       // ISO 8601形式の日付時間から時間部分のみを取得
-      let timePart = event[0].event_time.split('T')[1].split(':');
-      let formattedTime = `${timePart[0]}:${timePart[1]}`;
-      setEventTime(formattedTime);
+      if (event[0].event_time) {
+        let timePart = event[0].event_time.split('T')[1].split(':');
+        let formattedTime = `${timePart[0]}:${timePart[1]}`;
+        setEventTime(formattedTime);
+      }
 
       setDate(event[0].date);
 
