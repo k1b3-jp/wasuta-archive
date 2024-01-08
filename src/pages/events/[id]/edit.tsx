@@ -8,6 +8,7 @@ import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
 
 const EditEvent = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventName, setEventName] = useState('');
   const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
@@ -20,8 +21,16 @@ const EditEvent = () => {
   const router = useRouter();
   const { id } = router.query; // URLからイベントIDを取得
 
+  const validateAccess = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session !== null) {
+      setIsLoggedIn(true);
+    }
+  };
+
   useEffect(() => {
     setErrorMessage('');
+    validateAccess();
     fetchEventAndTags();
   }, [id]);
 
@@ -79,15 +88,9 @@ const EditEvent = () => {
     return true;
   };
 
-  // TODO: ログインしているユーザーの情報を取得する
-  const user = {
-    id: 1,
-    name: 'test user',
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (user) {
+    if (isLoggedIn) {
       const fields = {
         イベント名: eventName,
         日付: date,
@@ -230,7 +233,8 @@ const EditEvent = () => {
           </div>
           {errorMessage && <p>{errorMessage}</p>}
           <button
-            type="submit"
+            type="button"
+            onClick={handleSubmit}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Update Event

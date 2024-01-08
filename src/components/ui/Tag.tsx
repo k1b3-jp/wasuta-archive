@@ -14,6 +14,7 @@ const Tag: React.FC<TagProps> = ({ label, selected, onSelect }) => {
 
   return (
     <button
+      type="button"
       onClick={onSelect}
       className={`text-sm font-medium px-4 py-2 rounded-full transition duration-300 ease-in-out ${buttonStyles}`}
       aria-pressed={selected}

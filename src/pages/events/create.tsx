@@ -6,6 +6,7 @@ import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
 
 const CreateEvent = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventName, setEventName] = useState('');
   const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
@@ -16,9 +17,17 @@ const CreateEvent = () => {
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
+  const validateAccess = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session !== null) {
+      setIsLoggedIn(true);
+    }
+  };
+
   useEffect(() => {
     //エラーをリセットする
     setErrorMessage('');
+    validateAccess();
     fetchAllTags();
   }, []);
 
@@ -33,12 +42,6 @@ const CreateEvent = () => {
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
-  };
-
-  // TODO: ログインしているユーザーの情報を取得する
-  const user = {
-    id: 1,
-    name: 'test user',
   };
 
   // 日付と時刻をISO 8601形式に変換します
@@ -70,7 +73,7 @@ const CreateEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (user) {
+    if (isLoggedIn) {
       // Check if required fields are filled
       const fields = {
         イベント名: eventName,
@@ -87,11 +90,7 @@ const CreateEvent = () => {
           // imageUrl,
           description,
         };
-        const insertedData = await createEvent(
-          eventData,
-          user.id,
-          selectedTags,
-        );
+        const insertedData = await createEvent(eventData, selectedTags);
         // TODO: Reset form or redirect user
       } catch (error) {
         console.error('Error creating event', error);
@@ -208,8 +207,8 @@ const CreateEvent = () => {
           </div>
           {errorMessage && <p>{errorMessage}</p>}
           <button
+            type="button"
             onClick={handleSubmit}
-            type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Create Event

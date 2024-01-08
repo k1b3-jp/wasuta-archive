@@ -9,7 +9,7 @@ interface EventData {
   description: string;
 }
 
-const createEvent = async (data: EventData, userId: string, tags: number[]) => {
+const createEvent = async (data: EventData, tags: number[]) => {
   const {
     eventName,
     eventTime,
@@ -24,7 +24,6 @@ const createEvent = async (data: EventData, userId: string, tags: number[]) => {
       .from('events')
       .insert([
         {
-          user_id: userId,
           event_name: eventName,
           event_time: eventTime,
           date: new Date(date),
