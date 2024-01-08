@@ -13,6 +13,7 @@
     "format:check": "eslint-config-prettier 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
+    "@next/third-parties": "^14.0.4",
     "@supabase/auth-ui-react": "^0.4.6",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.1",

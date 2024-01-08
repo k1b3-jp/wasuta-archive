@@ -2,6 +2,7 @@ import DefaultLayout from '../app/layout';
 import { getEvents } from '../lib/supabase/getEvents';
 import EventCard from '../components/events/EventCard';
 import { Event } from '../types/event';
+import MovieCard from '@/components/events/MovieCard';
 interface HomeProps {
   events: any[];
 }
