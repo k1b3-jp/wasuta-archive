@@ -1,15 +1,6 @@
--- Usersテーブルの作成
-create table Users (
-    user_id integer primary key generated always as identity,
-    email text,
-    password text,
-    nickname text
-);
-
 -- Eventsテーブルの作成
 create table Events (
     event_id integer primary key generated always as identity,
-    user_id integer references Users(user_id),
     event_name text,
     event_time timestamp,
     date date,
