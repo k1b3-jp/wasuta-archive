@@ -155,6 +155,10 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             height={300}
           />
           {/* YouTubeリンクの表示 */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold">イベントの動画</h3>
+            <Link href={`/events/${id}/movie`}>もっと見る</Link>
+          </div>
           {youtubeLinks.map((link) => (
             <div key={link.youtube_link_id}>
               <MovieCard videoUrl={link.youtube_links.url}></MovieCard>

@@ -22,8 +22,6 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ videoUrl }) => {
   const videoId = extractYouTubeVideoId(videoUrl); // URLからビデオIDを抽出
-  console.log('videoUrl', videoUrl);
-  console.log('videoId', videoId);
 
   return (
     <div>
