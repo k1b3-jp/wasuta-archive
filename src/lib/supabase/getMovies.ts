@@ -13,9 +13,7 @@ export const getMovies = async (eventId: number) => {
     )
     .eq('event_id', eventId);
 
-  console.log(data);
-
-  if (error) throw new Error(`Error fetching Youtube links: ${error.message}`);
+  if (error) throw new Error(`Error fetching Youtube links: ${error?.message}`);
   return data;
 };
 
