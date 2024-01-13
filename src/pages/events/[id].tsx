@@ -131,7 +131,6 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           selectedYoutubeTags,
           id,
         );
-        console.log('insertedData', insertedData);
         // TODO: Reset form or redirect user
       } catch (error) {
         console.error('Error creating Youtube Link', error);

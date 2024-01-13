@@ -38,7 +38,6 @@ const EditEvent = () => {
     if (id) {
       // 既存のイベントデータを取得
       const event = await getEvents({ eventId: id });
-      console.log('event', event);
       setEventName(event[0].event_name);
 
       // ISO 8601形式の日付時間から時間部分のみを取得

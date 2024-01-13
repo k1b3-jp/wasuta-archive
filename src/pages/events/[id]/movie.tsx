@@ -36,7 +36,7 @@ const EventMovieList = () => {
             <div key={movie.youtube_link_id}>
               <MovieCard videoUrl={movie.youtube_links.url} />
               <button onClick={() => deleteMovie(movie.youtube_link_id)}>
-                Delete
+                動画を削除する
               </button>
             </div>
           ))}

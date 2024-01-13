@@ -11,8 +11,6 @@ export const createYoutubeLink = async (
     .insert([{ url: url }])
     .select();
 
-  console.log(linkData[0]);
-
   if (linkError)
     throw new Error(`Error adding Youtube link: ${linkError.message}`);
 

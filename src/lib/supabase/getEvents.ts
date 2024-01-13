@@ -51,7 +51,6 @@ export async function getEvents(options?: GetEventsOptions) {
   }
 
   // タグによるフィルター
-  console.log(options?.tags);
   if (options?.tags && options.tags.length > 0) {
     query = query.in('event_tags.tag_id', options.tags);
   }
@@ -70,8 +69,6 @@ export async function getEvents(options?: GetEventsOptions) {
   if (error) {
     throw new Error(error.message);
   }
-
-  console.log(events);
 
   return events;
 }
