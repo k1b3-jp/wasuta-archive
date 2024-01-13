@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import formatDate from '@/utils/formatDate';
 import Image from 'next/image';
 import DefaultLayout from '@/app/layout';
 import Link from 'next/link';
+import Tag from '@/components/ui/Tag';
+import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
+import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
+import MovieCard from '@/components/events/MovieCard';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -53,11 +57,11 @@ export const getStaticProps = async (context: any) => {
 
     // イベントに紐づくYouTubeリンクを取得
     let { data: linksData, error: linksError } = await supabase
-      .from('Event_Youtube_Links')
+      .from('event_youtube_links')
       .select(
         `
         youtube_link_id,
-        Youtube_Links (
+        youtube_links (
           url
         )
       `,
@@ -83,7 +87,59 @@ export const getStaticProps = async (context: any) => {
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
-  const id = event.event_id;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const validateAccess = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session !== null) {
+      setIsLoggedIn(true);
+    }
+  };
+
+  const id = event?.event_id;
+  const [url, setUrl] = useState('');
+
+  const [allYoutubeTags, setAllYoutubeTags] = useState([]);
+  const [selectedYoutubeTags, setSelectedYoutubeTags] = useState([]);
+  const fetchAllYoutubeTags = async () => {
+    const tags = await getYoutubeTags();
+    setAllYoutubeTags(tags);
+  };
+  const handleYoutubeTagSelect = (tag) => {
+    if (selectedYoutubeTags.includes(tag)) {
+      setSelectedYoutubeTags(selectedYoutubeTags.filter((t) => t !== tag));
+    } else {
+      setSelectedYoutubeTags([...selectedYoutubeTags, tag]);
+    }
+  };
+
+  useEffect(() => {
+    validateAccess();
+    fetchAllYoutubeTags();
+  }, []);
+
+  // YouTubeリンクの追加処理
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (isLoggedIn) {
+      // TODO: バリデーション
+      // if (!validateFields({ url })) return;
+
+      try {
+        const insertedData = await createYoutubeLink(
+          url,
+          selectedYoutubeTags,
+          id,
+        );
+        console.log('insertedData', insertedData);
+        // TODO: Reset form or redirect user
+      } catch (error) {
+        console.error('Error creating Youtube Link', error);
+      }
+    } else {
+      console.error('No user logged in');
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -101,14 +157,43 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           {/* YouTubeリンクの表示 */}
           {youtubeLinks.map((link) => (
             <div key={link.youtube_link_id}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                {link.url}
-              </a>
+              <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
             </div>
           ))}
+          {/* Youtubeリンクに新規登録するフォーム */}
+          <div>
+            <label
+              htmlFor="url"
+              className="block text-sm font-medium text-gray-700"
+            >
+              URL
+            </label>
+            <input
+              id="url"
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 my-4">
+            {allYoutubeTags.map((tag) => (
+              <Tag
+                key={tag.id} // タグのIDをkeyプロパティとして使用
+                label={tag.label} // タグの名前をlabelプロパティとして使用
+                selected={selectedYoutubeTags.includes(tag.id)}
+                onSelect={() => handleYoutubeTagSelect(tag.id)}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Link
+          </button>
         </div>
-
-        {/* 編集モード切替ボタン */}
         <Link href={`/events/${id}/edit`}>イベントを編集</Link>
       </div>
     </DefaultLayout>
