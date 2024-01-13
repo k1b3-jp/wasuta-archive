@@ -3,6 +3,7 @@ import MovieCard from '@/components/events/MovieCard';
 import { useRouter } from 'next/router';
 import { use, useEffect, useState } from 'react';
 import { getMovies } from '@/lib/supabase/getMovies';
+import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
 
 const EventMovieList = () => {
   const router = useRouter();
@@ -11,16 +12,20 @@ const EventMovieList = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
+    const fetchMovies = async () => {
+      if (id !== undefined) {
+        const fetchedMovies = await getMovies(id);
+        setMovies(fetchedMovies);
+      }
+    };
+
     if (id !== undefined) {
       fetchMovies();
     }
   }, [id]);
 
-  const fetchMovies = async () => {
-    if (id !== undefined) {
-      const fetchedMovies = await getMovies(id);
-      setMovies(fetchedMovies);
-    }
+  const deleteMovie = async (youtubeLinkId) => {
+    await deleteYoutubeLink(youtubeLinkId, id);
   };
 
   return (
@@ -28,7 +33,12 @@ const EventMovieList = () => {
       <div>
         <main className="grid grid-cols-1 gap-4">
           {movies.map((movie) => (
-            <MovieCard videoUrl={movie.youtube_links.url} />
+            <div key={movie.youtube_link_id}>
+              <MovieCard videoUrl={movie.youtube_links.url} />
+              <button onClick={() => deleteMovie(movie.youtube_link_id)}>
+                Delete
+              </button>
+            </div>
           ))}
         </main>
       </div>
