@@ -63,39 +63,41 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="mb-8 p-10">
-            <input
-              className="border border-gray-300 rounded-md p-2"
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <input
-              className="border border-gray-300 rounded-md p-2 ml-2"
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <input
-              className="border border-gray-300 rounded-md p-2 ml-2"
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-            <div className="flex flex-wrap gap-2 my-4">
-              {allTags.map((tag) => (
-                <Tag
-                  key={tag.id} // タグのIDをkeyプロパティとして使用
-                  label={tag.label} // タグの名前をlabelプロパティとして使用
-                  selected={selectedTags.includes(tag.id)}
-                  onSelect={() => handleTagSelect(tag.id)}
-                />
-              ))}
+          <div className="search-form mb-8 p-10 bg-bg-light-pink bg-100vw flex">
+            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
+              <input
+                className="border border-gray-300 rounded-md p-2"
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <input
+                className="border border-gray-300 rounded-md p-2 ml-2"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+              <input
+                className="border border-gray-300 rounded-md p-2 ml-2"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-2 my-4">
+                {allTags.map((tag) => (
+                  <Tag
+                    key={tag.id} // タグのIDをkeyプロパティとして使用
+                    label={tag.label} // タグの名前をlabelプロパティとして使用
+                    selected={selectedTags.includes(tag.id)}
+                    onSelect={() => handleTagSelect(tag.id)}
+                  />
+                ))}
+              </div>
+              <BaseButton onClick={handleSearch} label="検索" />
             </div>
-            <BaseButton onClick={handleSearch} label="検索" />
           </div>
-          <main className="flex flex-wrap gap-10">
+          <main className="event-list grid-base py-10">
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {events.map((event) => (

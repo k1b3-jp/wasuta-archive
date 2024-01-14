@@ -7,8 +7,9 @@ interface TagProps {
 }
 
 const Tag: React.FC<TagProps> = ({ label, selected, onSelect }) => {
-  const selectedStyles = 'bg-blue-600 text-white';
-  const unselectedStyles = 'bg-blue-100 text-blue-600';
+  const selectedStyles = 'bg-text-deep-green text-white';
+  const unselectedStyles =
+    'bg-white text-text-deep-green border border-text-green';
 
   const buttonStyles = selected ? selectedStyles : unselectedStyles;
 

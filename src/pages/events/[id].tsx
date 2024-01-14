@@ -8,6 +8,7 @@ import Tag from '@/components/ui/Tag';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
 import MovieCard from '@/components/events/MovieCard';
+import BaseButton from '@/components/ui/BaseButton';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -143,61 +144,91 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   return (
     <DefaultLayout>
       <div>
-        <div>
-          <h1>{event.event_name}</h1>
-          <p>{formatDate(event.event_time)}</p>
-          <p>{event.location}</p>
-          <Image
-            src={event.image_url || defaultImageUrl}
-            alt={event.event_name}
-            width={500}
-            height={300}
-          />
-          {/* YouTubeリンクの表示 */}
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold">イベントの動画</h3>
-            <Link href={`/events/${id}/movie`}>もっと見る</Link>
-          </div>
-          {youtubeLinks.map((link) => (
-            <div key={link.youtube_link_id}>
-              <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
-            </div>
-          ))}
-          {/* Youtubeリンクに新規登録するフォーム */}
-          <div>
-            <label
-              htmlFor="url"
-              className="block text-sm font-medium text-gray-700"
-            >
-              URL
-            </label>
-            <input
-              id="url"
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+        <div className="event">
+          <div className="event-head bg-100vw bg-bg-light-pink p-16">
+            <Image
+              src={event.image_url || defaultImageUrl}
+              alt={event.event_name}
+              width={500}
+              height={300}
+              className="mx-auto"
             />
           </div>
-          <div className="flex flex-wrap gap-2 my-4">
-            {allYoutubeTags.map((tag) => (
-              <Tag
-                key={tag.id} // タグのIDをkeyプロパティとして使用
-                label={tag.label} // タグの名前をlabelプロパティとして使用
-                selected={selectedYoutubeTags.includes(tag.id)}
-                onSelect={() => handleYoutubeTagSelect(tag.id)}
-              />
-            ))}
+          <div className="event-detail p-16">
+            <h1 className="text-text-yellow font-bold text-2xl mb-6">
+              {event.event_name}
+            </h1>
+            <h4 className="text-lg mb-4">
+              日時：{formatDate(event.event_time)}
+            </h4>
+            <h4 className="text-lg mb-4">場所：{event.location}</h4>
+            <p className="p-4 mb-4">{event.description}</p>
+            <BaseButton
+              link={`/events/${id}/edit`}
+              label="イベントを編集"
+            ></BaseButton>
           </div>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Add Link
-          </button>
+          {/* YouTubeリンクの表示 */}
+          <div className="event-movie bg-bg-light-pink bg-100vw">
+            <div className="container mx-auto p-16">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-2xl font-bold">MOVIE</h3>
+                <BaseButton
+                  label="もっと見る"
+                  link={`/events/${id}/movie`}
+                  yellow
+                />
+              </div>
+              <div
+                style={{ marginRight: 'calc(50% - 50vw)' }}
+                className="movie-list min-h-60 flex items-center overflow-scroll mb-6"
+              >
+                {youtubeLinks.length > 0 ? (
+                  youtubeLinks.map((link) => (
+                    <div key={link.youtube_link_id} className="min-w-80 m-4">
+                      <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
+                    </div>
+                  ))
+                ) : (
+                  <p>動画が登録されていません😢</p>
+                )}{' '}
+              </div>
+              {/* Youtubeリンクに新規登録するフォーム */}
+              <div className="add-movie bg-white p-10 rounded-lg border border-gray-100">
+                <h4 className="text-xl font-bold text-text-deep-green mb-10">
+                  動画の登録
+                </h4>
+                <div className="mb-8">
+                  <label
+                    htmlFor="url"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    URL
+                  </label>
+                  <input
+                    id="url"
+                    type="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                  />
+                </div>
+                <label className="block text-sm font-bold mb-2">タグ</label>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {allYoutubeTags.map((tag) => (
+                    <Tag
+                      key={tag.id} // タグのIDをkeyプロパティとして使用
+                      label={tag.label} // タグの名前をlabelプロパティとして使用
+                      selected={selectedYoutubeTags.includes(tag.id)}
+                      onSelect={() => handleYoutubeTagSelect(tag.id)}
+                    />
+                  ))}
+                </div>
+                <BaseButton label="登録する" onClick={handleSubmit} />
+              </div>
+            </div>
+          </div>
         </div>
-        <Link href={`/events/${id}/edit`}>イベントを編集</Link>
       </div>
     </DefaultLayout>
   );

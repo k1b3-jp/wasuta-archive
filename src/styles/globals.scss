@@ -46,3 +46,15 @@ h2 {
 h3 {
   color: $text-yellow;
 }
+
+.bg-100vw {
+  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw);
+}
+
+.grid-base {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 320px);
+  justify-content: center;
+  grid-gap: 2rem;
+}

@@ -4,6 +4,7 @@ import DefaultLayout from '@/app/layout';
 import createEvent from '@/lib/supabase/createEvent';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
+import BaseButton from '@/components/ui/BaseButton';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -102,67 +103,57 @@ const CreateEvent = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Create Event</h1>
+      <div className="container mx-auto p-10">
+        <h1 className="text-2xl font-bold mb-8 text-text-yellow">
+          イベントの作成
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="eventName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Event Name
+            <label htmlFor="eventName" className="block text-sm font-bold mb-2">
+              イベント名
             </label>
             <input
               id="eventName"
               type="text"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
-            <label
-              htmlFor="eventTime"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Event Time
-            </label>
-            <input
-              id="eventTime"
-              type="time"
-              value={eventTime}
-              onChange={(e) => setEventTime(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date
+            <label htmlFor="date" className="block text-sm font-bold mb-2">
+              日付
             </label>
             <input
               id="date"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Location
+            <label htmlFor="eventTime" className="block text-sm font-bold mb-2">
+              時刻
+            </label>
+            <input
+              id="eventTime"
+              type="time"
+              value={eventTime}
+              onChange={(e) => setEventTime(e.target.value)}
+              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="location" className="block text-sm font-bold mb-2">
+              場所
             </label>
             <input
               id="location"
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
@@ -183,19 +174,20 @@ const CreateEvent = () => {
           <div>
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-bold mb-2"
             >
-              Description
+              説明文
             </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            ></textarea>
+              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+            />
           </div>
-          <div className="flex flex-wrap gap-2 my-4">
+          <label className="block text-sm font-bold mb-2">タグ</label>
+          <div className="flex flex-wrap gap-2 pb-8">
             {allTags.map((tag) => (
               <Tag
                 key={tag.id} // タグのIDをkeyプロパティとして使用
@@ -206,13 +198,7 @@ const CreateEvent = () => {
             ))}
           </div>
           {errorMessage && <p>{errorMessage}</p>}
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Create Event
-          </button>
+          <BaseButton label="作成する" onClick={handleSubmit} />
         </form>
       </div>
     </DefaultLayout>
