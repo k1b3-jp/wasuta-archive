@@ -9,6 +9,7 @@ import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
+import { getMovies } from '@/lib/supabase/getMovies';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -57,17 +58,13 @@ export const getStaticProps = async (context: any) => {
     }
 
     // イベントに紐づくYouTubeリンクを取得
-    let { data: linksData, error: linksError } = await supabase
-      .from('event_youtube_links')
-      .select(
-        `
-        youtube_link_id,
-        youtube_links (
-          url
-        )
-      `,
-      )
-      .eq('event_id', id);
+    let linksData, linksError;
+    try {
+      linksData = await getMovies({ eventId: id, limit: 6 });
+    } catch (error) {
+      console.error(`Error fetching movies: ${error.message}`);
+      linksData = [];
+    }
 
     if (linksError) throw linksError;
 

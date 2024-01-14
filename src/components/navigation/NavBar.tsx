@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabaseClient';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);

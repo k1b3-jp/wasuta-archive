@@ -14,7 +14,7 @@ const EventMovieList = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       if (id !== undefined) {
-        const fetchedMovies = await getMovies(id);
+        const fetchedMovies = await getMovies({ eventId: id });
         setMovies(fetchedMovies);
       }
     };
