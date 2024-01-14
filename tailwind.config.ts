@@ -20,6 +20,11 @@ const config: Config = {
         ririka: '#7EC8D9',
         nanase: '#8ABF92',
         miri: '#C6A4C6',
+        'bg-pink': '#fbdfe0',
+        'bg-purple': '#e1c4da',
+        'font-color': '#43322d',
+        'text-yellow': '#dba926',
+        'text-green': '#b4d6d4',
       },
       fontFamily: {
         NotoSansJP: ['var(--font-NotoSansJP)'],

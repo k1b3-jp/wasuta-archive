@@ -36,10 +36,10 @@ const NavBar = () => {
     <header>
       <nav className="flex items-center p-3 flex-wrap">
         <Link href="/" className="p-2 mr-4 inline-flex items-center">
-          アイコン差込予定
+          HOME
         </Link>
         <button
-          className="text-black inline-flex p-3 hover:bg-gray-900 rounded lg:hidden ml-auto hover:text-white outline-none"
+          className="inline-flex p-3 rounded lg:hidden ml-auto outline-none"
           onClick={() => setIsNavOpen(!isNavOpen)}
         >
           <svg
@@ -66,33 +66,33 @@ const NavBar = () => {
           <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
             <Link
               href="/events"
-              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-gray-400 items-center justify-center hover:bg-gray-900 hover:text-white"
+              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
             >
-              <span>イベントを探す</span>
+              <span>EVENTS</span>
             </Link>
             <Link
               href="/events/create"
-              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-gray-400 items-center justify-center hover:bg-gray-900 hover:text-white"
+              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
             >
-              <span>イベントを作る</span>
+              <span>CREATE EVENT</span>
             </Link>
             <Link
               href="#"
-              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-gray-400 items-center justify-center hover:bg-gray-900 hover:text-white"
+              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
             >
-              <span>年表を見る</span>
+              <span>HISTORY</span>
             </Link>
             {isLoggedIn ? (
               <button
                 onClick={() => Logout()}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-gray-400 items-center justify-center hover:bg-gray-900 hover:text-white"
+                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
               >
-                <span>ログアウト</span>
+                <span>Logout</span>
               </button>
             ) : (
               <Link href={'/login'}>
-                <button className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-gray-400 items-center justify-center hover:bg-gray-900 hover:text-white">
-                  <span>ログイン/新規登録</span>
+                <button className="lg:inline-flex lg:w-auto w-full px-4 py-3 rounded items-center justify-center">
+                  <span>Login/SignUp</span>
                 </button>
               </Link>
             )}

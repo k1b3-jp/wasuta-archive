@@ -4,6 +4,7 @@ import EventCard from '@/components/events/EventCard';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
+import BaseButton from '@/components/ui/BaseButton';
 
 const EventListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,9 +61,9 @@ const EventListPage = () => {
 
   return (
     <DefaultLayout>
-      <div className="bg-gray-100 py-8">
-        <div className="max-w-md mx-auto">
-          <div className="mb-4">
+      <div>
+        <div className="mx-auto">
+          <div className="mb-8 p-10">
             <input
               className="border border-gray-300 rounded-md p-2"
               type="text"
@@ -92,14 +93,9 @@ const EventListPage = () => {
                 />
               ))}
             </div>
-            <button
-              onClick={handleSearch}
-              className="p-2 bg-blue-500 text-white rounded-md ml-2"
-            >
-              検索
-            </button>
+            <BaseButton onClick={handleSearch} label="検索" />
           </div>
-          <main className="grid grid-cols-1 gap-4">
+          <main className="flex flex-wrap gap-10">
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {events.map((event) => (
