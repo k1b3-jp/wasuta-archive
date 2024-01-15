@@ -29,7 +29,7 @@ const NavBar = () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw new Error(error.message);
     // ログアウトを反映させるためにリロードさせる
-    router.reload();
+    router.refresh();
   };
 
   return (
