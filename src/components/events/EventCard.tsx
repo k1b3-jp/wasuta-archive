@@ -1,6 +1,7 @@
 import React from 'react';
 import { Event } from '../../types/event';
 import Image from 'next/image';
+import BaseButton from '../ui/BaseButton';
 
 const defaultImageUrl = '/event-placeholder.png';
 
@@ -18,7 +19,7 @@ const EventCard: React.FC<Event> = ({
     day: '2-digit',
   });
   return (
-    <div className="max-w-xs bg-white rounded-lg shadow-md overflow-hidden max-w-sm relative">
+    <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
       <Image
         src={imageUrl || defaultImageUrl}
         alt={title}
@@ -26,7 +27,7 @@ const EventCard: React.FC<Event> = ({
         height={300}
         className="w-full"
       />
-      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg label">
+      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-blue text-white">
         {formattedDate}
       </div>
       <div className="p-4">
@@ -34,11 +35,7 @@ const EventCard: React.FC<Event> = ({
           <div className="text-lg font-semibold">{title}</div>
         </div>
         <div className="text-gray-500 mb-4 min-h-6">{location}</div>
-        <a href={`/events/${id}`}>
-          <button className="w-full text-white py-2 rounded-md transition-colors">
-            詳細を見る
-          </button>
-        </a>
+        <BaseButton label="詳細を見る" link={`/events/${id}`} />
       </div>
     </div>
   );

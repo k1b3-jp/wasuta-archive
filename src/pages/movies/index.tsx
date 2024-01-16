@@ -57,7 +57,7 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form mb-8 p-10 bg-bg-light-pink bg-100vw flex">
+          <div className="search-form mb-8 p-10 bg-light-pink bg-100vw flex">
             <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
               <div className="flex flex-wrap gap-2 my-4">
                 {allTags.map((tag) => (

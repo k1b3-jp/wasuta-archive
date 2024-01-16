@@ -47,7 +47,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
       <div>
         <section>{/* TODO:最新イベントのスライド？ */}</section>
         <section className="welcome p-10 flex flex-col">
-          <h2 className="mx-auto text-4xl font-bold my-8">
+          <h2 className="mx-auto text-4xl font-bold my-8 text-deep-pink">
             Welcome to Wasuta Archive!
           </h2>
           <p className="mx-auto my-8 text-center">
@@ -56,10 +56,10 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
             イベントや動画の検索は上の検索バーからできます。
           </p>
         </section>
-        <section className="bg-100vw bg-bg-light-pink pt-4">
+        <section className="bg-100vw bg-light-pink pt-4">
           <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">NEW MOVIE</h3>
+              <h3 className="text-xl font-bold text-deep-pink">NEW MOVIE</h3>
               <BaseButton label="もっと見る" link="/movies" />
             </div>
             <div
@@ -80,7 +80,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
         </section>
         <section className="py-4">
           <div className="flex justify-between items-center mb-4 p-4">
-            <h3 className="text-xl font-bold">NEW EVENT</h3>
+            <h3 className="text-xl font-bold text-deep-pink">NEW EVENT</h3>
             <BaseButton label="もっと見る" link="/events" />
           </div>
           <div className="grid-base">

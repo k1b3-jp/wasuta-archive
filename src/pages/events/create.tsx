@@ -104,7 +104,7 @@ const CreateEvent = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-10">
-        <h1 className="text-2xl font-bold mb-8 text-text-yellow">
+        <h1 className="text-2xl font-bold mb-8 text-deep-pink">
           イベントの作成
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">

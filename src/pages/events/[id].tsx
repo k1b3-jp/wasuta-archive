@@ -142,7 +142,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
     <DefaultLayout>
       <div>
         <div className="event">
-          <div className="event-head bg-100vw bg-bg-light-pink p-16">
+          <div className="event-head bg-100vw bg-light-pink p-16">
             <Image
               src={event.image_url || defaultImageUrl}
               alt={event.event_name}
@@ -152,7 +152,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             />
           </div>
           <div className="event-detail p-16">
-            <h1 className="text-text-yellow font-bold text-2xl mb-6">
+            <h1 className="text-deep-pink font-bold text-2xl mb-6">
               {event.event_name}
             </h1>
             <h4 className="text-lg mb-4">
@@ -166,7 +166,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             ></BaseButton>
           </div>
           {/* YouTubeリンクの表示 */}
-          <div className="event-movie bg-bg-light-pink bg-100vw">
+          <div className="event-movie bg-light-pink bg-100vw">
             <div className="container mx-auto p-16">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold">MOVIE</h3>
@@ -192,7 +192,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               </div>
               {/* Youtubeリンクに新規登録するフォーム */}
               <div className="add-movie bg-white p-10 rounded-lg border border-gray-100">
-                <h4 className="text-xl font-bold text-text-deep-green mb-10">
+                <h4 className="text-xl font-bold text-deep-blue mb-10">
                   動画の登録
                 </h4>
                 <div className="mb-8">

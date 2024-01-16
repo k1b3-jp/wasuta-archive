@@ -9,44 +9,6 @@ body {
   background-color: #fff;
 }
 
-button {
-  background-color: $bg-purple;
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.label {
-  background-color: $bg-purple;
-  color: #fff;
-}
-
-nav {
-  background-color: $bg-pink;
-  color: $text-yellow;
-  button {
-    background-color: $text-yellow;
-    color: #fff;
-  }
-}
-
-footer {
-  background-color: $bg-purple;
-  color: $font-color;
-}
-
-h1 {
-  color: $text-green;
-}
-
-h2 {
-  color: $text-yellow;
-}
-
-h3 {
-  color: $text-yellow;
-}
-
 .bg-100vw {
   margin-right: calc(50% - 50vw);
   margin-left: calc(50% - 50vw);
