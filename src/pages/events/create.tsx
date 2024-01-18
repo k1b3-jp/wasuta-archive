@@ -5,6 +5,7 @@ import createEvent from '@/lib/supabase/createEvent';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
 import BaseButton from '@/components/ui/BaseButton';
+import { toast } from 'react-toastify';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -80,7 +81,10 @@ const CreateEvent = () => {
         イベント名: eventName,
         日付: date,
       };
-      if (!validateFields(fields)) return;
+      if (!validateFields(fields)) {
+        toast.error('不足項目があります😢');
+        return;
+      }
 
       try {
         const eventData = {
@@ -93,11 +97,12 @@ const CreateEvent = () => {
         };
         const insertedData = await createEvent(eventData, selectedTags);
         // TODO: Reset form or redirect user
+        toast.success('保存しました🌏');
       } catch (error) {
-        console.error('Error creating event', error);
+        toast.error('エラーがあります😢');
       }
     } else {
-      console.error('No user logged in');
+      toast.error('ログインが必要です。');
     }
   };
 

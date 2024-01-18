@@ -10,6 +10,7 @@ import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
 import { getMovies } from '@/lib/supabase/getMovies';
+import { toast } from 'react-toastify';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -130,10 +131,13 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           id,
         );
         // TODO: Reset form or redirect user
+        toast.success('動画を登録しました🌏');
       } catch (error) {
+        toast.error('動画の登録中にエラーが発生しました😢');
         console.error('Error creating Youtube Link', error);
       }
     } else {
+      toast.error('ログインが必要です。');
       console.error('No user logged in');
     }
   };

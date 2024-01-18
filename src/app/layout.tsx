@@ -1,3 +1,4 @@
+import type { NextPage } from 'next';
 import React from 'react';
 import type { Metadata } from 'next';
 import { Noto_Sans_JP, Rubik } from 'next/font/google';
@@ -7,6 +8,9 @@ import styles from './layout.module.scss';
 import '../styles/globals.scss';
 import NavBar from '@/components/navigation/NavBar';
 import Footer from '@/components/navigation/Footer';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const noto = Noto_Sans_JP({ subsets: ['latin'] });
 const rubik = Rubik({ subsets: ['latin'] });
@@ -34,6 +38,18 @@ export default function RootLayout({
           <div className="container mx-auto">{children}</div>
         </main>
         <Footer />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <Analytics />
       </div>
     </>

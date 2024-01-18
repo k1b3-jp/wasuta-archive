@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { use, useEffect, useState } from 'react';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
+import { toast } from 'react-toastify';
 
 const EventMovieList = () => {
   const router = useRouter();
@@ -25,7 +26,12 @@ const EventMovieList = () => {
   }, [id]);
 
   const deleteMovie = async (youtubeLinkId) => {
-    await deleteYoutubeLink(youtubeLinkId, id);
+    try {
+      await deleteYoutubeLink(youtubeLinkId, id);
+      toast.success('動画が正常に削除されました');
+    } catch (error) {
+      toast.error('動画の削除中にエラーが発生しました');
+    }
   };
 
   return (

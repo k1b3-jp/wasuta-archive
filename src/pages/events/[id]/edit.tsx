@@ -6,6 +6,7 @@ import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベント�
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
+import { toast } from 'react-toastify';
 
 const EditEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -96,7 +97,10 @@ const EditEvent = () => {
         イベント名: eventName,
         日付: date,
       };
-      if (!validateFields(fields)) return;
+      if (!validateFields(fields)) {
+        toast.error('不足項目があります😢');
+        return;
+      }
 
       let combinedDateTime = null;
       if (date && eventTime) {
@@ -117,12 +121,14 @@ const EditEvent = () => {
           description,
         };
         const updatedData = await updateEvent(eventData, id, selectedTags);
-        // 更新後の処理 (フォームのリセット、リダイレクトなど)
+        // TODO:更新後の処理 (フォームのリセット、リダイレクトなど)
+        toast.success('保存しました🌏');
       } catch (error) {
+        toast.error('エラーがあります😢');
         console.error('Error updating event', error);
       }
     } else {
-      console.error('No user logged in');
+      toast.error('ログインが必要です。');
     }
   };
 
