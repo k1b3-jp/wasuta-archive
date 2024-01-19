@@ -11,6 +11,7 @@ import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { toast } from 'react-toastify';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -111,10 +112,17 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
     }
   };
 
+  const router = useRouter();
+  const query = useSearchParams();
+  const toastParams = query?.get('toast');
+
   useEffect(() => {
+    if (toastParams === 'success') {
+      toast.success('保存しました🌏');
+    }
     validateAccess();
     fetchAllYoutubeTags();
-  }, []);
+  }, [toastParams]);
 
   // YouTubeリンクの追加処理
   const handleSubmit = async (e) => {
@@ -130,8 +138,10 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           selectedYoutubeTags,
           id,
         );
-        // TODO: Reset form or redirect user
         toast.success('動画を登録しました🌏');
+        // TODO: refetchする
+        setUrl('');
+        setSelectedYoutubeTags([]);
       } catch (error) {
         toast.error('動画の登録中にエラーが発生しました😢');
         console.error('Error creating Youtube Link', error);

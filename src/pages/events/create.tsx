@@ -6,6 +6,7 @@ import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
 import BaseButton from '@/components/ui/BaseButton';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +19,7 @@ const CreateEvent = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const router = useRouter();
 
   const validateAccess = async () => {
     const { data } = await supabase.auth.getSession();
@@ -96,8 +98,8 @@ const CreateEvent = () => {
           description,
         };
         const insertedData = await createEvent(eventData, selectedTags);
-        // TODO: Reset form or redirect user
-        toast.success('保存しました🌏');
+        // TODO: 作成したイベントのIDを取得する
+        router.push(`/events/${id}?toast=success`);
       } catch (error) {
         toast.error('エラーがあります😢');
       }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import DefaultLayout from '@/app/layout';
 import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベントを更新するための関数
@@ -121,8 +121,7 @@ const EditEvent = () => {
           description,
         };
         const updatedData = await updateEvent(eventData, id, selectedTags);
-        // TODO:更新後の処理 (フォームのリセット、リダイレクトなど)
-        toast.success('保存しました🌏');
+        router.push(`/events/${id}?toast=success`);
       } catch (error) {
         toast.error('エラーがあります😢');
         console.error('Error updating event', error);
