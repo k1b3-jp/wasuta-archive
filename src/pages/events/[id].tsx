@@ -139,7 +139,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           id,
         );
         toast.success('動画を登録しました🌏');
-        // TODO: refetchする
+        router.push(`/events/${id}`);
         setUrl('');
         setSelectedYoutubeTags([]);
       } catch (error) {

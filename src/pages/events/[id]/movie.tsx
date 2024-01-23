@@ -11,6 +11,7 @@ const EventMovieList = () => {
   const { id } = router.query;
 
   const [movies, setMovies] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -23,12 +24,13 @@ const EventMovieList = () => {
     if (id !== undefined) {
       fetchMovies();
     }
-  }, [id]);
+  }, [id, refreshKey]);
 
   const deleteMovie = async (youtubeLinkId) => {
     try {
       await deleteYoutubeLink(youtubeLinkId, id);
       toast.success('動画が正常に削除されました');
+      setRefreshKey((old) => old + 1);
     } catch (error) {
       toast.error('動画の削除中にエラーが発生しました');
     }
