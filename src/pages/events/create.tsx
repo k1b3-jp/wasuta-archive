@@ -98,7 +98,7 @@ const CreateEvent = () => {
           description,
         };
         const insertedData = await createEvent(eventData, selectedTags);
-        // TODO: 作成したイベントのIDを取得する
+        const id = insertedData[0].event_id;
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
         toast.error('エラーがあります😢');
