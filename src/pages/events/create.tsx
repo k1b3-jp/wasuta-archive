@@ -7,6 +7,7 @@ import Tag from '@/components/ui/Tag';
 import BaseButton from '@/components/ui/BaseButton';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { uploadStorage } from '@/lib/supabase/uploadStorage';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -14,12 +15,13 @@ const CreateEvent = () => {
   const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
-  // const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const router = useRouter();
+  const [fileList, setFileList] = useState<FileList | null>(null);
+  const [path, setPathName] = useState<string | undefined>();
 
   const validateAccess = async () => {
     const { data } = await supabase.auth.getSession();
@@ -73,6 +75,16 @@ const CreateEvent = () => {
     return true;
   };
 
+  const handleUploadStorage = async (folder: FolderList | null) => {
+    if (!folder || !folder.length) return null;
+    const { path } = await uploadStorage({
+      folder,
+      bucketName: 'event_pics',
+    });
+    const { data } = supabase.storage.from('event_pics').getPublicUrl(path);
+    return data.publicUrl;
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,12 +101,13 @@ const CreateEvent = () => {
       }
 
       try {
+        const newPath = await handleUploadStorage(fileList);
         const eventData = {
           eventName,
           eventTime: combinedDateTime,
           date,
           location,
-          // imageUrl,
+          imageUrl: newPath, // 更新後のpathを使用する
           description,
         };
         const insertedData = await createEvent(eventData, selectedTags);
@@ -164,19 +177,20 @@ const CreateEvent = () => {
             />
           </div>
           <div>
-            {/* <label
-            htmlFor="imageUrl"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Image URL
-          </label>
-          <input
-            id="imageUrl"
-            type="text"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          /> */}
+            <label
+              htmlFor="file-upload"
+              className="block text-sm font-bold mb-2"
+            >
+              カバー画像
+            </label>
+            <input
+              id="file-upload"
+              name="file-upload"
+              type="file"
+              className=""
+              accept="image/png, image/jpeg"
+              onChange={(e) => setFileList(e.target?.files)}
+            />
           </div>
           <div>
             <label

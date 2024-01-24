@@ -10,14 +10,7 @@ interface EventData {
 }
 
 const createEvent = async (data: EventData, tags: number[]) => {
-  const {
-    eventName,
-    eventTime,
-    date,
-    location,
-    // imageUrl,
-    description,
-  } = data;
+  const { eventName, eventTime, date, location, imageUrl, description } = data;
 
   try {
     const { data: insertedData, error: eventInsertError } = await supabase
@@ -28,7 +21,7 @@ const createEvent = async (data: EventData, tags: number[]) => {
           event_time: eventTime,
           date: new Date(date),
           location,
-          // image_url: imageUrl,
+          image_url: imageUrl,
           description,
         },
       ])
