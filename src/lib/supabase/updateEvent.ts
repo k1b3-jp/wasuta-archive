@@ -14,14 +14,7 @@ const updateEvent = async (
   eventId: string,
   tags: number[],
 ) => {
-  const {
-    eventName,
-    eventTime,
-    date,
-    location,
-    // imageUrl,
-    description,
-  } = data;
+  const { eventName, eventTime, date, location, imageUrl, description } = data;
 
   try {
     // 既存のイベントを更新
@@ -32,7 +25,7 @@ const updateEvent = async (
         event_time: eventTime,
         date: new Date(date),
         location,
-        // image_url: imageUrl,
+        image_url: imageUrl,
         description,
       })
       .match({ event_id: eventId });

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import DefaultLayout from '@/app/layout';
 import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベントを更新するための関数
@@ -7,6 +7,11 @@ import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import Tag from '@/components/ui/Tag';
 import { toast } from 'react-toastify';
+import { uploadStorage } from '@/lib/supabase/uploadStorage';
+import { deleteStorage } from '@/lib/supabase/deleteStorage';
+import Image from 'next/image';
+
+const defaultImageUrl = '/event-placeholder.png';
 
 const EditEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -14,13 +19,15 @@ const EditEvent = () => {
   const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
-  // const [imageUrl, setImageUrl] = useState('');
+  const [fileList, setFileList] = useState<FileList | null>(null);
+  const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const router = useRouter();
-  const { id } = router.query; // URLからイベントIDを取得
+  const params = useParams();
+  const id = params?.id;
 
   const validateAccess = async () => {
     const { data } = await supabase.auth.getSession();
@@ -51,7 +58,7 @@ const EditEvent = () => {
       setDate(event[0].date);
 
       setLocation(event[0].location);
-      // setImageUrl(event.imageUrl);
+      setImageUrl(event[0].image_url);
       setDescription(event[0].description);
 
       // イベントに紐づくタグを取得
@@ -90,6 +97,29 @@ const EditEvent = () => {
     return true;
   };
 
+  const handleUploadStorage = async (folder: FolderList | null) => {
+    if (!folder || !folder.length) return null;
+    const { path } = await uploadStorage({
+      folder,
+      bucketName: 'event_pics',
+    });
+    const { data } = supabase.storage.from('event_pics').getPublicUrl(path);
+    return data.publicUrl;
+  };
+
+  function extractPathFromUrl(url) {
+    const urlParts = new URL(url);
+    // URLのパス部分を取得し、最初の'/'を取り除く
+    const path = urlParts.pathname.substring(1);
+
+    // 必要なパス部分だけを取得するために分割
+    const pathParts = path.split('/');
+    // 'event_pics'以下の部分だけを取り出す
+    const desiredPath = pathParts.slice(pathParts.lastIndexOf('event_pics'));
+
+    return desiredPath.join('/');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLoggedIn) {
@@ -112,12 +142,19 @@ const EditEvent = () => {
       }
 
       try {
+        const newPath = await handleUploadStorage(fileList);
+        // 既存のimageUrlのファイルを削除
+        console.log('imageUrl', extractPathFromUrl(imageUrl));
+        const deletePics = await deleteStorage({
+          path: extractPathFromUrl(imageUrl),
+          bucketName: 'event_pics',
+        });
         const eventData = {
           eventName,
           eventTime: combinedDateTime,
           date,
           location,
-          // imageUrl,
+          imageUrl: newPath,
           description,
         };
         const updatedData = await updateEvent(eventData, id, selectedTags);
@@ -198,19 +235,27 @@ const EditEvent = () => {
             />
           </div>
           <div>
-            {/* <label
-            htmlFor="imageUrl"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Image URL
-          </label>
-          <input
-            id="imageUrl"
-            type="text"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          /> */}
+            <label
+              htmlFor="file-upload"
+              className="block text-sm font-bold mb-2"
+            >
+              カバー画像
+            </label>
+            <Image
+              src={imageUrl || defaultImageUrl}
+              alt={eventName}
+              width={500}
+              height={300}
+              className="mx-auto"
+            />
+            <input
+              id="file-upload"
+              name="file-upload"
+              type="file"
+              className=""
+              accept="image/png, image/jpeg"
+              onChange={(e) => setFileList(e.target?.files)}
+            />
           </div>
           <div>
             <label
