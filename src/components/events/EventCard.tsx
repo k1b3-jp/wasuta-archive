@@ -6,7 +6,6 @@ import BaseButton from '../ui/BaseButton';
 const defaultImageUrl = '/event-placeholder.png';
 
 const EventCard: React.FC<Event> = ({
-  key,
   title,
   location,
   date,

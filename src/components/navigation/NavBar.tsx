@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import BaseButton from '../ui/BaseButton';
+import Logo from '../../../public/logo.svg';
 
 const NavBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -35,9 +36,12 @@ const NavBar = () => {
 
   return (
     <header className="shadow-lg sticky top-0 z-50">
-      <nav className="flex items-center p-3 flex-wrap bg-mid-pink text-deep-pink font-bold text-center">
-        <Link href="/" className="p-2 mr-4 inline-flex items-center">
-          LOGO?
+      <nav className="flex items-center p-2 flex-wrap bg-mid-pink text-deep-pink font-bold text-center">
+        <Link
+          href="/"
+          className="mr-4 inline-flex items-center text-font-color"
+        >
+          <Logo width={50} height={50} />
         </Link>
         <button
           className="inline-flex p-3 rounded lg:hidden ml-auto outline-none"
