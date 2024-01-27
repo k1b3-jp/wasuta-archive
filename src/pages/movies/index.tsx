@@ -57,9 +57,9 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form mb-8 p-10 bg-light-pink bg-100vw flex">
-            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
-              <div className="flex flex-wrap gap-2 my-4">
+          <div className="search-form p-8 bg-light-pink bg-100vw flex">
+            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100 w-full">
+              <div className="flex flex-wrap gap-2 m-4">
                 {allTags.map((tag) => (
                   <Tag
                     key={tag.id} // タグのIDをkeyプロパティとして使用
@@ -77,7 +77,7 @@ const EventListPage = () => {
             {error && <p className="text-red-500">{error}</p>}
             {movies.length > 0 ? (
               movies.map((link) => (
-                <div key={link.youtube_link_id} className="min-w-80 m-4">
+                <div key={link.youtube_link_id} className="min-w-80">
                   <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
                 </div>
               ))

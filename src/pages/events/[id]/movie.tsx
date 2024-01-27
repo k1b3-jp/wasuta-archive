@@ -5,6 +5,9 @@ import { use, useEffect, useState } from 'react';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
 import { toast } from 'react-toastify';
+import BaseButton from '@/components/ui/BaseButton';
+import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
+import Tag from '@/components/ui/Tag';
 
 const EventMovieList = () => {
   const router = useRouter();
@@ -12,14 +15,22 @@ const EventMovieList = () => {
 
   const [movies, setMovies] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [allTags, setAllTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const fetchMovies = async (selectedTags?: string[]) => {
+    if (id !== undefined) {
+      const params = { eventId: id };
+      if (selectedTags) {
+        params['tags'] = selectedTags;
+      }
+      const fetchedMovies = await getMovies(params);
+      setMovies(fetchedMovies);
+    }
+  };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      if (id !== undefined) {
-        const fetchedMovies = await getMovies({ eventId: id });
-        setMovies(fetchedMovies);
-      }
-    };
+    fetchAllTags();
 
     if (id !== undefined) {
       fetchMovies();
@@ -36,16 +47,55 @@ const EventMovieList = () => {
     }
   };
 
+  const fetchAllTags = async () => {
+    const tags = await getYoutubeTags();
+    setAllTags(tags);
+  };
+
+  const handleTagSelect = (tag) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+
+  const handleSearch = () => {
+    fetchMovies(selectedTags);
+  };
+
   return (
     <DefaultLayout>
       <div>
-        <main className="grid grid-cols-1 gap-4">
+        <div className="search-form p-8 bg-light-pink bg-100vw flex">
+          <div className="mx-auto bg-white p-6 rounded-lg border border-gray-100 w-full">
+            <div className="flex flex-wrap gap-2 mb-4">
+              {allTags.map((tag) => (
+                <Tag
+                  key={tag.id} // タグのIDをkeyプロパティとして使用
+                  label={tag.label} // タグの名前をlabelプロパティとして使用
+                  selected={selectedTags.includes(tag.id)}
+                  onSelect={() => handleTagSelect(tag.id)}
+                />
+              ))}
+            </div>
+            <BaseButton onClick={handleSearch} label="絞り込む" />
+          </div>
+        </div>
+        <main className="event-list grid-base py-8">
           {movies.map((movie) => (
             <div key={movie.youtube_link_id}>
-              <MovieCard videoUrl={movie.youtube_links.url} />
-              <button onClick={() => deleteMovie(movie.youtube_link_id)}>
-                動画を削除する
-              </button>
+              <div className="mb-2">
+                <MovieCard videoUrl={movie.youtube_links.url} />
+              </div>
+              <div className="flex justify-end">
+                <div className="w-6/12">
+                  <BaseButton
+                    onClick={() => deleteMovie(movie.youtube_link_id)}
+                    label="動画を削除する"
+                  />
+                </div>
+              </div>
             </div>
           ))}
         </main>

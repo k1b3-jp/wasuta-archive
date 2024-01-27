@@ -144,10 +144,13 @@ const EditEvent = () => {
         if (fileList) {
           newPath = await handleUploadStorage(fileList); // newPathに値を設定
           // 既存のimageUrlのファイルを削除
-          const deletePics = await deleteStorage(
-            extractPathFromUrl(imageUrl),
-            'event_pics',
-          );
+          let deletePics;
+          if (imageUrl) {
+            deletePics = await deleteStorage(
+              extractPathFromUrl(imageUrl),
+              'event_pics',
+            );
+          }
         }
         const eventData = {
           eventName,
