@@ -109,15 +109,13 @@ const EditEvent = () => {
 
   function extractPathFromUrl(url) {
     const urlParts = new URL(url);
-    // URLのパス部分を取得し、最初の'/'を取り除く
-    const path = urlParts.pathname.substring(1);
+    // URLのパス部分を取得し、'/'で分割
+    const pathSegments = urlParts.pathname.split('/');
 
-    // 必要なパス部分だけを取得するために分割
-    const pathParts = path.split('/');
-    // 'event_pics'以下の部分だけを取り出す
-    const desiredPath = pathParts.slice(pathParts.lastIndexOf('event_pics'));
+    // パスの最後のセグメントを取得
+    const lastSegment = pathSegments[pathSegments.length - 1];
 
-    return desiredPath.join('/');
+    return lastSegment;
   }
 
   const handleSubmit = async (e) => {
@@ -142,20 +140,22 @@ const EditEvent = () => {
       }
 
       try {
-        const newPath = await handleUploadStorage(fileList);
-        // 既存のimageUrlのファイルを削除
-        console.log('imageUrl', extractPathFromUrl(imageUrl));
-        const deletePics = await deleteStorage({
-          path: extractPathFromUrl(imageUrl),
-          bucketName: 'event_pics',
-        });
+        let newPath;
+        if (fileList) {
+          newPath = await handleUploadStorage(fileList); // newPathに値を設定
+          // 既存のimageUrlのファイルを削除
+          const deletePics = await deleteStorage(
+            extractPathFromUrl(imageUrl),
+            'event_pics',
+          );
+        }
         const eventData = {
           eventName,
           eventTime: combinedDateTime,
           date,
           location,
-          imageUrl: newPath,
           description,
+          ...(newPath ? { imageUrl: newPath } : {}),
         };
         const updatedData = await updateEvent(eventData, id, selectedTags);
         router.push(`/events/${id}?toast=success`);
