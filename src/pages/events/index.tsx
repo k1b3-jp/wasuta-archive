@@ -33,7 +33,12 @@ const EventListPage = () => {
     }
   };
 
-  const fetchEvents = async ({ page, limit }) => {
+  type FetchEventsParams = {
+    page: number;
+    limit: number;
+  };
+
+  const fetchEvents = async ({ page, limit }: FetchEventsParams) => {
     const start = limit * page;
     const end = start + limit - 1;
 
@@ -57,8 +62,8 @@ const EventListPage = () => {
     }
   };
 
-  const [limit, setLimit] = useState(10);
-  const getKey = (pageIndex, previousPageData) => {
+  const [limit] = useState(10);
+  const getKey = (pageIndex: number, previousPageData: any[]) => {
     if (previousPageData && !previousPageData.length) return null; // 最後に到達した
     return { page: pageIndex, limit: limit };
   };
@@ -68,7 +73,7 @@ const EventListPage = () => {
     size,
     setSize,
     mutate,
-  } = useSWRInfinite(getKey, fetchEvents, { initialData: [] });
+  } = useSWRInfinite(getKey, fetchEvents);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -78,8 +83,8 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form p-10 bg-light-pink bg-100vw flex">
-            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
+          <div className="search-form p-8 bg-light-pink bg-100vw flex">
+            <div className="mx-auto bg-white p-8 rounded-lg border border-gray-100">
               <input
                 className="border border-gray-300 rounded-md p-2"
                 type="text"
@@ -112,7 +117,7 @@ const EventListPage = () => {
               <BaseButton onClick={handleSearch} label="検索" />
             </div>
           </div>
-          <main className="event-list grid-base py-10">
+          <main className="event-list grid-base py-8">
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {events?.map((items) => {
