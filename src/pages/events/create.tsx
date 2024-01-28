@@ -27,6 +27,8 @@ const CreateEvent = () => {
     const { data } = await supabase.auth.getSession();
     if (data.session !== null) {
       setIsLoggedIn(true);
+    } else {
+      router.push(`/login?toast=login`);
     }
   };
 

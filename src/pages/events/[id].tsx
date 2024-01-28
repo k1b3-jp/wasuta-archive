@@ -144,11 +144,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         setSelectedYoutubeTags([]);
       } catch (error) {
         toast.error('動画の登録中にエラーが発生しました😢');
-        console.error('Error creating Youtube Link', error);
       }
     } else {
-      toast.error('ログインが必要です。');
-      console.error('No user logged in');
+      toast.error('ログインが必要です🙇‍♂️');
     }
   };
 
@@ -196,7 +194,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               >
                 {youtubeLinks.length > 0 ? (
                   youtubeLinks.map((link) => (
-                    <div key={link.youtube_link_id} className="min-w-80 m-4">
+                    <div key={link.youtube_link_id} className="min-w-80 m-2">
                       <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
                     </div>
                   ))
