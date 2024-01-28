@@ -11,10 +11,12 @@ interface GetEventsOptions {
   endDate?: string;
   tags?: string[];
   eventId?: number;
+  start?: number;
+  end?: number;
 }
 
 export async function getEvents(options?: GetEventsOptions) {
-  let query = supabase.from('events').select(`*`);
+  let query = supabase.from('events').select('*');
 
   if (options?.tags && options.tags.length > 0) {
     query = query.select(`
@@ -55,14 +57,19 @@ export async function getEvents(options?: GetEventsOptions) {
     query = query.in('event_tags.tag_id', options.tags);
   }
 
-  // ソート順を適用します。デフォルトは開催日の昇順です。
-  const sortBy = 'date';
-  query = query.order(sortBy, { ascending: options?.ascending ?? false });
-
   // リミットが指定されていれば適用します
   if (options?.limit) {
     query = query.limit(options.limit);
   }
+
+  // ページネーションのためのオプションを適用します
+  let start = options?.start || 0;
+  let end = options?.end || 9;
+  query = query.range(start, end);
+
+  // ソート順を適用します。デフォルトは開催日の昇順です。
+  const sortBy = 'date';
+  query = query.order(sortBy, { ascending: options?.ascending ?? false });
 
   const { data: events, error } = await query;
 

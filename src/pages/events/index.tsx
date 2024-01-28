@@ -5,6 +5,7 @@ import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import BaseButton from '@/components/ui/BaseButton';
+import useSWRInfinite from 'swr/infinite';
 
 const EventListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,13 +13,10 @@ const EventListPage = () => {
   const [endDate, setEndDate] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // 初期ロード時に全イベントを取得
-    fetchEvents();
     fetchAllTags();
   }, []);
 
@@ -35,18 +33,22 @@ const EventListPage = () => {
     }
   };
 
-  const fetchEvents = async (keyword = '') => {
+  const fetchEvents = async ({ page, limit }) => {
+    const start = limit * page;
+    const end = start + limit - 1;
+
     setLoading(true);
     setError('');
     try {
       const eventsData = await getEvents({
-        keyword: keyword,
-        limit: 12,
+        keyword: searchTerm,
         startDate: startDate,
         endDate: endDate,
         tags: selectedTags,
+        start: start,
+        end: end,
       });
-      setEvents(eventsData);
+      return eventsData;
     } catch (err) {
       setError('イベントの取得中にエラーが発生しました');
       console.error(err);
@@ -55,15 +57,28 @@ const EventListPage = () => {
     }
   };
 
+  const [limit, setLimit] = useState(10);
+  const getKey = (pageIndex, previousPageData) => {
+    if (previousPageData && !previousPageData.length) return null; // 最後に到達した
+    return { page: pageIndex, limit: limit };
+  };
+
+  const {
+    data: events,
+    size,
+    setSize,
+    mutate,
+  } = useSWRInfinite(getKey, fetchEvents, { initialData: [] });
+
   const handleSearch = () => {
-    fetchEvents(searchTerm);
+    setSize(1).then(() => mutate());
   };
 
   return (
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form mb-8 p-10 bg-light-pink bg-100vw flex">
+          <div className="search-form p-10 bg-light-pink bg-100vw flex">
             <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
               <input
                 className="border border-gray-300 rounded-md p-2"
@@ -100,16 +115,28 @@ const EventListPage = () => {
           <main className="event-list grid-base py-10">
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {events.map((event) => (
-              <EventCard
-                key={event.event_id}
-                title={event.event_name}
-                location={event.location}
-                date={event.date}
-                imageUrl={event.image_url}
-                id={event.event_id}
-              />
-            ))}
+            {events?.map((items) => {
+              return items.map((event) => {
+                return (
+                  <EventCard
+                    key={event.event_id}
+                    title={event.event_name}
+                    location={event.location}
+                    date={event.date}
+                    imageUrl={event.image_url}
+                    id={event.event_id}
+                  />
+                );
+              });
+            })}
+            <button
+              className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
+              onClick={() => {
+                setSize(size + 1);
+              }}
+            >
+              さらに読み込む
+            </button>
           </main>
         </div>
       </div>
