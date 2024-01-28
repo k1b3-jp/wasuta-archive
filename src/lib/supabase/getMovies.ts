@@ -4,6 +4,8 @@ interface GetMoviesOptions {
   eventId?: number;
   limit?: number;
   tags?: string[];
+  start?: number;
+  end?: number;
 }
 
 export const getMovies = async (options?: GetMoviesOptions) => {
@@ -41,6 +43,11 @@ export const getMovies = async (options?: GetMoviesOptions) => {
   if (options?.limit) {
     query = query.limit(options.limit);
   }
+
+  // ページネーションのためのオプションを適用します
+  let start = options?.start || 0;
+  let end = options?.end || 9;
+  query = query.range(start, end);
 
   const { data: movies, error } = await query;
 

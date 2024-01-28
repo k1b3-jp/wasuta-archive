@@ -82,6 +82,12 @@ const NavBar = () => {
               <span>CREATE EVENT</span>
             </Link>
             <Link
+              href="/movies"
+              className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
+            >
+              <span>MOVIES</span>
+            </Link>
+            <Link
               href="/events/history"
               className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center"
             >

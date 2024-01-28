@@ -5,17 +5,15 @@ import { getMovies } from '@/lib/supabase/getMovies';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import BaseButton from '@/components/ui/BaseButton';
 import MovieCard from '@/components/events/MovieCard';
+import useSWRInfinite from 'swr/infinite';
 
 const EventListPage = () => {
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // 初期ロード時に全イベントを取得
-    fetchMovies();
     fetchAllTags();
   }, []);
 
@@ -32,15 +30,24 @@ const EventListPage = () => {
     }
   };
 
-  const fetchMovies = async () => {
+  type FetchEventsParams = {
+    page: number;
+    limit: number;
+  };
+
+  const fetchMovies = async ({ page, limit }: FetchEventsParams) => {
+    const start = limit * page;
+    const end = start + limit - 1;
+
     setLoading(true);
     setError('');
     try {
       const moviesData = await getMovies({
-        limit: 12,
         tags: selectedTags,
+        start: start,
+        end: end,
       });
-      setMovies(moviesData);
+      return moviesData;
     } catch (err) {
       setError('イベントの取得中にエラーが発生しました');
       console.error(err);
@@ -49,8 +56,21 @@ const EventListPage = () => {
     }
   };
 
+  const [limit] = useState(10);
+  const getKey = (pageIndex: number, previousPageData: any[]) => {
+    if (previousPageData && !previousPageData.length) return null; // 最後に到達した
+    return { page: pageIndex, limit: limit };
+  };
+
+  const {
+    data: movies,
+    size,
+    setSize,
+    mutate,
+  } = useSWRInfinite(getKey, fetchMovies);
+
   const handleSearch = () => {
-    fetchMovies();
+    setSize(1).then(() => mutate());
   };
 
   return (
@@ -75,15 +95,23 @@ const EventListPage = () => {
           <main className="event-list grid-base py-10">
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {movies.length > 0 ? (
-              movies.map((link) => (
-                <div key={link.youtube_link_id} className="min-w-80">
-                  <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
-                </div>
-              ))
-            ) : (
-              <p>動画が見つかりませんでした😢</p>
-            )}{' '}
+            {movies?.map((items) => {
+              return items.map((link) => {
+                return (
+                  <div key={link.youtube_link_id} className="min-w-80">
+                    <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
+                  </div>
+                );
+              });
+            })}
+            <button
+              className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
+              onClick={() => {
+                setSize(size + 1);
+              }}
+            >
+              さらに読み込む
+            </button>
           </main>
         </div>
       </div>
