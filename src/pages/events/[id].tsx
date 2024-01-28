@@ -182,7 +182,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           {/* YouTubeリンクの表示 */}
           <div className="event-movie bg-light-pink bg-100vw">
             <div className="container mx-auto p-8">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-deep-pink">MOVIE</h3>
                 <BaseButton
                   label="もっと見る"

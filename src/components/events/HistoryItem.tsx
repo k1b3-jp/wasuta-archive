@@ -6,7 +6,6 @@ import BaseButton from '../ui/BaseButton';
 const defaultImageUrl = '/event-placeholder.png';
 
 const HistoryItem: React.FC<Event> = ({
-  key,
   title,
   location,
   date,
@@ -51,8 +50,8 @@ const HistoryItem: React.FC<Event> = ({
           className="w-full"
         />
       </div>
-      <p className="mb-4 text-base font-normal text-gray-500">{description}</p>
-      <div className="inline-flex items-center px-4 py-2">
+      <p className="mb-2 text-base font-normal text-gray-500">{description}</p>
+      <div className="inline-flex items-center py-2">
         <BaseButton label="詳細を見る" link={`/events/${id}`} />
       </div>
     </li>

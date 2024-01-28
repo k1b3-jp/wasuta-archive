@@ -9,6 +9,7 @@ import Logo from '../../../public/logo.svg';
 const NavBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setcurrentUser] = useState('');
   const router = useRouter();
 
   const getCurrentUser = async () => {
@@ -18,8 +19,7 @@ const NavBar = () => {
         data: { user },
       } = await supabase.auth.getUser();
       setIsLoggedIn(true);
-
-      // TODO: どのアカウントでログインしているか明示する
+      setcurrentUser(user?.email);
     }
   };
 
@@ -87,10 +87,20 @@ const NavBar = () => {
             >
               <span>HISTORY</span>
             </Link>
-            {isLoggedIn ? (
-              <BaseButton onClick={() => Logout()} label="Logout" />
-            ) : (
-              <BaseButton link={'/login'} label={'Login/SignUp'} />
+            <div className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center">
+              {isLoggedIn ? (
+                <BaseButton onClick={() => Logout()} label="Logout" />
+              ) : (
+                <BaseButton link={'/login'} label={'Login/SignUp'} />
+              )}
+            </div>
+            {currentUser && (
+              <div
+                suppressHydrationWarning={true}
+                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center text-font-color text-xs"
+              >
+                {currentUser} でログインしています。
+              </div>
             )}
           </div>
         </div>
