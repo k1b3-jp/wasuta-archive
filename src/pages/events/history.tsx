@@ -6,16 +6,18 @@ import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import BaseButton from '@/components/ui/BaseButton';
 import HistoryItem from '@/components/events/HistoryItem';
+import { Event } from '@/types/event';
+import { TagType } from '@/types/tag';
 
 const EventListPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [allTags, setAllTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const [allTags, setAllTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     // 初期ロード時に全イベントを取得

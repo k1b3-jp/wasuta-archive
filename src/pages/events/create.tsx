@@ -8,6 +8,7 @@ import BaseButton from '@/components/ui/BaseButton';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { uploadStorage } from '@/lib/supabase/uploadStorage';
+import { TagType } from '@/types/tag';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,8 +18,8 @@ const CreateEvent = () => {
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [allTags, setAllTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [allTags, setAllTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const router = useRouter();
   const [fileList, setFileList] = useState<FileList | null>(null);
   const [path, setPathName] = useState<string | undefined>();
@@ -53,12 +54,18 @@ const CreateEvent = () => {
   };
 
   // 日付と時刻をISO 8601形式に変換します
-  let combinedDateTime = null;
+  let combinedDateTime: string | null = null;
   if (date && eventTime) {
     let [year, month, day] = date.split('-');
     let [hour, minute] = eventTime.split(':');
     combinedDateTime = new Date(
-      Date.UTC(year, month - 1, day, hour, minute),
+      Date.UTC(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hour),
+        Number(minute),
+      ),
     ).toISOString();
   }
 
@@ -88,7 +95,7 @@ const CreateEvent = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (isLoggedIn) {
@@ -109,7 +116,7 @@ const CreateEvent = () => {
           eventTime: combinedDateTime,
           date,
           location,
-          imageUrl: newPath, // 更新後のpathを使用する
+          imageUrl: newPath || undefined,
           description,
         };
         const insertedData = await createEvent(eventData, selectedTags);

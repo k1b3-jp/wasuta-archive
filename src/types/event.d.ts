@@ -4,6 +4,7 @@ export interface Event {
   location: string;
   date: string;
   image_url: string;
+  description: string;
 }
 
 export interface EventCard {
