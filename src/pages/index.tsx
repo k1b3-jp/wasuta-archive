@@ -5,13 +5,15 @@ import { Event } from '../types/event';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
 import { getMovies } from '@/lib/supabase/getMovies';
+import { Movie } from '@/types/movie';
 interface HomeProps {
-  events: any[];
-  movies: any[];
+  events: Event[];
+  movies: Movie[];
 }
 
 export async function getStaticProps() {
-  let events, movies;
+  let events: any[] = [];
+  let movies: any[] = [];
 
   try {
     events = await getEvents({
@@ -19,8 +21,9 @@ export async function getStaticProps() {
       byToday: true,
     });
   } catch (error) {
-    console.error(`Error fetching events: ${error.message}`);
-    events = [];
+    if (error instanceof Error) {
+      console.error(`Error fetching events: ${error.message}`);
+    }
   }
 
   try {
@@ -29,8 +32,9 @@ export async function getStaticProps() {
       limit: 6,
     });
   } catch (error) {
-    console.error(`Error fetching movies: ${error.message}`);
-    movies = [];
+    if (error instanceof Error) {
+      console.error(`Error fetching movies: ${error.message}`);
+    }
   }
 
   return {

@@ -6,15 +6,16 @@ import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import BaseButton from '@/components/ui/BaseButton';
 import useSWRInfinite from 'swr/infinite';
+import { TagType } from '@/types/tag';
 
 const EventListPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [allTags, setAllTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const [allTags, setAllTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     fetchAllTags();
@@ -22,12 +23,14 @@ const EventListPage = () => {
 
   const fetchAllTags = async () => {
     const tags = await getEventTags();
-    setAllTags(tags);
+    if (tags) {
+      setAllTags(tags);
+    }
   };
 
-  const handleTagSelect = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  const handleTagSelect = (tag: TagType) => {
+    if (selectedTags.some((t) => t.id === tag.id)) {
+      setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -62,7 +65,7 @@ const EventListPage = () => {
     }
   };
 
-  const [limit] = useState(10);
+  const [limit] = useState<number>(10);
   const getKey = (pageIndex: number, previousPageData: any[]) => {
     if (previousPageData && !previousPageData.length) return null; // 最後に到達した
     return { page: pageIndex, limit: limit };
@@ -121,7 +124,7 @@ const EventListPage = () => {
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {events?.map((items) => {
-              return items.map((event) => {
+              return items?.map((event) => {
                 return (
                   <EventCard
                     key={event.event_id}

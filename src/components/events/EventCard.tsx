@@ -1,11 +1,11 @@
 import React from 'react';
-import { Event } from '../../types/event';
+import { EventCard } from '../../types/event';
 import Image from 'next/image';
 import BaseButton from '../ui/BaseButton';
 
 const defaultImageUrl = '/event-placeholder.png';
 
-const EventCard: React.FC<Event> = ({
+const EventCard: React.FC<EventCard> = ({
   title,
   location,
   date,
