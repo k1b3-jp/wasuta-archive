@@ -48,11 +48,12 @@ const EventListPage = () => {
     setLoading(true);
     setError('');
     try {
+      const selectedTagIds = selectedTags.map((tag) => tag.id);
       const eventsData = await getEvents({
         keyword: searchTerm,
         startDate: startDate,
         endDate: endDate,
-        tags: selectedTags,
+        tags: selectedTagIds,
         start: start,
         end: end,
       });
@@ -110,10 +111,10 @@ const EventListPage = () => {
               <div className="flex flex-wrap gap-2 my-4">
                 {allTags.map((tag) => (
                   <Tag
-                    key={tag.id} // タグのIDをkeyプロパティとして使用
-                    label={tag.label} // タグの名前をlabelプロパティとして使用
-                    selected={selectedTags.includes(tag.id)}
-                    onSelect={() => handleTagSelect(tag.id)}
+                    key={tag.id}
+                    label={tag.label}
+                    selected={selectedTags.some((t) => t.id === tag.id)}
+                    onSelect={() => handleTagSelect(tag)}
                   />
                 ))}
               </div>
@@ -124,18 +125,26 @@ const EventListPage = () => {
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {events?.map((items) => {
-              return items?.map((event) => {
-                return (
-                  <EventCard
-                    key={event.event_id}
-                    title={event.event_name}
-                    location={event.location}
-                    date={event.date}
-                    imageUrl={event.image_url}
-                    id={event.event_id}
-                  />
-                );
-              });
+              return items?.map(
+                (event: {
+                  event_id: any;
+                  event_name: any;
+                  location: any;
+                  date: any;
+                  image_url: any;
+                }) => {
+                  return (
+                    <EventCard
+                      key={event.event_id}
+                      title={event.event_name}
+                      location={event.location}
+                      date={event.date}
+                      imageUrl={event.image_url}
+                      id={event.event_id}
+                    />
+                  );
+                },
+              );
             })}
             <button
               className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
