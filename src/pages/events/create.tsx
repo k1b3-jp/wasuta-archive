@@ -42,12 +42,14 @@ const CreateEvent = () => {
 
   const fetchAllTags = async () => {
     const tags = await getEventTags();
-    setAllTags(tags);
+    if (tags) {
+      setAllTags(tags);
+    }
   };
 
-  const handleTagSelect = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  const handleTagSelect = (tag: TagType) => {
+    if (selectedTags.some((t) => t.id === tag.id)) {
+      setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -70,7 +72,10 @@ const CreateEvent = () => {
   }
 
   // Validation function
-  const validateFields = (fields) => {
+  type Fields = {
+    [key: string]: string;
+  };
+  const validateFields = (fields: Fields) => {
     let errors = [];
     for (let fieldName in fields) {
       if (!fields[fieldName]) {
@@ -84,7 +89,7 @@ const CreateEvent = () => {
     return true;
   };
 
-  const handleUploadStorage = async (folder: FolderList | null) => {
+  const handleUploadStorage = async (folder: FileList | null) => {
     if (!folder || !folder.length) return null;
     const { path } = await uploadStorage({
       folder,
@@ -119,7 +124,8 @@ const CreateEvent = () => {
           imageUrl: newPath || undefined,
           description,
         };
-        const insertedData = await createEvent(eventData, selectedTags);
+        const selectedTagIds = selectedTags.map((tag) => tag.id);
+        const insertedData = await createEvent(eventData, selectedTagIds);
         const id = insertedData[0].event_id;
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
@@ -220,10 +226,10 @@ const CreateEvent = () => {
           <div className="flex flex-wrap gap-2 pb-8">
             {allTags.map((tag) => (
               <Tag
-                key={tag.id} // タグのIDをkeyプロパティとして使用
-                label={tag.label} // タグの名前をlabelプロパティとして使用
-                selected={selectedTags.includes(tag.id)}
-                onSelect={() => handleTagSelect(tag.id)}
+                key={tag.id}
+                label={tag.label}
+                selected={selectedTags.some((t) => t.id === tag.id)}
+                onSelect={() => handleTagSelect(tag)}
               />
             ))}
           </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '@/app/layout';
-import EventCard from '@/components/events/EventCard';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
@@ -27,12 +26,14 @@ const EventListPage = () => {
 
   const fetchAllTags = async () => {
     const tags = await getEventTags();
-    setAllTags(tags);
+    if (tags) {
+      setAllTags(tags);
+    }
   };
 
-  const handleTagSelect = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  const handleTagSelect = (tag: TagType) => {
+    if (selectedTags.some((t) => t.id === tag.id)) {
+      setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -42,12 +43,13 @@ const EventListPage = () => {
     setLoading(true);
     setError('');
     try {
+      const selectedTagIds = selectedTags.map((tag) => tag.id);
       const eventsData = await getEvents({
         keyword: keyword,
         limit: 12,
         startDate: startDate,
         endDate: endDate,
-        tags: selectedTags,
+        tags: selectedTagIds,
       });
       setEvents(eventsData);
     } catch (err) {
@@ -90,10 +92,10 @@ const EventListPage = () => {
               <div className="flex flex-wrap gap-2 my-4">
                 {allTags.map((tag) => (
                   <Tag
-                    key={tag.id} // タグのIDをkeyプロパティとして使用
-                    label={tag.label} // タグの名前をlabelプロパティとして使用
-                    selected={selectedTags.includes(tag.id)}
-                    onSelect={() => handleTagSelect(tag.id)}
+                    key={tag.id}
+                    label={tag.label}
+                    selected={selectedTags.some((t) => t.id === tag.id)}
+                    onSelect={() => handleTagSelect(tag)}
                   />
                 ))}
               </div>

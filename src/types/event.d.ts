@@ -14,4 +14,5 @@ export interface EventCard {
   date;
   imageUrl;
   id;
+  description?: string;
 }

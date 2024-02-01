@@ -1,4 +1,6 @@
-export interface Movie {
-  youtube_link_id: string;
-  youtube_links: array;
-}
+export type Movie = {
+  youtube_link_id: number;
+  youtube_links: {
+    url: string;
+  };
+};

@@ -2,14 +2,14 @@ import { supabase } from '../supabaseClient';
 
 interface EventData {
   eventName: string;
-  eventTime?: string;
+  eventTime?: string | null;
   date: string;
   location?: string;
   imageUrl?: string;
   description: string;
 }
 
-const createEvent = async (data: EventData, tags: number[]) => {
+const createEvent = async (data: EventData, tags: string[]) => {
   const { eventName, eventTime, date, location, imageUrl, description } = data;
 
   try {

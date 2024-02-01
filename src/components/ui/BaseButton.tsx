@@ -3,7 +3,7 @@ import React from 'react';
 
 interface BaseButtonProps {
   label: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   link?: string;
 }
