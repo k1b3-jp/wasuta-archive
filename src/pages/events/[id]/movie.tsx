@@ -1,33 +1,44 @@
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
 import { useRouter } from 'next/router';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useState, useCallback } from 'react';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
 import { toast } from 'react-toastify';
 import BaseButton from '@/components/ui/BaseButton';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import Tag from '@/components/ui/Tag';
+import { TagType } from '@/types/tag';
+import { Movie } from '@/types/movie';
 
 const EventMovieList = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router?.query;
 
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [allTags, setAllTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [allTags, setAllTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
 
-  const fetchMovies = async (selectedTags?: string[]) => {
-    if (id !== undefined) {
-      const params = { eventId: id };
-      if (selectedTags) {
-        params['tags'] = selectedTags;
-      }
-      const fetchedMovies = await getMovies(params);
-      setMovies(fetchedMovies);
-    }
+  type ParamsType = {
+    eventId: number;
+    tags?: string[];
   };
+
+  const fetchMovies = useCallback(
+    async (selectedTags?: TagType[]) => {
+      if (id !== undefined) {
+        const params: ParamsType = { eventId: Number(id) };
+        if (selectedTags) {
+          const selectedTagIds = selectedTags.map((tag) => tag.id);
+          params['tags'] = selectedTagIds;
+        }
+        const fetchedMovies: Movie[] = await getMovies(params);
+        setMovies(fetchedMovies);
+      }
+    },
+    [id],
+  ); // fetchMovies関数が依存する変数をここにリストします
 
   useEffect(() => {
     fetchAllTags();
@@ -35,11 +46,11 @@ const EventMovieList = () => {
     if (id !== undefined) {
       fetchMovies();
     }
-  }, [id, refreshKey]);
+  }, [id, refreshKey, fetchMovies]);
 
-  const deleteMovie = async (youtubeLinkId) => {
+  const deleteMovie = async (youtubeLinkId: number) => {
     try {
-      await deleteYoutubeLink(youtubeLinkId, id);
+      await deleteYoutubeLink(youtubeLinkId, Number(id));
       toast.success('動画が正常に削除されました');
       setRefreshKey((old) => old + 1);
     } catch (error) {
@@ -49,12 +60,14 @@ const EventMovieList = () => {
 
   const fetchAllTags = async () => {
     const tags = await getYoutubeTags();
-    setAllTags(tags);
+    if (tags) {
+      setAllTags(tags);
+    }
   };
 
-  const handleTagSelect = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  const handleTagSelect = (tag: TagType) => {
+    if (selectedTags.some((t) => t.id === tag.id)) {
+      setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -72,10 +85,10 @@ const EventMovieList = () => {
             <div className="flex flex-wrap gap-2 mb-4">
               {allTags.map((tag) => (
                 <Tag
-                  key={tag.id} // タグのIDをkeyプロパティとして使用
-                  label={tag.label} // タグの名前をlabelプロパティとして使用
-                  selected={selectedTags.includes(tag.id)}
-                  onSelect={() => handleTagSelect(tag.id)}
+                  key={tag.id}
+                  label={tag.label}
+                  selected={selectedTags.some((t) => t.id === tag.id)}
+                  onSelect={() => handleTagSelect(tag)}
                 />
               ))}
             </div>

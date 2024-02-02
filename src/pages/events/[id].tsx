@@ -12,6 +12,8 @@ import BaseButton from '@/components/ui/BaseButton';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { TagType } from '@/types/tag';
+import { Movie } from '@/types/movie';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -41,7 +43,7 @@ export const getStaticProps = async (context: any) => {
   const { id } = context.params;
 
   let event = null;
-  let youtubeLinks = [];
+  let youtubeLinks: Movie[] = [];
 
   try {
     // IDに基づいてイベントの詳細を取得
@@ -60,11 +62,11 @@ export const getStaticProps = async (context: any) => {
     }
 
     // イベントに紐づくYouTubeリンクを取得
-    let linksData, linksError;
+    let linksData: Movie[], linksError;
     try {
       linksData = await getMovies({ eventId: id, limit: 6 });
     } catch (error) {
-      console.error(`Error fetching movies: ${error.message}`);
+      console.error(`Error fetching movies: ${(error as any).message}`);
       linksData = [];
     }
 
@@ -98,15 +100,19 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const id = event?.event_id;
   const [url, setUrl] = useState('');
 
-  const [allYoutubeTags, setAllYoutubeTags] = useState([]);
-  const [selectedYoutubeTags, setSelectedYoutubeTags] = useState([]);
+  const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
+  const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
   const fetchAllYoutubeTags = async () => {
     const tags = await getYoutubeTags();
-    setAllYoutubeTags(tags);
+    if (tags) {
+      setAllYoutubeTags(tags);
+    }
   };
-  const handleYoutubeTagSelect = (tag) => {
-    if (selectedYoutubeTags.includes(tag)) {
-      setSelectedYoutubeTags(selectedYoutubeTags.filter((t) => t !== tag));
+  const handleYoutubeTagSelect = (tag: TagType) => {
+    if (selectedYoutubeTags.some((t) => t.id === tag.id)) {
+      setSelectedYoutubeTags(
+        selectedYoutubeTags.filter((t) => t.id !== tag.id),
+      );
     } else {
       setSelectedYoutubeTags([...selectedYoutubeTags, tag]);
     }
@@ -125,7 +131,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   }, [toastParams]);
 
   // YouTubeリンクの追加処理
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (isLoggedIn) {
@@ -133,9 +139,10 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
       // if (!validateFields({ url })) return;
 
       try {
+        const selectedYoutubeTagIds = selectedYoutubeTags.map((tag) => tag.id);
         const insertedData = await createYoutubeLink(
           url,
-          selectedYoutubeTags,
+          selectedYoutubeTagIds,
           id,
         );
         toast.success('動画を登録しました🌏');
@@ -182,11 +189,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             <div className="container mx-auto p-8">
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-deep-pink">MOVIE</h3>
-                <BaseButton
-                  label="もっと見る"
-                  link={`/events/${id}/movie`}
-                  yellow
-                />
+                <BaseButton label="もっと見る" link={`/events/${id}/movie`} />
               </div>
               <div
                 style={{ marginRight: 'calc(50% - 50vw)' }}
@@ -226,10 +229,12 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                 <div className="flex flex-wrap gap-2 mb-8">
                   {allYoutubeTags.map((tag) => (
                     <Tag
-                      key={tag.id} // タグのIDをkeyプロパティとして使用
-                      label={tag.label} // タグの名前をlabelプロパティとして使用
-                      selected={selectedYoutubeTags.includes(tag.id)}
-                      onSelect={() => handleYoutubeTagSelect(tag.id)}
+                      key={tag.id}
+                      label={tag.label}
+                      selected={selectedYoutubeTags.some(
+                        (t) => t.id === tag.id,
+                      )}
+                      onSelect={() => handleYoutubeTagSelect(tag)}
                     />
                   ))}
                 </div>

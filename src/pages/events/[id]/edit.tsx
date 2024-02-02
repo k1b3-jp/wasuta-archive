@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { uploadStorage } from '@/lib/supabase/uploadStorage';
 import { deleteStorage } from '@/lib/supabase/deleteStorage';
 import Image from 'next/image';
+import { TagType } from '@/types/tag';
 
 const defaultImageUrl = '/event-placeholder.png';
 
@@ -23,8 +24,8 @@ const EditEvent = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [allTags, setAllTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [allTags, setAllTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
@@ -47,7 +48,7 @@ const EditEvent = () => {
   const fetchEventAndTags = async () => {
     if (id) {
       // 既存のイベントデータを取得
-      const event = await getEvents({ eventId: id });
+      const event = await getEvents({ eventId: Number(id) });
       setEventName(event[0].event_name);
 
       // ISO 8601形式の日付時間から時間部分のみを取得
@@ -64,20 +65,22 @@ const EditEvent = () => {
       setDescription(event[0].description);
 
       // イベントに紐づくタグを取得
-      let { data: eventTags, error: eventTagsError } = await supabase
+      const { data: eventTags } = await supabase
         .from('event_tags')
         .select('tag_id')
         .eq('event_id', id);
-      eventTags = eventTags.map((tag) => tag.tag_id);
-      setSelectedTags(eventTags);
+      if (eventTags) {
+        const tagIds = eventTags.map((tag) => tag.tag_id);
+        setSelectedTags(tagIds);
+      }
 
       // タグを取得
       const tags = await getEventTags();
-      setAllTags(tags);
+      setAllTags(tags ?? []);
     }
   };
 
-  const handleTagSelect = (tag) => {
+  const handleTagSelect = (tag: number) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
     } else {
@@ -85,7 +88,11 @@ const EditEvent = () => {
     }
   };
 
-  const validateFields = (fields) => {
+  const validateFields = (fields: {
+    [x: string]: any;
+    イベント名?: string;
+    日付?: string;
+  }) => {
     let errors = [];
     for (let fieldName in fields) {
       if (!fields[fieldName]) {
@@ -99,7 +106,7 @@ const EditEvent = () => {
     return true;
   };
 
-  const handleUploadStorage = async (folder: FolderList | null) => {
+  const handleUploadStorage = async (folder: FileList | null) => {
     if (!folder || !folder.length) return null;
     const { path } = await uploadStorage({
       folder,
@@ -109,7 +116,7 @@ const EditEvent = () => {
     return data.publicUrl;
   };
 
-  function extractPathFromUrl(url) {
+  function extractPathFromUrl(url: string | URL) {
     const urlParts = new URL(url);
     // URLのパス部分を取得し、'/'で分割
     const pathSegments = urlParts.pathname.split('/');
@@ -120,7 +127,7 @@ const EditEvent = () => {
     return lastSegment;
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (isLoggedIn) {
       const fields = {
@@ -137,7 +144,13 @@ const EditEvent = () => {
         let [year, month, day] = date.split('-');
         let [hour, minute] = eventTime.split(':');
         combinedDateTime = new Date(
-          Date.UTC(year, month - 1, day, hour, minute),
+          Date.UTC(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            Number(hour),
+            Number(minute),
+          ),
         ).toISOString();
       }
 
@@ -162,7 +175,14 @@ const EditEvent = () => {
           description,
           ...(newPath ? { imageUrl: newPath } : {}),
         };
-        const updatedData = await updateEvent(eventData, id, selectedTags);
+        const updatedData = await updateEvent(
+          {
+            ...eventData,
+            eventTime: eventData.eventTime || undefined,
+          },
+          id?.toString() ?? '',
+          selectedTags,
+        );
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
         toast.error('エラーがあります😢');
@@ -282,8 +302,8 @@ const EditEvent = () => {
               <Tag
                 key={tag.id}
                 label={tag.label}
-                selected={selectedTags.includes(tag.id)}
-                onSelect={() => handleTagSelect(tag.id)}
+                selected={selectedTags.includes(parseInt(tag.id))}
+                onSelect={() => handleTagSelect(parseInt(tag.id))}
               />
             ))}
           </div>

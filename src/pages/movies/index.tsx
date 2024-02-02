@@ -7,6 +7,7 @@ import BaseButton from '@/components/ui/BaseButton';
 import MovieCard from '@/components/events/MovieCard';
 import useSWRInfinite from 'swr/infinite';
 import { TagType } from '@/types/tag';
+import { Movie } from '@/types/movie';
 
 const EventListPage = () => {
   const [allTags, setAllTags] = useState<TagType[]>([]);
@@ -69,7 +70,7 @@ const EventListPage = () => {
     size,
     setSize,
     mutate,
-  } = useSWRInfinite(getKey, fetchMovies);
+  } = useSWRInfinite<any>(getKey, fetchMovies);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -98,7 +99,7 @@ const EventListPage = () => {
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {movies?.map((items) => {
-              return items?.map((link) => {
+              return items?.map((link: Movie) => {
                 return (
                   <div key={link.youtube_link_id} className="min-w-80">
                     <MovieCard videoUrl={link?.youtube_links?.url}></MovieCard>
