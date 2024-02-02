@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient';
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 
 // イベントを取得するためのオプションの型を定義します
 interface GetEventsOptions {
@@ -16,7 +17,13 @@ interface GetEventsOptions {
 }
 
 export async function getEvents(options?: GetEventsOptions) {
-  let query = supabase.from('events').select('*');
+  let query = supabase.from('events').select('*') as PostgrestFilterBuilder<
+    any,
+    any,
+    any[],
+    'events',
+    unknown
+  >;
 
   if (options?.tags && options.tags.length > 0) {
     query = query.select(`
@@ -24,7 +31,7 @@ export async function getEvents(options?: GetEventsOptions) {
       event_tags!inner(*,
         event_tag_names(name)
       )
-    `);
+    `) as PostgrestFilterBuilder<any, any, any[], 'events', unknown>;
   }
 
   // イベントIDでフィルタリング
