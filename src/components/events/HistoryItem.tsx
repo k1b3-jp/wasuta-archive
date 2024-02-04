@@ -1,6 +1,6 @@
+import Image from 'next/image';
 import React from 'react';
 import { EventCard } from '../../types/event';
-import Image from 'next/image';
 import BaseButton from '../ui/BaseButton';
 
 const defaultImageUrl = '/event-placeholder.png';

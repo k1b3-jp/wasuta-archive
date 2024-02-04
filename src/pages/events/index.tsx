@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
 import EventCard from '@/components/events/EventCard';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import BaseButton from '@/components/ui/BaseButton';
-import useSWRInfinite from 'swr/infinite';
 import { TagType } from '@/types/tag';
 
 const EventListPage = () => {

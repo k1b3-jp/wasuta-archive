@@ -1,15 +1,15 @@
+import { useRouter } from 'next/router';
+import { useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
-import { useRouter } from 'next/router';
-import { use, useEffect, useState, useCallback } from 'react';
-import { getMovies } from '@/lib/supabase/getMovies';
-import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
-import { toast } from 'react-toastify';
 import BaseButton from '@/components/ui/BaseButton';
-import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import Tag from '@/components/ui/Tag';
-import { TagType } from '@/types/tag';
+import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
+import { getMovies } from '@/lib/supabase/getMovies';
+import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { Movie } from '@/types/movie';
+import { TagType } from '@/types/tag';
 
 const EventMovieList = () => {
   const router = useRouter();

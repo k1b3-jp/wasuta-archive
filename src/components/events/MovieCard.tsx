@@ -1,5 +1,5 @@
-import React from 'react';
 import { YouTubeEmbed } from '@next/third-parties/google';
+import React from 'react';
 
 export function extractYouTubeVideoId(url: string): string | null {
   const matched =

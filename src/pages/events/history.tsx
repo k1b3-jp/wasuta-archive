@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '@/app/layout';
+import HistoryItem from '@/components/events/HistoryItem';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import BaseButton from '@/components/ui/BaseButton';
-import HistoryItem from '@/components/events/HistoryItem';
 import { Event } from '@/types/event';
 import { TagType } from '@/types/tag';
 

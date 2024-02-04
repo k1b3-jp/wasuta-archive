@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
-import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベントを更新するための関数
+import Tag from '@/components/ui/Tag';
+import { deleteStorage } from '@/lib/supabase/deleteStorage';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import Tag from '@/components/ui/Tag';
-import { toast } from 'react-toastify';
+import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベントを更新するための関数
 import { uploadStorage } from '@/lib/supabase/uploadStorage';
-import { deleteStorage } from '@/lib/supabase/deleteStorage';
-import Image from 'next/image';
+import { supabase } from '@/lib/supabaseClient';
 import { TagType } from '@/types/tag';
 
 const defaultImageUrl = '/event-placeholder.png';

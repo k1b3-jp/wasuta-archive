@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
+import MovieCard from '@/components/events/MovieCard';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
-import BaseButton from '@/components/ui/BaseButton';
-import MovieCard from '@/components/events/MovieCard';
-import useSWRInfinite from 'swr/infinite';
-import { TagType } from '@/types/tag';
 import { Movie } from '@/types/movie';
+import { TagType } from '@/types/tag';
 
 const EventListPage = () => {
   const [allTags, setAllTags] = useState<TagType[]>([]);

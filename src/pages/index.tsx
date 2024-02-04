@@ -1,10 +1,10 @@
-import DefaultLayout from '../app/layout';
-import { getEvents } from '../lib/supabase/getEvents';
-import EventCard from '../components/events/EventCard';
-import { Event } from '../types/event';
+import DefaultLayout from '@/app/layout';
+import EventCard from '@/components/events/EventCard';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
+import { getEvents } from '@/lib/supabase/getEvents';
 import { getMovies } from '@/lib/supabase/getMovies';
+import { Event } from '@/types/event';
 import { Movie } from '@/types/movie';
 interface HomeProps {
   events: Event[];
