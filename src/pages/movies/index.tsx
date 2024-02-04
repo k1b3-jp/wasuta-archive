@@ -21,7 +21,9 @@ const EventListPage = () => {
 
   const fetchAllTags = async () => {
     const tags = await getYoutubeTags();
-    setAllTags(tags);
+    if (tags !== undefined) {
+      setAllTags(tags);
+    }
   };
 
   const handleTagSelect = (tag: TagType) => {

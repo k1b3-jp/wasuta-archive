@@ -7,7 +7,7 @@ const formatDate = (dateString: string): string => {
   const utcDate = new Date(date.toUTCString());
   const jstDate = new Date(utcDate);
 
-  const options = {
+  const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

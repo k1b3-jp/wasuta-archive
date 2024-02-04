@@ -11,7 +11,7 @@ export const getYoutubeTags = async () => {
   }
 
   // タグのオブジェクトの配列を返す
-  return tags.map((tag) => ({
+  return tags?.map((tag) => ({
     id: tag.tag_id,
     label: tag.name,
   }));

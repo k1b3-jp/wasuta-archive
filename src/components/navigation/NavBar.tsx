@@ -19,7 +19,7 @@ const NavBar = () => {
         data: { user },
       } = await supabase.auth.getUser();
       setIsLoggedIn(true);
-      setcurrentUser(user?.email);
+      setcurrentUser(user?.email ?? '');
     }
   };
 
