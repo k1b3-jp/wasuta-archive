@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import Tag from '@/components/ui/Tag';
 import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
 import { getMovies } from '@/lib/supabase/getMovies';
@@ -77,6 +78,29 @@ const EventMovieList = () => {
     fetchMovies(selectedTags);
   };
 
+  // Dialogを使った確認と動画削除
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+
+  const openDialog = (movieId: number) => {
+    if (movieId != null) {
+      setSelectedMovieId(movieId);
+      setIsDialogOpen(true);
+    }
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedMovieId(null);
+  };
+
+  const handleConfirm = () => {
+    if (selectedMovieId) {
+      deleteMovie(selectedMovieId);
+      closeDialog();
+    }
+  };
+
   return (
     <DefaultLayout>
       <div>
@@ -104,7 +128,7 @@ const EventMovieList = () => {
               <div className="flex justify-end">
                 <div className="w-6/12">
                   <BaseButton
-                    onClick={() => deleteMovie(movie.youtube_link_id)}
+                    onClick={() => openDialog(movie.youtube_link_id)}
                     label="動画を削除する"
                   />
                 </div>
@@ -112,6 +136,14 @@ const EventMovieList = () => {
             </div>
           ))}
         </main>
+        <ConfirmDialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+          onConfirm={handleConfirm}
+          title="動画を削除しますか？"
+          text="この操作は取り消せません。"
+          confirmText="削除する"
+        />
       </div>
     </DefaultLayout>
   );

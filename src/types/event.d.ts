@@ -7,7 +7,7 @@ export interface Event {
   description: string;
 }
 
-export interface EventCard {
+export interface EventCardProps {
   key;
   title;
   location;
