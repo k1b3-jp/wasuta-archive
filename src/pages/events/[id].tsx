@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import formatDate from '@/utils/formatDate';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
-import Link from 'next/link';
-import Tag from '@/components/ui/Tag';
-import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
-import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
 import MovieCard from '@/components/events/MovieCard';
 import BaseButton from '@/components/ui/BaseButton';
+import Tag from '@/components/ui/Tag';
+import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
 import { getMovies } from '@/lib/supabase/getMovies';
-import { toast } from 'react-toastify';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { TagType } from '@/types/tag';
+import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { Movie } from '@/types/movie';
+import { TagType } from '@/types/tag';
+import formatDate from '@/utils/formatDate';
+import { supabase } from '../../lib/supabaseClient';
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {

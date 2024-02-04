@@ -1,13 +1,13 @@
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
+import BaseButton from '@/components/ui/BaseButton';
+import Tag from '@/components/ui/Tag';
 import createEvent from '@/lib/supabase/createEvent';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import Tag from '@/components/ui/Tag';
-import BaseButton from '@/components/ui/BaseButton';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 import { uploadStorage } from '@/lib/supabase/uploadStorage';
+import { supabase } from '@/lib/supabaseClient';
 import { TagType } from '@/types/tag';
 
 const CreateEvent = () => {

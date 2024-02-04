@@ -1,10 +1,10 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
-import BaseButton from '../ui/BaseButton';
 import Logo from '../../../public/logo.svg';
+import BaseButton from '../ui/BaseButton';
 
 const NavBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);

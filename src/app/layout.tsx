@@ -1,14 +1,10 @@
-import type { NextPage } from 'next';
-import React from 'react';
-import type { Metadata } from 'next';
-import { Noto_Sans_JP, Rubik } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import styles from './layout.module.scss';
-import '../styles/globals.scss';
-import NavBar from '@/components/navigation/NavBar';
-import Footer from '@/components/navigation/Footer';
+import { Noto_Sans_JP, Rubik } from 'next/font/google';
+import React from 'react';
+import '@/styles/globals.scss';
 import { ToastContainer } from 'react-toastify';
+import Footer from '@/components/navigation/Footer';
+import NavBar from '@/components/navigation/NavBar';
 
 import 'react-toastify/dist/ReactToastify.css';
 

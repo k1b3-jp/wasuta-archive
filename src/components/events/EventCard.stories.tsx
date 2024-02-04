@@ -1,7 +1,7 @@
 // stories/EventCard.stories.tsx
 
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
+import React from 'react';
 import EventCard from './EventCard';
 
 export default {
