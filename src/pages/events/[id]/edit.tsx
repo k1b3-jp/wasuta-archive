@@ -3,7 +3,10 @@ import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
+import BaseButton from '@/components/ui/BaseButton';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import Tag from '@/components/ui/Tag';
+import { deleteEvent } from '@/lib/supabase/deleteEvent';
 import { deleteStorage } from '@/lib/supabase/deleteStorage';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
@@ -193,6 +196,31 @@ const EditEvent = () => {
     }
   };
 
+  // イベントを削除する
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+
+  const openDialog = (eventId: number) => {
+    if (eventId != null) {
+      setSelectedEventId(eventId);
+      setIsDialogOpen(true);
+    }
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedEventId(null);
+  };
+
+  const handleConfirm = () => {
+    if (selectedEventId) {
+      deleteEvent(selectedEventId);
+      router.push('/events');
+      // TODO:トースト表示
+      closeDialog();
+    }
+  };
+
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
@@ -316,6 +344,18 @@ const EditEvent = () => {
             Update Event
           </button>
         </form>
+        <BaseButton
+          onClick={() => openDialog(Number(id))}
+          label="イベントを削除する"
+        />
+        <ConfirmDialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+          onConfirm={handleConfirm}
+          title="イベントを削除しますか？"
+          text="この操作は取り消せません。紐づく動画もすべて削除されます。"
+          confirmText="削除する"
+        />
       </div>
     </DefaultLayout>
   );
