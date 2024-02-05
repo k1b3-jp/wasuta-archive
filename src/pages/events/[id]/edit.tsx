@@ -20,7 +20,6 @@ const defaultImageUrl = '/event-placeholder.png';
 const EditEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventName, setEventName] = useState('');
-  const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [fileList, setFileList] = useState<FileList | null>(null);
@@ -53,13 +52,6 @@ const EditEvent = () => {
       // 既存のイベントデータを取得
       const event = await getEvents({ eventId: Number(id) });
       setEventName(event[0].event_name);
-
-      // ISO 8601形式の日付時間から時間部分のみを取得
-      if (event[0].event_time) {
-        let timePart = event[0].event_time.split('T')[1].split(':');
-        let formattedTime = `${timePart[0]}:${timePart[1]}`;
-        setEventTime(formattedTime);
-      }
 
       setDate(event[0].date);
 
@@ -142,21 +134,6 @@ const EditEvent = () => {
         return;
       }
 
-      let combinedDateTime = null;
-      if (date && eventTime) {
-        let [year, month, day] = date.split('-');
-        let [hour, minute] = eventTime.split(':');
-        combinedDateTime = new Date(
-          Date.UTC(
-            Number(year),
-            Number(month) - 1,
-            Number(day),
-            Number(hour),
-            Number(minute),
-          ),
-        ).toISOString();
-      }
-
       try {
         let newPath;
         if (fileList) {
@@ -172,7 +149,6 @@ const EditEvent = () => {
         }
         const eventData = {
           eventName,
-          eventTime: combinedDateTime,
           date,
           location,
           description,
@@ -181,7 +157,6 @@ const EditEvent = () => {
         const updatedData = await updateEvent(
           {
             ...eventData,
-            eventTime: eventData.eventTime || undefined,
           },
           id?.toString() ?? '',
           selectedTags,
@@ -239,21 +214,6 @@ const EditEvent = () => {
               type="text"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="eventTime"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Event Time
-            </label>
-            <input
-              id="eventTime"
-              type="time"
-              value={eventTime}
-              onChange={(e) => setEventTime(e.target.value)}
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
             />
           </div>

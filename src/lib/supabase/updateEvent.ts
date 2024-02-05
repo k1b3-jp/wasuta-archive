@@ -2,7 +2,6 @@ import { supabase } from '../supabaseClient';
 
 interface EventData {
   eventName: string;
-  eventTime?: string;
   date: string;
   location?: string;
   imageUrl?: string;
@@ -14,7 +13,7 @@ const updateEvent = async (
   eventId: string,
   tags: number[],
 ) => {
-  const { eventName, eventTime, date, location, imageUrl, description } = data;
+  const { eventName, date, location, imageUrl, description } = data;
 
   try {
     // 既存のイベントを更新
@@ -22,7 +21,6 @@ const updateEvent = async (
       .from('events')
       .update({
         event_name: eventName,
-        event_time: eventTime,
         date: new Date(date),
         location,
         image_url: imageUrl,

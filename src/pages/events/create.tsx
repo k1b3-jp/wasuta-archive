@@ -13,7 +13,6 @@ import { TagType } from '@/types/tag';
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventName, setEventName] = useState('');
-  const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
@@ -54,22 +53,6 @@ const CreateEvent = () => {
       setSelectedTags([...selectedTags, tag]);
     }
   };
-
-  // 日付と時刻をISO 8601形式に変換します
-  let combinedDateTime: string | null = null;
-  if (date && eventTime) {
-    let [year, month, day] = date.split('-');
-    let [hour, minute] = eventTime.split(':');
-    combinedDateTime = new Date(
-      Date.UTC(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        Number(hour),
-        Number(minute),
-      ),
-    ).toISOString();
-  }
 
   // Validation function
   type Fields = {
@@ -118,7 +101,6 @@ const CreateEvent = () => {
         const newPath = await handleUploadStorage(fileList);
         const eventData = {
           eventName,
-          eventTime: combinedDateTime,
           date,
           location,
           imageUrl: newPath || undefined,
@@ -164,18 +146,6 @@ const CreateEvent = () => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="eventTime" className="block text-sm font-bold mb-2">
-              時刻
-            </label>
-            <input
-              id="eventTime"
-              type="time"
-              value={eventTime}
-              onChange={(e) => setEventTime(e.target.value)}
               className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
