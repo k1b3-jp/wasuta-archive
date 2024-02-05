@@ -2,7 +2,6 @@
 create table Events (
     event_id integer primary key generated always as identity,
     event_name text,
-    event_time timestamp,
     date date,
     location text,
     image_url text,

@@ -173,9 +173,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             <h1 className="text-deep-pink font-bold text-2xl mb-6">
               {event.event_name}
             </h1>
-            <h4 className="text-lg mb-4">
-              日時：{formatDate(event.event_time)}
-            </h4>
+            <h4 className="text-lg mb-4">日付：{formatDate(event.date)}</h4>
             <h4 className="text-lg mb-4">場所：{event.location}</h4>
             <p className="mb-4">{event.description}</p>
             <BaseButton

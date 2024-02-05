@@ -2,7 +2,6 @@ import { supabase } from '../supabaseClient';
 
 interface EventData {
   eventName: string;
-  eventTime?: string | null;
   date: string;
   location?: string;
   imageUrl?: string;
@@ -10,7 +9,7 @@ interface EventData {
 }
 
 const createEvent = async (data: EventData, tags: string[]) => {
-  const { eventName, eventTime, date, location, imageUrl, description } = data;
+  const { eventName, date, location, imageUrl, description } = data;
 
   try {
     const { data: insertedData, error: eventInsertError } = await supabase
@@ -18,7 +17,6 @@ const createEvent = async (data: EventData, tags: string[]) => {
       .insert([
         {
           event_name: eventName,
-          event_time: eventTime,
           date: new Date(date),
           location,
           image_url: imageUrl,
