@@ -1,5 +1,6 @@
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -26,6 +27,17 @@ export default function Google() {
             providers={['google']}
           />
         </div>
+        <p className="text-sm text-center">
+          サインアップすることで、
+          <Link href="/terms" className="underline">
+            利用規約
+          </Link>
+          および
+          <Link href="/policy" className="underline">
+            プライバシーポリシー
+          </Link>
+          に同意したことになります。
+        </p>
       </DefaultLayout>
     </>
   );
