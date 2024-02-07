@@ -20,3 +20,11 @@ body {
   justify-content: center;
   grid-gap: 2rem;
 }
+
+ol {
+  list-style: decimal;
+  padding-left: 1em;
+  li {
+    margin-bottom: 0.5rem;
+  }
+}
