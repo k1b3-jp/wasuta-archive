@@ -25,9 +25,7 @@ const defaultImageUrl = '/event-placeholder.png';
 // イベント詳細ページのデータ取得処理
 export const getStaticPaths = async () => {
   // 全イベントのIDを取得
-  const { data: events, error } = await supabase
-    .from('events')
-    .select('event_id');
+  const { data: events, error } = await supabase.from('events').select('event_id');
 
   // パスオブジェクトの配列を生成
   const paths = events?.map((event) => ({
@@ -109,9 +107,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   };
   const handleYoutubeTagSelect = (tag: TagType) => {
     if (selectedYoutubeTags.some((t) => t.id === tag.id)) {
-      setSelectedYoutubeTags(
-        selectedYoutubeTags.filter((t) => t.id !== tag.id),
-      );
+      setSelectedYoutubeTags(selectedYoutubeTags.filter((t) => t.id !== tag.id));
     } else {
       setSelectedYoutubeTags([...selectedYoutubeTags, tag]);
     }
@@ -139,17 +135,18 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 
       try {
         const selectedYoutubeTagIds = selectedYoutubeTags.map((tag) => tag.id);
-        const insertedData = await createYoutubeLink(
-          url,
-          selectedYoutubeTagIds,
-          id,
-        );
+        const insertedData = await createYoutubeLink(url, selectedYoutubeTagIds, id);
         toast.success('動画を登録しました🌏');
         router.push(`/events/${id}`);
         setUrl('');
         setSelectedYoutubeTags([]);
       } catch (error) {
-        toast.error('動画の登録中にエラーが発生しました😢');
+        if ((error as any).code === '23505') {
+          toast.error('その動画は既に登録されています。別のURLを入力してください🙇‍♂️');
+        } else {
+          console.log(error);
+          toast.error('動画の登録中にエラーが発生しました😢');
+        }
       }
     } else {
       toast.error('ログインが必要です🙇‍♂️');
@@ -170,16 +167,11 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             />
           </div>
           <div className="event-detail p-8">
-            <h1 className="text-deep-pink font-bold text-2xl mb-6">
-              {event.event_name}
-            </h1>
+            <h1 className="text-deep-pink font-bold text-2xl mb-6">{event.event_name}</h1>
             <h4 className="text-lg mb-4">日付：{formatDate(event.date)}</h4>
             <h4 className="text-lg mb-4">場所：{event.location}</h4>
             <p className="mb-4">{event.description}</p>
-            <BaseButton
-              link={`/events/${id}/edit`}
-              label="イベントを編集"
-            ></BaseButton>
+            <BaseButton link={`/events/${id}/edit`} label="イベントを編集"></BaseButton>
           </div>
           {/* YouTubeリンクの表示 */}
           <div className="event-movie bg-light-pink bg-100vw">
@@ -204,14 +196,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               </div>
               {/* Youtubeリンクに新規登録するフォーム */}
               <div className="add-movie bg-white p-8 rounded-lg border border-gray-100">
-                <h4 className="text-xl font-bold text-deep-blue mb-10">
-                  動画の登録
-                </h4>
+                <h4 className="text-xl font-bold text-deep-blue mb-10">動画の登録</h4>
                 <div className="mb-8">
-                  <label
-                    htmlFor="url"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
                     URL
                   </label>
                   <input
@@ -228,9 +215,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                     <Tag
                       key={tag.id}
                       label={tag.label}
-                      selected={selectedYoutubeTags.some(
-                        (t) => t.id === tag.id,
-                      )}
+                      selected={selectedYoutubeTags.some((t) => t.id === tag.id)}
                       onSelect={() => handleYoutubeTagSelect(tag)}
                     />
                   ))}

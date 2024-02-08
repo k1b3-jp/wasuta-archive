@@ -59,17 +59,14 @@ const CreateEvent = () => {
     [key: string]: string;
   };
   const validateFields = (fields: Fields) => {
-    let errors = [];
+    let isValid = true;
     for (let fieldName in fields) {
       if (!fields[fieldName]) {
-        errors.push(`${fieldName}は必須です。`);
+        toast.error(`${fieldName}は必須です😥`);
+        isValid = false;
       }
     }
-    if (errors.length > 0) {
-      setErrorMessage(errors.join(' '));
-      return false;
-    }
-    return true;
+    return isValid;
   };
 
   const handleUploadStorage = async (folder: FileList | null) => {
@@ -93,7 +90,6 @@ const CreateEvent = () => {
         日付: date,
       };
       if (!validateFields(fields)) {
-        toast.error('不足項目があります😢');
         return;
       }
 
@@ -111,7 +107,11 @@ const CreateEvent = () => {
         const id = insertedData[0].event_id;
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
-        toast.error('エラーがあります😢');
+        if ((error as any).code === '23505') {
+          toast.error('そのイベント名は既に存在します。別の名前を試してください🙇‍♂️');
+        } else {
+          toast.error(`エラーがあります😢`);
+        }
       }
     } else {
       toast.error('ログインが必要です。');
@@ -121,9 +121,7 @@ const CreateEvent = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-10">
-        <h1 className="text-2xl font-bold mb-8 text-deep-pink">
-          イベントの作成
-        </h1>
+        <h1 className="text-2xl font-bold mb-8 text-deep-pink">イベントの作成</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="eventName" className="block text-sm font-bold mb-2">
@@ -162,10 +160,7 @@ const CreateEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="file-upload"
-              className="block text-sm font-bold mb-2"
-            >
+            <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
               カバー画像
             </label>
             <input
@@ -178,10 +173,7 @@ const CreateEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-bold mb-2"
-            >
+            <label htmlFor="description" className="block text-sm font-bold mb-2">
               説明文
             </label>
             <textarea
