@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import DefaultLayout from '../app/layout';
 
 export default function Policy() {
@@ -148,8 +149,11 @@ export default function Policy() {
           </div>
           <h2 className="font-bold text-xl mb-3">第10条（お問い合わせ窓口）</h2>
           <p className="mb-6">
-            {/* TODO: 問い合わせフォームの設置とリンク設定 */}
-            本ポリシーに関するお問い合わせは、ウェブサイト上のお問い合わせフォームからお願いいたします。
+            本ポリシーに関するお問い合わせは、ウェブサイト上の
+            <Link href="/form" className="underline">
+              お問い合わせフォーム
+            </Link>
+            からお願いいたします。
           </p>
           <p className="text-right">以上</p>
         </div>
