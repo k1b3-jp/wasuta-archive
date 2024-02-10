@@ -49,7 +49,6 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
   return (
     <DefaultLayout>
       <div>
-        <section>{/* TODO:最新イベントのスライド？ */}</section>
         <section className="welcome p-10 flex flex-col">
           <h2 className="mx-auto text-4xl font-bold my-8 text-deep-pink">
             Welcome to Wasuta Archive!
