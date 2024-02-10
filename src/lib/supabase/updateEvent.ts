@@ -5,14 +5,10 @@ interface EventData {
   date: string;
   location?: string;
   imageUrl?: string;
-  description: string;
+  description?: string;
 }
 
-const updateEvent = async (
-  data: EventData,
-  eventId: string,
-  tags: number[],
-) => {
+const updateEvent = async (data: EventData, eventId: string, tags: number[]) => {
   const { eventName, date, location, imageUrl, description } = data;
 
   try {
@@ -22,11 +18,11 @@ const updateEvent = async (
       .update({
         event_name: eventName,
         date: new Date(date),
-        location,
+        location: location || '',
         image_url: imageUrl,
-        description,
+        description: description || '',
       })
-      .match({ event_id: eventId });
+      .eq('event_id', eventId);
 
     if (updateError) throw updateError;
 
@@ -44,9 +40,7 @@ const updateEvent = async (
       tag_id: tagId,
     }));
 
-    const { error: tagError } = await supabase
-      .from('event_tags')
-      .insert(eventTagData);
+    const { error: tagError } = await supabase.from('event_tags').insert(eventTagData);
 
     if (tagError) throw tagError;
 
