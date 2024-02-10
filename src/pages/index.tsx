@@ -72,7 +72,10 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
               {movies.length > 0 ? (
                 movies.map((link) => (
                   <div key={link.youtube_link_id} className="min-w-80 m-2">
-                    <MovieCard videoUrl={link.youtube_links.url}></MovieCard>
+                    <MovieCard
+                      videoUrl={link.youtube_links.url}
+                      id={link.youtube_link_id}
+                    ></MovieCard>
                   </div>
                 ))
               ) : (

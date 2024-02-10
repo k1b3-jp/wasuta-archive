@@ -123,7 +123,7 @@ const EventMovieList = () => {
           {movies.map((movie) => (
             <div key={movie.youtube_link_id}>
               <div className="mb-2">
-                <MovieCard videoUrl={movie.youtube_links.url} />
+                <MovieCard videoUrl={movie.youtube_links.url} id={movie.youtube_link_id} />
               </div>
               <div className="flex justify-end">
                 <div className="w-6/12">
