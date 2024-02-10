@@ -130,9 +130,6 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
     e.preventDefault();
 
     if (isLoggedIn) {
-      // TODO: バリデーション
-      // if (!validateFields({ url })) return;
-
       try {
         const selectedYoutubeTagIds = selectedYoutubeTags.map((tag) => tag.id);
         const insertedData = await createYoutubeLink(url, selectedYoutubeTagIds, id);
@@ -144,8 +141,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         if ((error as any).code === '23505') {
           toast.error('その動画は既に登録されています。別のURLを入力してください🙇‍♂️');
         } else {
-          console.log(error);
-          toast.error('動画の登録中にエラーが発生しました😢');
+          toast.error(`動画の登録中にエラーが発生しました😢（${error}）`);
         }
       }
     } else {
