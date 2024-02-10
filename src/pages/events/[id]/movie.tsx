@@ -39,7 +39,7 @@ const EventMovieList = () => {
       }
     },
     [id],
-  ); // fetchMovies関数が依存する変数をここにリストします
+  );
 
   useEffect(() => {
     fetchAllTags();
