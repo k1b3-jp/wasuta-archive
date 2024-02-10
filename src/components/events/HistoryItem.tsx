@@ -1,5 +1,7 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getEventTags } from '@/lib/supabase/getEventTags';
+import { TagType } from '@/types/tag';
 import { EventCardProps } from '../../types/event';
 import BaseButton from '../ui/BaseButton';
 
@@ -18,6 +20,19 @@ const HistoryItem: React.FC<EventCardProps> = ({
     month: '2-digit',
     day: '2-digit',
   });
+
+  //idに紐づくタグを取得する
+  const [eventTags, setEventTags] = useState<TagType[] | undefined>([]);
+
+  useEffect(() => {
+    fetchEventTags();
+  }, [id]);
+
+  const fetchEventTags = async () => {
+    const tags = await getEventTags(id);
+    setEventTags(tags);
+  };
+
   return (
     <li className="mb-10 ms-6">
       <span className="absolute flex items-center justify-center w-6 h-6 bg-light-blue rounded-full -start-3 ring-8 ring-white">
@@ -33,10 +48,16 @@ const HistoryItem: React.FC<EventCardProps> = ({
       </span>
       <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
         {title}
-        <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded ms-3">
-          {/* TODO: タグを表示する実装 */}
-          Latest
-        </span>
+        {eventTags?.map(
+          (tag: { id: React.Key | null | undefined; label: string | null | undefined }) => (
+            <span
+              key={tag.id}
+              className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded ms-1"
+            >
+              {tag.label}
+            </span>
+          ),
+        )}
       </h3>
       <time className="block mb-2 text-sm font-normal leading-none text-gray-400">
         {formattedDate}
