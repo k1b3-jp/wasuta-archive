@@ -67,12 +67,7 @@ const EventListPage = () => {
     return { page: pageIndex, limit: limit };
   };
 
-  const {
-    data: movies,
-    size,
-    setSize,
-    mutate,
-  } = useSWRInfinite<any>(getKey, fetchMovies);
+  const { data: movies, size, setSize, mutate } = useSWRInfinite<any>(getKey, fetchMovies);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -104,7 +99,10 @@ const EventListPage = () => {
               return items?.map((link: Movie) => {
                 return (
                   <div key={link.youtube_link_id} className="min-w-80">
-                    <MovieCard videoUrl={link?.youtube_links?.url}></MovieCard>
+                    <MovieCard
+                      videoUrl={link?.youtube_links?.url}
+                      id={link.youtube_link_id}
+                    ></MovieCard>
                   </div>
                 );
               });
