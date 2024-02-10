@@ -1,6 +1,18 @@
 import { supabase } from '../supabaseClient';
 
+export function validateUrl(url: string) {
+  // YouTubeのビデオページ、短縮URL、埋め込みページの形式にマッチする正規表現を一つに組み合わせる
+  const youtubeRegex =
+    /^(https?:\/\/)?((www\.)?youtube\.com\/watch\?([^&]+&)*v=([^&]+)|youtu\.be\/([^?]+)|(www\.)?youtube\.com\/embed\/([^?]+))$/;
+
+  return youtubeRegex.test(url);
+}
+
 export const createYoutubeLink = async (url: string, tags: string[], eventId: number) => {
+  if (!validateUrl(url)) {
+    throw new Error('URLが正しいYoutubeのリンクではありません');
+  }
+
   // Youtubeリンクを追加
   const { data: linkData, error: linkError } = await supabase
     .from('youtube_links')
