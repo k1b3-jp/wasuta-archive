@@ -1,4 +1,6 @@
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
 import EventCard from '@/components/events/EventCard';
@@ -17,7 +19,13 @@ const EventListPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  const query = useSearchParams();
+  const toastParams = query?.get('toast');
+
   useEffect(() => {
+    if (toastParams === 'eventDeleted') {
+      toast.success('イベントを削除しました');
+    }
     fetchAllTags();
   }, []);
 
@@ -72,12 +80,7 @@ const EventListPage = () => {
     return { page: pageIndex, limit: limit };
   };
 
-  const {
-    data: events,
-    size,
-    setSize,
-    mutate,
-  } = useSWRInfinite(getKey, fetchEvents);
+  const { data: events, size, setSize, mutate } = useSWRInfinite(getKey, fetchEvents);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
