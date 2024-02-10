@@ -83,11 +83,7 @@ const EditEvent = () => {
     }
   };
 
-  const validateFields = (fields: {
-    [x: string]: any;
-    イベント名?: string;
-    日付?: string;
-  }) => {
+  const validateFields = (fields: { [x: string]: any; イベント名?: string; 日付?: string }) => {
     let errors = [];
     for (let fieldName in fields) {
       if (!fields[fieldName]) {
@@ -138,22 +134,21 @@ const EditEvent = () => {
         let newPath;
         if (fileList) {
           newPath = await handleUploadStorage(fileList); // newPathに値を設定
+
           // 既存のimageUrlのファイルを削除
           let deletePics;
           if (imageUrl) {
-            deletePics = await deleteStorage(
-              extractPathFromUrl(imageUrl),
-              'event_pics',
-            );
+            deletePics = await deleteStorage(extractPathFromUrl(imageUrl), 'event_pics');
           }
         }
         const eventData = {
           eventName,
           date,
           location,
-          description,
           ...(newPath ? { imageUrl: newPath } : {}),
+          description,
         };
+
         const updatedData = await updateEvent(
           {
             ...eventData,
@@ -187,11 +182,15 @@ const EditEvent = () => {
     setSelectedEventId(null);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (selectedEventId) {
-      deleteEvent(selectedEventId);
-      router.push('/events');
-      // TODO:トースト表示
+      try {
+        await deleteEvent(selectedEventId);
+        await router.push(`/events?toast=eventDeleted`);
+      } catch (error) {
+        console.error('An error occurred:', error);
+        toast.error('イベントの削除中にエラーが発生しました。');
+      }
       closeDialog();
     }
   };
@@ -203,10 +202,7 @@ const EditEvent = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* 各フォーム要素 */}
           <div>
-            <label
-              htmlFor="eventName"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="eventName" className="block text-sm font-medium text-gray-700">
               Event Name
             </label>
             <input
@@ -218,10 +214,7 @@ const EditEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
               Date
             </label>
             <input
@@ -233,10 +226,7 @@ const EditEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
               Location
             </label>
             <input
@@ -248,10 +238,7 @@ const EditEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="file-upload"
-              className="block text-sm font-bold mb-2"
-            >
+            <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
               カバー画像
             </label>
             <Image
@@ -271,10 +258,7 @@ const EditEvent = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Description
             </label>
             <textarea
@@ -304,10 +288,7 @@ const EditEvent = () => {
             Update Event
           </button>
         </form>
-        <BaseButton
-          onClick={() => openDialog(Number(id))}
-          label="イベントを削除する"
-        />
+        <BaseButton onClick={() => openDialog(Number(id))} label="イベントを削除する" />
         <ConfirmDialog
           open={isDialogOpen}
           onClose={closeDialog}
