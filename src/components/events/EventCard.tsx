@@ -6,13 +6,7 @@ import BaseButton from '../ui/BaseButton';
 
 const defaultImageUrl = '/event-placeholder.png';
 
-const EventCard: React.FC<EventCardProps> = ({
-  title,
-  location,
-  date,
-  imageUrl,
-  id,
-}) => {
+const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl, id }) => {
   return (
     <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
       <Image
@@ -22,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({
         height={300}
         className="w-full"
       />
-      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-blue text-white">
+      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-gray">
         {formatDate(date)}
       </div>
       <div className="p-4">

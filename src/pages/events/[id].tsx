@@ -153,7 +153,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
     <DefaultLayout>
       <div>
         <div className="event">
-          <div className="event-head bg-100vw bg-light-pink p-8">
+          <div className="event-head bg-100vw bg-light-gray p-8">
             <Image
               src={event.image_url || defaultImageUrl}
               alt={event.event_name}
@@ -163,17 +163,17 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             />
           </div>
           <div className="event-detail p-8">
-            <h1 className="text-deep-pink font-bold text-2xl mb-6">{event.event_name}</h1>
+            <h1 className="text-font-color font-bold text-2xl mb-6">{event.event_name}</h1>
             <h4 className="text-lg mb-4">日付：{formatDate(event.date)}</h4>
             <h4 className="text-lg mb-4">場所：{event.location}</h4>
             <p className="mb-4">{event.description}</p>
             <BaseButton link={`/events/${id}/edit`} label="イベントを編集"></BaseButton>
           </div>
           {/* YouTubeリンクの表示 */}
-          <div className="event-movie bg-light-pink bg-100vw">
+          <div className="event-movie bg-light-gray bg-100vw">
             <div className="container mx-auto p-8">
               <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-bold text-deep-pink">MOVIE</h3>
+                <h3 className="text-2xl font-bold text-font-color">MOVIE</h3>
                 <BaseButton label="もっと見る" link={`/events/${id}/movie`} />
               </div>
               <div
@@ -195,7 +195,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               </div>
               {/* Youtubeリンクに新規登録するフォーム */}
               <div className="add-movie bg-white p-8 rounded-lg border border-gray-100">
-                <h4 className="text-xl font-bold text-deep-blue mb-10">動画の登録</h4>
+                <h4 className="text-xl font-bold text-deep-green mb-10">動画の登録</h4>
                 <div className="mb-8">
                   <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
                     URL

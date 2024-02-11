@@ -36,9 +36,9 @@ const HistoryItem: React.FC<EventCardProps> = ({
 
   return (
     <li className="mb-10 ms-6">
-      <span className="absolute flex items-center justify-center w-6 h-6 bg-light-blue rounded-full -start-3 ring-8 ring-white">
+      <span className="absolute flex items-center justify-center w-6 h-6 bg-light-green rounded-full -start-3 ring-8 ring-white">
         <svg
-          className="w-2.5 h-2.5 text-deep-blue"
+          className="w-2.5 h-2.5 text-deep-green"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
