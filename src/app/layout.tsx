@@ -1,3 +1,4 @@
+import { config } from '@fortawesome/fontawesome-svg-core';
 import { Analytics } from '@vercel/analytics/react';
 import { Noto_Sans_JP, Rubik } from 'next/font/google';
 import React from 'react';
@@ -5,8 +6,10 @@ import '@/styles/globals.scss';
 import { ToastContainer } from 'react-toastify';
 import Footer from '@/components/navigation/Footer';
 import NavBar from '@/components/navigation/NavBar';
-
 import 'react-toastify/dist/ReactToastify.css';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+config.autoAddCss = false;
 
 const noto = Noto_Sans_JP({ subsets: ['latin'] });
 const rubik = Rubik({ subsets: ['latin'] });
@@ -16,11 +19,7 @@ const rubik = Rubik({ subsets: ['latin'] });
 //   description: 'わーすたの過去のイベントや撮影動画が見つかるWebサイトです。',
 // }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div
