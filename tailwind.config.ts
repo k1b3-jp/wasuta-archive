@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         'font-color': '#2f2f2f',
         'light-black': '#333333',
+        'deep-gray': '#F0F2F5',
         'light-gray': '#f5f5f5',
         'light-green': '#7bdcb5',
         'deep-green': '#2cb',
