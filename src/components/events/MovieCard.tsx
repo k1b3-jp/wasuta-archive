@@ -2,6 +2,7 @@ import { YouTubeEmbed } from '@next/third-parties/google';
 import React, { useEffect, useState } from 'react';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { TagType } from '@/types/tag';
+import MiniTag from '../ui/MiniTag';
 
 export function extractYouTubeVideoId(url: string): string | null {
   const matched =
@@ -40,16 +41,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
   return (
     <div>
       {videoId ? <YouTubeEmbed videoid={videoId} /> : <p>Invalid URL</p>}
-      {youtubeTags?.map(
-        (tag: { id: React.Key | null | undefined; label: string | null | undefined }) => (
-          <span
-            key={tag.id}
-            className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded ms-1"
-          >
-            {tag.label}
-          </span>
-        ),
-      )}
+      {youtubeTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
+        <MiniTag key={tag.id} label={tag.label} />
+      ))}
     </div>
   );
 };
