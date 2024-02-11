@@ -16,10 +16,13 @@ const config: Config = {
       colors: {
         'font-color': '#2f2f2f',
         'light-black': '#333333',
-        'deep-gray': '#F0F2F5',
         'light-gray': '#f5f5f5',
         'light-green': '#7bdcb5',
         'deep-green': '#2cb',
+        pink: '#f78da7',
+        purple: '#9b51e0',
+        'light-blue': '#8ed1fc',
+        yellow: '#ffea00',
       },
       fontFamily: {
         NotoSansJP: ['var(--font-NotoSansJP)'],
