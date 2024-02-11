@@ -8,17 +8,12 @@ interface BaseButtonProps {
   link?: string;
 }
 
-const BaseButton: React.FC<BaseButtonProps> = ({
-  label,
-  onClick,
-  disabled,
-  link,
-}) => {
+const BaseButton: React.FC<BaseButtonProps> = ({ label, onClick, disabled, link }) => {
   const button = (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-full text-white py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md bg-deep-blue
+      className={`w-full text-white py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md bg-deep-green
     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
     `}
     >

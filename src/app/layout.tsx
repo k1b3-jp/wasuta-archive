@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{
           margin: 0,
         }}
-        className={`${rubik.className} flex flex-col min-h-screen`}
+        className={`${noto.className} flex flex-col min-h-screen`}
       >
         <NavBar />
         <main className="flex-grow">

@@ -90,7 +90,7 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form p-8 bg-light-pink bg-100vw flex">
+          <div className="search-form p-8 bg-light-gray bg-100vw flex">
             <div className="mx-auto bg-white p-8 rounded-lg border border-gray-100">
               <input
                 className="border border-gray-300 rounded-md p-2"

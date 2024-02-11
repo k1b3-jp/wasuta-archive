@@ -104,7 +104,7 @@ const EventMovieList = () => {
   return (
     <DefaultLayout>
       <div>
-        <div className="search-form p-8 bg-light-pink bg-100vw flex">
+        <div className="search-form p-8 bg-light-gray bg-100vw flex">
           <div className="mx-auto bg-white p-6 rounded-lg border border-gray-100 w-full">
             <div className="flex flex-wrap gap-2 mb-4">
               {allTags.map((tag) => (
