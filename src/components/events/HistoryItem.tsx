@@ -4,6 +4,7 @@ import { getEventTags } from '@/lib/supabase/getEventTags';
 import { TagType } from '@/types/tag';
 import { EventCardProps } from '../../types/event';
 import BaseButton from '../ui/BaseButton';
+import MiniTag from '../ui/MiniTag';
 
 const defaultImageUrl = '/event-placeholder.png';
 
@@ -48,16 +49,9 @@ const HistoryItem: React.FC<EventCardProps> = ({
       </span>
       <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
         {title}
-        {eventTags?.map(
-          (tag: { id: React.Key | null | undefined; label: string | null | undefined }) => (
-            <span
-              key={tag.id}
-              className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded ms-1"
-            >
-              {tag.label}
-            </span>
-          ),
-        )}
+        {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
+          <MiniTag key={tag.id} label={tag.label} />
+        ))}
       </h3>
       <time className="block mb-2 text-sm font-normal leading-none text-gray-400">
         {formattedDate}
