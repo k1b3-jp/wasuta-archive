@@ -59,7 +59,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
             イベントや動画の検索は上の検索バーからできます。
           </p>
         </section>
-        <section className="bg-100vw bg-light-gray pt-4">
+        <section className="bg-100vw pt-4">
           <div className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-font-color">新着動画</h3>
