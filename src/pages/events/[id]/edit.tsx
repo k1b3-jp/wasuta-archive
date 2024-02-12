@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import BaseButton from '@/components/ui/BaseButton';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import MiniTag from '@/components/ui/MiniTag';
 import Tag from '@/components/ui/Tag';
 import { deleteEvent } from '@/lib/supabase/deleteEvent';
 import { deleteStorage } from '@/lib/supabase/deleteStorage';
@@ -23,6 +24,7 @@ const EditEvent = () => {
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [fileList, setFileList] = useState<FileList | null>(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -95,6 +97,27 @@ const EditEvent = () => {
       return false;
     }
     return true;
+  };
+
+  // ファイルが選択された際の処理
+  const handleFileChange = (e: any) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setFileList(files); // ファイルリストの状態を更新
+
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        if (typeof fileReader.result === 'string') {
+          setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
+        }
+      };
+      fileReader.readAsDataURL(file);
+    } else {
+      // ファイルが選択されていない場合、プレビューをクリア
+      setPreviewUrl('');
+      setFileList(null);
+    }
   };
 
   const handleUploadStorage = async (folder: FileList | null) => {
@@ -197,98 +220,101 @@ const EditEvent = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Edit Event</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* 各フォーム要素 */}
-          <div>
-            <label htmlFor="eventName" className="block text-sm font-medium text-gray-700">
-              Event Name
-            </label>
-            <input
-              id="eventName"
-              type="text"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-              Date
-            </label>
-            <input
-              id="date"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-              Location
-            </label>
-            <input
-              id="location"
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
-              カバー画像
-            </label>
-            <Image
-              src={imageUrl || defaultImageUrl}
-              alt={eventName}
-              width={500}
-              height={300}
-              className="mx-auto"
-            />
-            <input
-              id="file-upload"
-              name="file-upload"
-              type="file"
-              className=""
-              accept="image/png, image/jpeg"
-              onChange={(e) => setFileList(e.target?.files)}
-            />
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            ></textarea>
-          </div>
-          <div className="flex flex-wrap gap-2 my-4">
-            {allTags.map((tag) => (
-              <Tag
-                key={tag.id}
-                label={tag.label}
-                selected={selectedTags.includes(parseInt(tag.id))}
-                onSelect={() => handleTagSelect(parseInt(tag.id))}
+      <div className="container mx-auto p-4 py-6">
+        <h1 className="text-2xl font-bold mb-4">イベントの編集</h1>
+        <form onSubmit={handleSubmit} className="space-y-4 mb-4">
+          <div className="flex flex-col gap-4 mx-auto">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="eventName" className="text-sm font-bold">
+                タイトル
+                <MiniTag label="必須" />
+              </label>
+              <input
+                id="eventName"
+                type="text"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+                className="bg-light-gray rounded-md p-3"
               />
-            ))}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="date" className="text-sm font-bold">
+                日付
+                <MiniTag label="必須" />
+              </label>
+              <input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="bg-light-gray rounded-md p-3"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="location" className="text-sm font-bold">
+                場所
+              </label>
+              <input
+                id="location"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="bg-light-gray rounded-md p-3"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="file-upload" className="text-sm font-bold">
+                カバー画像
+              </label>
+              <input
+                id="file-upload"
+                name="file-upload"
+                type="file"
+                className=""
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {(previewUrl && <img src={previewUrl} alt="Preview" />) || (
+                <Image
+                  src={imageUrl || defaultImageUrl}
+                  alt={eventName}
+                  width={500}
+                  height={300}
+                  className="mx-auto"
+                />
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="description" className="text-sm font-bold">
+                説明
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="bg-light-gray rounded-md p-3"
+              ></textarea>
+            </div>
+            <div className="flex flex-col gap-2 mb-4">
+              <label className="text-sm font-bold">タグ</label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {allTags.map((tag) => (
+                  <Tag
+                    key={tag.id}
+                    label={tag.label}
+                    selected={selectedTags.includes(parseInt(tag.id))}
+                    onSelect={() => handleTagSelect(parseInt(tag.id))}
+                  />
+                ))}
+              </div>
+            </div>
+            {errorMessage && <p>{errorMessage}</p>}
+            <BaseButton onClick={handleSubmit} label="イベントを更新する" />
           </div>
-          {errorMessage && <p>{errorMessage}</p>}
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Update Event
-          </button>
         </form>
-        <BaseButton onClick={() => openDialog(Number(id))} label="イベントを削除する" />
+        <BaseButton onClick={() => openDialog(Number(id))} label="イベントを削除する" danger />
         <ConfirmDialog
           open={isDialogOpen}
           onClose={closeDialog}
