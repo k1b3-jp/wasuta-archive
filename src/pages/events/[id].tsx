@@ -1,3 +1,6 @@
+import { faCalendar } from '@fortawesome/free-regular-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -153,7 +156,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
     <DefaultLayout>
       <div>
         <div className="event">
-          <div className="event-head bg-100vw bg-light-gray p-8">
+          <div className="event-head bg-100vw bg-light-gray p-4">
             <Image
               src={event.image_url || defaultImageUrl}
               alt={event.event_name}
@@ -162,18 +165,30 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               className="mx-auto"
             />
           </div>
-          <div className="event-detail p-8">
-            <h1 className="text-font-color font-bold text-2xl mb-6">{event.event_name}</h1>
-            <h4 className="text-lg mb-4">日付：{formatDate(event.date)}</h4>
-            <h4 className="text-lg mb-4">場所：{event.location}</h4>
-            <p className="mb-4">{event.description}</p>
-            <BaseButton link={`/events/${id}/edit`} label="イベントを編集"></BaseButton>
+          <div className="event-detail p-6">
+            <h1 className="text-font-color font-bold text-xl mb-4">{event.event_name}</h1>
+            <div className="flex flex-row gap-2 items-center mb-4">
+              <div className="bg-light-gray py-2 px-3 rounded">
+                <FontAwesomeIcon icon={faCalendar} />
+              </div>
+              <p>{formatDate(event.date)}</p>
+            </div>
+            <div className="flex flex-row gap-2 items-center mb-6">
+              <div className="bg-light-gray py-2 px-3 rounded">
+                <FontAwesomeIcon icon={faLocationDot} />
+              </div>
+              <p>{event.location || '未設定'}</p>
+            </div>
+            <div className="flex flex-col gap-2 mb-6">
+              <h2 className="text-l font-bold">イベントについて</h2>
+              <p>{event.description || '未設定'}</p>
+            </div>
+            <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集"></BaseButton>
           </div>
-          {/* YouTubeリンクの表示 */}
-          <div className="event-movie bg-light-gray bg-100vw">
-            <div className="container mx-auto p-8">
-              <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-bold text-font-color">MOVIE</h3>
+          <div className="event-movie bg-100vw">
+            <div className="container mx-auto p-6">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-xl font-bold text-font-color">イベントの動画</h3>
                 <BaseButton label="もっと見る" link={`/events/${id}/movie`} />
               </div>
               <div
@@ -193,31 +208,34 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                   <p>動画が登録されていません😢</p>
                 )}{' '}
               </div>
-              {/* Youtubeリンクに新規登録するフォーム */}
-              <div className="add-movie bg-white p-8 rounded-lg border border-gray-100">
-                <h4 className="text-xl font-bold text-deep-green mb-10">動画の登録</h4>
-                <div className="mb-8">
-                  <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-                    URL
-                  </label>
-                  <input
-                    id="url"
-                    type="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                  />
-                </div>
-                <label className="block text-sm font-bold mb-2">タグ</label>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {allYoutubeTags.map((tag) => (
-                    <Tag
-                      key={tag.id}
-                      label={tag.label}
-                      selected={selectedYoutubeTags.some((t) => t.id === tag.id)}
-                      onSelect={() => handleYoutubeTagSelect(tag)}
+              <div className="add-movie bg-white p-6 rounded-lg shadow-lg">
+                <h4 className="text-xl font-bold text-deep-green mb-8">動画の登録</h4>
+                <div className="flex flex-col gap-4 mx-auto">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="url" className="text-sm font-bold">
+                      URL
+                    </label>
+                    <input
+                      id="url"
+                      type="url"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                     />
-                  ))}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold">タグ</label>
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {allYoutubeTags.map((tag) => (
+                        <Tag
+                          key={tag.id}
+                          label={tag.label}
+                          selected={selectedYoutubeTags.some((t) => t.id === tag.id)}
+                          onSelect={() => handleYoutubeTagSelect(tag)}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 <BaseButton label="登録する" onClick={handleSubmit} />
               </div>

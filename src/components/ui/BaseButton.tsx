@@ -19,7 +19,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({ label, onClick, disabled, link,
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-full py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md 
+      className={`w-full py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md font-bold
     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
     ${buttonStyles}
     `}

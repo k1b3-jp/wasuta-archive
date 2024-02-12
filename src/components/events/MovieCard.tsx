@@ -40,10 +40,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 
   return (
     <div>
-      {videoId ? <YouTubeEmbed videoid={videoId} /> : <p>Invalid URL</p>}
-      {youtubeTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
-        <MiniTag key={tag.id} label={tag.label} />
-      ))}
+      <div className="mb-2">
+        {videoId ? <YouTubeEmbed videoid={videoId} /> : <p>Invalid URL</p>}
+      </div>
+      <div className="min-h-[28px]">
+        {youtubeTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
+          <MiniTag key={tag.id} label={tag.label} />
+        ))}
+      </div>
     </div>
   );
 };
