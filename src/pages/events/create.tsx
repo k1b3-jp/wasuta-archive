@@ -22,6 +22,7 @@ const CreateEvent = () => {
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const router = useRouter();
   const [fileList, setFileList] = useState<FileList | null>(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [path, setPathName] = useState<string | undefined>();
 
   const validateAccess = async () => {
@@ -68,6 +69,23 @@ const CreateEvent = () => {
       }
     }
     return isValid;
+  };
+
+  // ファイルが選択された際の処理
+  const handleFileChange = (e: any) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      setFileList(files); // ファイルリストの状態を更新
+      const fileReader = new FileReader();
+
+      fileReader.onloadend = () => {
+        if (typeof fileReader.result === 'string') {
+          setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
+        }
+      };
+
+      fileReader.readAsDataURL(files[0]);
+    }
   };
 
   const handleUploadStorage = async (folder: FileList | null) => {
@@ -172,8 +190,10 @@ const CreateEvent = () => {
               type="file"
               className=""
               accept="image/png, image/jpeg"
-              onChange={(e) => setFileList(e.target?.files)}
+              onChange={handleFileChange}
             />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {previewUrl && <img src={previewUrl} alt="Preview" className="my-4" />}
           </div>
           <div>
             <label htmlFor="description" className="block text-sm font-bold mb-2">
