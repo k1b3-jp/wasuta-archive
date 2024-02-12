@@ -77,17 +77,20 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form p-8 bg-light-gray bg-100vw flex">
-            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100 w-full">
-              <div className="flex flex-wrap gap-2 m-4">
-                {allTags.map((tag) => (
-                  <Tag
-                    key={tag.id}
-                    label={tag.label}
-                    selected={selectedTags.some((t) => t.id === tag.id)}
-                    onSelect={() => handleTagSelect(tag)}
-                  />
-                ))}
+          <div className="search-form p-2 bg-light-gray bg-100vw flex">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg border border-gray-100">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タグ</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {allTags.map((tag) => (
+                    <Tag
+                      key={tag.id}
+                      label={tag.label}
+                      selected={selectedTags.some((t) => t.id === tag.id)}
+                      onSelect={() => handleTagSelect(tag)}
+                    />
+                  ))}
+                </div>
               </div>
               <BaseButton onClick={handleSearch} label="検索" />
             </div>

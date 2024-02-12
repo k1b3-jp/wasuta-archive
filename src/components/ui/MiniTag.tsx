@@ -22,6 +22,9 @@ const Tag: React.FC<TagProps> = ({ label }) => {
     case '葉月':
       tagStyles = 'bg-yellow text-white';
       break;
+    case '必須':
+      tagStyles = 'bg-red-500 text-white';
+      break;
     default:
       tagStyles = 'bg-gray-100 text-gray-800';
       break;
