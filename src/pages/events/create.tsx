@@ -74,17 +74,21 @@ const CreateEvent = () => {
   // ファイルが選択された際の処理
   const handleFileChange = (e: any) => {
     const files = e.target.files;
-    if (files && files[0]) {
+    if (files && files.length > 0) {
+      const file = files[0];
       setFileList(files); // ファイルリストの状態を更新
-      const fileReader = new FileReader();
 
+      const fileReader = new FileReader();
       fileReader.onloadend = () => {
         if (typeof fileReader.result === 'string') {
           setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
         }
       };
-
-      fileReader.readAsDataURL(files[0]);
+      fileReader.readAsDataURL(file);
+    } else {
+      // ファイルが選択されていない場合、プレビューをクリア
+      setPreviewUrl('');
+      setFileList(null);
     }
   };
 
@@ -193,7 +197,7 @@ const CreateEvent = () => {
               onChange={handleFileChange}
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {previewUrl && <img src={previewUrl} alt="Preview" className="my-4" />}
+            {previewUrl && <img src={previewUrl} alt="Preview" />}
           </div>
           <div>
             <label htmlFor="description" className="block text-sm font-bold mb-2">
