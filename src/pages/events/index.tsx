@@ -23,6 +23,22 @@ const EventListPage = () => {
   const toastParams = query?.get('toast');
 
   useEffect(() => {
+    const queryTags = query?.get('tags');
+    const queryTagIds = queryTags?.split(',').map((id) => parseInt(id, 10));
+
+    const selectTagsById = () => {
+      const selected = allTags.filter((tag) => queryTagIds?.includes(Number(tag.id)));
+      setSelectedTags(selected);
+    };
+
+    selectTagsById();
+  }, [allTags]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [selectedTags]);
+
+  useEffect(() => {
     if (toastParams === 'eventDeleted') {
       toast.success('イベントを削除しました');
     }
