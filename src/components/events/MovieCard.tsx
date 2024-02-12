@@ -35,7 +35,6 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
   const fetchyoutubeTags = async () => {
     const tags = await getYoutubeTags(id);
     setYoutubeTags(tags);
-    console.log(tags);
   };
 
   return (
