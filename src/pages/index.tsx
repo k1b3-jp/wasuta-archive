@@ -66,7 +66,13 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
             <h3 className="text-xl font-bold text-font-color mb-4">カテゴリ</h3>
             <div className="grid grid-cols-2 gap-4">
               <Link href="/events?tags=1">
-                <Image src="/concert.webp" width="400" height="400" className="mb-2 rounded-xl" />
+                <Image
+                  src="/concert.webp"
+                  width="400"
+                  height="400"
+                  alt="単独ライブのイメージ画像"
+                  className="mb-2 rounded-xl"
+                />
                 <h4 className="mb-1">単独ライブ</h4>
                 <p className="text-xs text-deep-green">わーすたが主催する単独ライブやイベント</p>
               </Link>
@@ -75,6 +81,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
                   src="/release-event.webp"
                   width="400"
                   height="400"
+                  alt="リリイベのイメージ画像"
                   className="mb-2 rounded-xl"
                 />
                 <h4 className="mb-1">リリイベ</h4>
@@ -83,12 +90,24 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
                 </p>
               </Link>
               <Link href="/events?tags=3">
-                <Image src="/festival.webp" width="400" height="400" className="mb-2 rounded-xl" />
+                <Image
+                  src="/festival.webp"
+                  width="400"
+                  height="400"
+                  alt="対バンのイメージ画像"
+                  className="mb-2 rounded-xl"
+                />
                 <h4 className="mb-1">対バン</h4>
                 <p className="text-xs text-deep-green">出演した対バンやフェス</p>
               </Link>
               <Link href="/events?tags=4">
-                <Image src="/media.webp" width="400" height="400" className="mb-2 rounded-xl" />
+                <Image
+                  src="/media.webp"
+                  width="400"
+                  height="400"
+                  alt="メディア出演のイメージ画像"
+                  className="mb-2 rounded-xl"
+                />
                 <h4 className="mb-1">メディア</h4>
                 <p className="text-xs text-deep-green">各種メディア出演や配信</p>
               </Link>
