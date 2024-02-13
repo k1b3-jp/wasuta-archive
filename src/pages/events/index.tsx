@@ -43,7 +43,7 @@ const EventListPage = () => {
       toast.success('イベントを削除しました');
     }
     fetchAllTags();
-  }, []);
+  }, [toastParams]);
 
   const fetchAllTags = async () => {
     const tags = await getEventTags();
