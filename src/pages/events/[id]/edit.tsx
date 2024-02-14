@@ -220,7 +220,7 @@ const EditEvent = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4 py-6">
+      <div className="container mx-auto p-4 py-6 lg:max-w-3xl">
         <h1 className="text-2xl font-bold mb-4">イベントの編集</h1>
         <form onSubmit={handleSubmit} className="space-y-4 mb-4">
           <div className="flex flex-col gap-4 mx-auto">

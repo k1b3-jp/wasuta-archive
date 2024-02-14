@@ -8,6 +8,11 @@ const config: Config = {
     './stories/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    container: {
+      screens: {
+        lg: '960px',
+      },
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -208,7 +208,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                   <p>動画が登録されていません😢</p>
                 )}{' '}
               </div>
-              <div className="add-movie bg-white p-6 rounded-lg shadow-lg">
+              <div className="add-movie bg-white p-6 rounded-lg shadow-lg lg:w-[700px] mx-auto">
                 <h4 className="text-xl font-bold text-deep-green mb-8">動画の登録</h4>
                 <div className="flex flex-col gap-4 mx-auto">
                   <div className="flex flex-col gap-2">

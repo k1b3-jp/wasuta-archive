@@ -38,7 +38,7 @@ const NavBar = () => {
 
   return (
     <header className="shadow-lg sticky top-0 z-50">
-      <nav className="flex items-center flex-wrap text-white font-bold text-center bg-white">
+      <nav className="flex items-center flex-wrap text-white lg:text-font-color font-bold text-center bg-white">
         <Link href="/" className="my-2 mr-4 ml-2 inline-flex items-center text-font-color">
           <Logo width={50} height={50} />
         </Link>
@@ -54,7 +54,7 @@ const NavBar = () => {
           } top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto`}
           id="navigation"
         >
-          <div className="bg-light-black lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col divide-y-[1px] divide-gray-400">
+          <div className="bg-light-black lg:bg-white lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col divide-y-[1px] divide-gray-400 lg:divide-y-0">
             <Link
               href="/events"
               className="lg:inline-flex lg:w-auto w-full px-3 py-4 rounded items-center justify-center"
@@ -89,9 +89,10 @@ const NavBar = () => {
             {currentUser && (
               <div
                 suppressHydrationWarning={true}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center text-white text-xs border-none"
+                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded items-center justify-center text-white lg:text-font-color text-xs border-none"
               >
-                {currentUser} でログインしています。
+                {currentUser} <br className="hidden lg:block" />
+                でログインしています。
               </div>
             )}
           </div>

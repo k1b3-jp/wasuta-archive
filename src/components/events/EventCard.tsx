@@ -14,7 +14,7 @@ const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl, 
         alt={title}
         width={500}
         height={300}
-        className="w-full"
+        className="w-full h-52 object-cover"
       />
       <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-gray">
         {formatDate(date)}
