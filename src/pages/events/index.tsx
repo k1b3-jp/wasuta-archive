@@ -107,7 +107,7 @@ const EventListPage = () => {
       <div>
         <div className="mx-auto">
           <div className="search-form p-2 bg-light-gray bg-100vw flex">
-            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg border border-gray-100">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-bold">タイトル</label>
                 <input
@@ -177,15 +177,15 @@ const EventListPage = () => {
                 },
               );
             })}
-            <button
-              className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
-              onClick={() => {
-                setSize(size + 1);
-              }}
-            >
-              さらに読み込む
-            </button>
           </main>
+          <button
+            className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-lg border mx-auto min-w-[288px] mb-6"
+            onClick={() => {
+              setSize(size + 1);
+            }}
+          >
+            さらに読み込む
+          </button>
         </div>
       </div>
     </DefaultLayout>

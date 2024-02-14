@@ -60,7 +60,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
         <section className="flex flex-col">
           <div className="container mx-auto p-6">
             <h3 className="text-xl font-bold text-font-color mb-6">カテゴリ</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <CategoryCard
                 href="/events?tags=1"
                 src="/concert.webp"
@@ -135,7 +135,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
                 />
               ))}
             </div>
-            <div className="my-6 px-6">
+            <div className="my-6 px-6 lg:w-1/3 lg:mx-auto">
               <BaseButton label="もっと見る" link="/events" />
             </div>
           </div>

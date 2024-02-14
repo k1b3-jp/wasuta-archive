@@ -35,7 +35,7 @@ const HistoryItem: React.FC<EventCardProps> = ({
   };
 
   return (
-    <li className="mb-10 ms-6">
+    <li className="mb-10 ms-6 max-w-sm">
       <span className="absolute flex items-center justify-center w-6 h-6 bg-light-green rounded-full -start-3 ring-8 ring-white">
         <svg
           className="w-2.5 h-2.5 text-deep-green"
@@ -47,13 +47,13 @@ const HistoryItem: React.FC<EventCardProps> = ({
           <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
         </svg>
       </span>
-      <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
-        {title}
+      <div className="flex items-center mb-1 text-lg font-semibold text-gray-900">
+        <h3 className="mr-2">{title}</h3>
         {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
           <MiniTag key={tag.id} label={tag.label} />
         ))}
-      </h3>
-      <time className="block mb-2 text-sm font-normal leading-none text-gray-400">
+      </div>
+      <time className="block mb-3 text-sm font-normal leading-none text-gray-400">
         {formattedDate}
       </time>
       <div className="mb-4">
@@ -62,7 +62,7 @@ const HistoryItem: React.FC<EventCardProps> = ({
           alt={title}
           width={500}
           height={300}
-          className="w-full"
+          className="w-full object-cover"
         />
       </div>
       <p className="mb-2 text-base font-normal text-gray-500">{description}</p>

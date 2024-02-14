@@ -69,7 +69,7 @@ const EventListPage = () => {
       <div>
         <div className="mx-auto">
           <div className="search-form p-2 bg-light-gray bg-100vw flex">
-            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg border border-gray-100">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-bold">タイトル</label>
                 <input
@@ -118,7 +118,7 @@ const EventListPage = () => {
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            <ol className="relative border-s border-gray-200">
+            <ol className="relative border-s border-gray-200 lg:max-w-sm lg:mx-auto">
               {events.map((event) => (
                 <HistoryItem
                   key={event.event_id}
