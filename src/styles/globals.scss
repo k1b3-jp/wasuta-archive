@@ -28,3 +28,10 @@ ol {
     margin-bottom: 0.5rem;
   }
 }
+
+.gradient-marker {
+  background-image: linear-gradient(90deg, #84fab0 0%, #8fd3f4 100%);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% 40%;
+}
