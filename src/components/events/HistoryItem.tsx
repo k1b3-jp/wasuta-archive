@@ -49,13 +49,18 @@ const HistoryItem: React.FC<EventCardProps> = ({
       </span>
       <div className="flex items-center mb-1 text-lg font-semibold text-gray-900">
         <h3 className="mr-2">{title}</h3>
-        {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
-          <MiniTag key={tag.id} label={tag.label} />
-        ))}
       </div>
       <time className="block mb-3 text-sm font-normal leading-none text-gray-400">
         {formattedDate}
       </time>
+      <div
+        style={{ marginRight: 'calc(50% - 50vw)' }}
+        className="flex items-center overflow-scroll mb-3"
+      >
+        {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
+          <MiniTag key={tag.id} label={tag.label} />
+        ))}
+      </div>
       <div className="mb-4">
         <Image
           src={imageUrl || defaultImageUrl}
