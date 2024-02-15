@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import DefaultLayout from '@/app/layout';
 import EventCard from '@/components/events/EventCard';
 import MovieCard from '@/components/events/MovieCard';
@@ -50,14 +51,29 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
   return (
     <DefaultLayout>
       <div>
-        <section className="welcome p-10 flex flex-col relative">
-          <h2 className="text-left text-4xl font-bold mt-6 mb-2 text-font-color">Wasuta Archive</h2>
-          <p className="mx-auto my-4 text-left">
-            あの日のわーすたが見つかる。
-            <br />
-          </p>
+        <section className="welcome px-4 pt-14 pb-4 lg:pb-10 flex flex-col lg:flex-row lg:items-center relative">
+          <div>
+            <h2 className="text-left text-3xl font-bold mb-6 text-font-color leading-normal">
+              あの日のわーすた
+              <br />
+              <span className="gradient-marker">動画で見つかる。</span>
+            </h2>
+            <p className="mb-8 text-left text-sm font-bold leading-relaxed">
+              わーすたアーカイブはわーすたの動画が
+              <br />
+              イベント毎に見つかるサイトです。
+              <br />
+              <br />
+              タグで過去のライブを探したり、
+              <br />
+              年表表示で歴史を振り返ることができます。
+            </p>
+          </div>
+          <div className="w-4/6 lg:w-1/4 mx-auto lg:ml-auto lg:mr-28">
+            <Image src="/main-mockup.png" alt="スクリーンショット画像" width="1344" height="1920" />
+          </div>
         </section>
-        <section className="flex flex-col">
+        <section className="flex flex-col bg-light-gray bg-100vw">
           <div className="container mx-auto p-6">
             <h3 className="text-xl font-bold text-font-color mb-6">カテゴリ</h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
