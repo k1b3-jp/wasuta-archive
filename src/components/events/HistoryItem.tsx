@@ -53,24 +53,23 @@ const HistoryItem: React.FC<EventCardProps> = ({
       <time className="block mb-3 text-sm font-normal leading-none text-gray-400">
         {formattedDate}
       </time>
-      <div
-        style={{ marginRight: 'calc(50% - 50vw)' }}
-        className="flex items-center overflow-scroll mb-3"
-      >
+      <div className="flex items-center flex-wrap mb-3 gap-2">
         {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
           <MiniTag key={tag.id} label={tag.label} />
         ))}
       </div>
       <div className="mb-4">
-        <Image
-          src={imageUrl || defaultImageUrl}
-          alt={title}
-          width={500}
-          height={300}
-          className="w-full object-cover"
-        />
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={500}
+            height={300}
+            className="w-full object-cover"
+          />
+        )}
       </div>
-      <p className="mb-2 text-base font-normal text-gray-500">{description}</p>
+      <p className="mb-2 text-base font-normal text-gray-500 break-words">{description}</p>
       <div className="inline-flex items-center py-2">
         <BaseButton label="詳細を見る" link={`/events/${id}`} />
       </div>

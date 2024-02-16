@@ -30,11 +30,7 @@ const Tag: React.FC<TagProps> = ({ label }) => {
       break;
   }
 
-  return (
-    <span className={`text-sm font-medium me-2 px-3 py-1 rounded-2xl ms-1 ${tagStyles}`}>
-      {label}
-    </span>
-  );
+  return <span className={`text-sm font-medium px-3 py-1 rounded-2xl ${tagStyles}`}>{label}</span>;
 };
 
 export default Tag;

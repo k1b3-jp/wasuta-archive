@@ -51,7 +51,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
   return (
     <DefaultLayout>
       <div>
-        <section className="welcome px-4 pt-14 pb-4 lg:pb-10 flex flex-col lg:flex-row lg:items-center relative">
+        <section className="welcome px-4 pt-14 pb-4 lg:pb-10 flex flex-col lg:flex-row lg:items-center lg:justify-between relative">
           <div>
             <h2 className="text-left text-3xl font-bold mb-6 text-font-color leading-normal">
               あの日のわーすた
@@ -69,8 +69,14 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
               年表表示で歴史を振り返ることができます。
             </p>
           </div>
-          <div className="w-4/6 lg:w-1/4 mx-auto lg:ml-auto lg:mr-28">
-            <Image src="/main-mockup.png" alt="スクリーンショット画像" width="1344" height="1920" />
+          <div className="overflow-hidden lg:w-1/2 mr-[calc(50%-50vw)] lg:mr-0">
+            <Image
+              src="/main-mockup.png"
+              alt="スクリーンショット画像"
+              width="1344"
+              height="1920"
+              className="translate-x-[7%] lg:translate-x-0"
+            />
           </div>
         </section>
         <section className="flex flex-col bg-light-gray bg-100vw">
