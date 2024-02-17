@@ -22,9 +22,10 @@ values
 -- Event_Tag_Namesテーブルにサンプルデータを追加
 insert into public.Event_Tag_Names (name)
 values 
-('単独ライブ'),
-('リリイベ'),
+('単独'),
 ('対バン'),
+('リリイベ'),
+('生誕'),
 ('メディア'),
 ('奈々聖'),
 ('瑠香'),
