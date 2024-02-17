@@ -6,11 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const BottomBar = () => {
-  // const router = useRouter();
-
-  // 現在のパスに基づいてリンクのスタイルを決定する関数
   const pathname = usePathname();
-  console.log(pathname);
   const linkStyle = (path: string | null) =>
     `inline-flex flex-col items-center justify-center gap-1 group ${pathname === path ? 'text-deep-green' : 'hover:text-deep-green text-deep-gray'}`;
 
