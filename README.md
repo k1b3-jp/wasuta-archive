@@ -15,7 +15,7 @@
 
 - プログラミング言語: TypeScript
 - フレームワーク: React, Next.js
-- スタイリング: TailwindCSS, SCSS, Headless UI
+- スタイリング: TailwindCSS, SCSS, Headless UI, Font Awesome
 - パッケージマネージャ: yarn
 - バージョン管理: Git
 - コードフォーマッター: Prettier
