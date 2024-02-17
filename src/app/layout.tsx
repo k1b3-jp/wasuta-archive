@@ -4,6 +4,7 @@ import { Noto_Sans_JP, Rubik } from 'next/font/google';
 import React from 'react';
 import '@/styles/globals.scss';
 import { ToastContainer } from 'react-toastify';
+import BottomBar from '@/components/navigation/BottomBar';
 import Footer from '@/components/navigation/Footer';
 import NavBar from '@/components/navigation/NavBar';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-grow">
           <div className="container mx-auto">{children}</div>
         </main>
+        <BottomBar />
         <Footer />
         <ToastContainer
           position="top-center"
