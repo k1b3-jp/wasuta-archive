@@ -1,3 +1,9 @@
+import {
+  faCakeCandles,
+  faHandshakeSimple,
+  faSun,
+  faTicket,
+} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import DefaultLayout from '@/app/layout';
 import EventCard from '@/components/events/EventCard';
@@ -85,31 +91,27 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <CategoryCard
                 href="/events?tags=1"
-                src="/concert.webp"
-                alt="単独ライブのイメージ画像"
+                src={faTicket}
                 title="単独ライブ"
-                description="わーすたが主催する単独ライブやイベント"
+                description="わーすたが主催するライブイベント"
               />
               <CategoryCard
                 href="/events?tags=2"
-                src="/release-event.webp"
-                alt="リリイベのイメージ画像"
-                title="リリイベ"
-                description="CDリリースに際したイベント"
-              />
-              <CategoryCard
-                href="/events?tags=3"
-                src="/festival.webp"
-                alt="対バンのイメージ画像"
+                src={faSun}
                 title="対バン"
                 description="出演した対バンやフェス"
               />
               <CategoryCard
+                href="/events?tags=3"
+                src={faHandshakeSimple}
+                title="リリイベ"
+                description="CDリリースに際したイベント"
+              />
+              <CategoryCard
                 href="/events?tags=4"
-                src="/media.webp"
-                alt="メディア出演のイメージ画像"
-                title="メディア"
-                description="各種メディア出演や配信"
+                src={faCakeCandles}
+                title="生誕"
+                description="各メンバーの生誕イベント"
               />
             </div>
           </div>
