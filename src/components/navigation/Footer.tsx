@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="p-7 flex flex-wrap flex-col gap-2 text-white bg-light-black text-sm">
+    <footer className="p-7 mb-[73px] flex flex-wrap flex-col gap-2 text-white bg-light-black text-sm">
       <Link href="/form" className="mx-auto underline">
         お問い合わせ
       </Link>
