@@ -111,14 +111,15 @@ const EventListPage = () => {
               });
             })}
           </main>
-          <button
-            className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-lg border mx-auto min-w-[288px] mb-6"
-            onClick={() => {
-              setSize(size + 1);
-            }}
-          >
-            さらに読み込む
-          </button>
+          <div className="mx-auto mb-6 px-6 lg:w-1/2">
+            <BaseButton
+              label="もっと見る"
+              onClick={() => {
+                setSize(size + 1);
+              }}
+              white
+            />
+          </div>
         </div>
       </div>
     </DefaultLayout>

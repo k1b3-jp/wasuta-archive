@@ -183,7 +183,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               <h2 className="text-l font-bold">イベントについて</h2>
               <p>{event.description || '未設定'}</p>
             </div>
-            <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集"></BaseButton>
+            <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集" white></BaseButton>
           </div>
           <div className="event-movie bg-100vw">
             <div className="container mx-auto p-6">
