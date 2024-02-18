@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import formatDate from '@/utils/formatDate';
 import { EventCardProps } from '../../types/event';
@@ -9,7 +8,8 @@ const defaultImageUrl = '/event-placeholder.png';
 const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl, id }) => {
   return (
     <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={imageUrl || defaultImageUrl}
         alt={title}
         width={500}
