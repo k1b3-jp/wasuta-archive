@@ -35,3 +35,11 @@ ol {
   background-position: bottom;
   background-size: 100% 40%;
 }
+
+.movie-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

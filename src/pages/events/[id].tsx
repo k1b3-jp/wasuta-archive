@@ -25,22 +25,8 @@ interface EventDetailsProps {
 
 const defaultImageUrl = '/event-placeholder.png';
 
-// イベント詳細ページのデータ取得処理
-export const getStaticPaths = async () => {
-  // 全イベントのIDを取得
-  const { data: events, error } = await supabase.from('events').select('event_id');
-
-  // パスオブジェクトの配列を生成
-  const paths = events?.map((event) => ({
-    params: { id: event.event_id.toString() },
-  }));
-
-  // fallback: false は、リストにないパスにアクセスした場合は404ページを表示する
-  return { paths, fallback: false };
-};
-
-export const getStaticProps = async (context: any) => {
-  const { id } = context.params;
+export async function getServerSideProps({ params }: { params: { [key: string]: string } }) {
+  const { id } = params;
 
   let event = null;
   let youtubeLinks: Movie[] = [];
@@ -55,16 +41,12 @@ export const getStaticProps = async (context: any) => {
 
     if (eventError) throw eventError;
 
-    if (!eventData) {
-      console.error('eventData is null');
-    } else {
-      event = eventData;
-    }
+    event = eventData || null;
 
     // イベントに紐づくYouTubeリンクを取得
     let linksData: Movie[], linksError;
     try {
-      linksData = await getMovies({ eventId: id, limit: 6 });
+      linksData = await getMovies({ eventId: parseInt(id), limit: 6 });
     } catch (error) {
       console.error(`Error fetching movies: ${(error as any).message}`);
       linksData = [];
@@ -72,21 +54,18 @@ export const getStaticProps = async (context: any) => {
 
     if (linksError) throw linksError;
 
-    youtubeLinks = linksData;
+    youtubeLinks = linksData || [];
   } catch (error) {
     console.error('Error fetching data:', error);
-    // エラーハンドリング: 必要に応じて適切な処理を行う
   }
 
-  // 成功した場合、取得したデータをpropsとして返す
   return {
     props: {
-      event, // eventがundefinedの場合はnullを返す
+      event,
       youtubeLinks,
     },
-    revalidate: 10, // ISRを利用する場合、ページの再生成間隔を秒単位で指定
   };
-};
+}
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
