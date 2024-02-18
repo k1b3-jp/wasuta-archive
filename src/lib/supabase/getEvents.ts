@@ -1,5 +1,5 @@
-import { supabase } from '../supabaseClient';
 import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
+import { supabase } from '../supabaseClient';
 
 // イベントを取得するためのオプションの型を定義します
 interface GetEventsOptions {

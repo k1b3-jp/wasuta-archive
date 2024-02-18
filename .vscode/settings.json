@@ -8,6 +8,7 @@
   "diffEditor.maxComputationTime": 0,
   "settingsSync.ignoredExtensions": [],
   "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
     "source.fixAll.eslint": true
   },
   "[javascript]": {

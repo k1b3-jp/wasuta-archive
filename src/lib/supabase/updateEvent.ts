@@ -2,19 +2,14 @@ import { supabase } from '../supabaseClient';
 
 interface EventData {
   eventName: string;
-  eventTime?: string;
   date: string;
   location?: string;
   imageUrl?: string;
-  description: string;
+  description?: string;
 }
 
-const updateEvent = async (
-  data: EventData,
-  eventId: string,
-  tags: number[],
-) => {
-  const { eventName, eventTime, date, location, imageUrl, description } = data;
+const updateEvent = async (data: EventData, eventId: string, tags: number[]) => {
+  const { eventName, date, location, imageUrl, description } = data;
 
   try {
     // 既存のイベントを更新
@@ -22,13 +17,12 @@ const updateEvent = async (
       .from('events')
       .update({
         event_name: eventName,
-        event_time: eventTime,
         date: new Date(date),
-        location,
+        location: location || '',
         image_url: imageUrl,
-        description,
+        description: description || '',
       })
-      .match({ event_id: eventId });
+      .eq('event_id', eventId);
 
     if (updateError) throw updateError;
 
@@ -46,9 +40,7 @@ const updateEvent = async (
       tag_id: tagId,
     }));
 
-    const { error: tagError } = await supabase
-      .from('event_tags')
-      .insert(eventTagData);
+    const { error: tagError } = await supabase.from('event_tags').insert(eventTagData);
 
     if (tagError) throw tagError;
 

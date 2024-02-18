@@ -1,15 +1,16 @@
+import { useRouter } from 'next/router';
+import { useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
-import { useRouter } from 'next/router';
-import { use, useEffect, useState, useCallback } from 'react';
-import { getMovies } from '@/lib/supabase/getMovies';
-import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
-import { toast } from 'react-toastify';
 import BaseButton from '@/components/ui/BaseButton';
-import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import Tag from '@/components/ui/Tag';
-import { TagType } from '@/types/tag';
+import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
+import { getMovies } from '@/lib/supabase/getMovies';
+import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
 import { Movie } from '@/types/movie';
+import { TagType } from '@/types/tag';
 
 const EventMovieList = () => {
   const router = useRouter();
@@ -38,7 +39,7 @@ const EventMovieList = () => {
       }
     },
     [id],
-  ); // fetchMovies関数が依存する変数をここにリストします
+  );
 
   useEffect(() => {
     fetchAllTags();
@@ -77,11 +78,34 @@ const EventMovieList = () => {
     fetchMovies(selectedTags);
   };
 
+  // Dialogを使った確認と動画削除
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+
+  const openDialog = (movieId: number) => {
+    if (movieId != null) {
+      setSelectedMovieId(movieId);
+      setIsDialogOpen(true);
+    }
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedMovieId(null);
+  };
+
+  const handleConfirm = () => {
+    if (selectedMovieId) {
+      deleteMovie(selectedMovieId);
+      closeDialog();
+    }
+  };
+
   return (
     <DefaultLayout>
       <div>
-        <div className="search-form p-8 bg-light-pink bg-100vw flex">
-          <div className="mx-auto bg-white p-6 rounded-lg border border-gray-100 w-full">
+        <div className="search-form p-8 bg-light-gray bg-100vw flex">
+          <div className="mx-auto bg-white p-6 rounded-lg lg:w-[700px] w-full">
             <div className="flex flex-wrap gap-2 mb-4">
               {allTags.map((tag) => (
                 <Tag
@@ -99,19 +123,28 @@ const EventMovieList = () => {
           {movies.map((movie) => (
             <div key={movie.youtube_link_id}>
               <div className="mb-2">
-                <MovieCard videoUrl={movie.youtube_links.url} />
+                <MovieCard videoUrl={movie.youtube_links.url} id={movie.youtube_link_id} />
               </div>
               <div className="flex justify-end">
                 <div className="w-6/12">
                   <BaseButton
-                    onClick={() => deleteMovie(movie.youtube_link_id)}
+                    onClick={() => openDialog(movie.youtube_link_id)}
                     label="動画を削除する"
+                    white
                   />
                 </div>
               </div>
             </div>
           ))}
         </main>
+        <ConfirmDialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+          onConfirm={handleConfirm}
+          title="動画を削除しますか？"
+          text="この操作は取り消せません。"
+          confirmText="削除する"
+        />
       </div>
     </DefaultLayout>
   );
