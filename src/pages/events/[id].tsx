@@ -1,7 +1,6 @@
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -136,7 +135,8 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
       <div>
         <div className="event">
           <div className="event-head bg-100vw bg-light-gray p-4">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={event.image_url || defaultImageUrl}
               alt={event.event_name}
               width={500}
