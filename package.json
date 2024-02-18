@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
@@ -30,6 +31,7 @@
     "eslint-plugin-import": "^2.29.1",
     "next": "14.0.4",
     "next-seo": "^6.5.0",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-toastify": "^10.0.3",
