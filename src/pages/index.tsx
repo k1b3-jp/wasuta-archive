@@ -19,7 +19,7 @@ interface HomeProps {
   movies: Movie[];
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   let events: any[] = [];
   let movies: any[] = [];
 
