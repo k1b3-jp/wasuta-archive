@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import { TagType } from '@/types/tag';
@@ -60,7 +59,8 @@ const HistoryItem: React.FC<EventCardProps> = ({
       </div>
       <div className="mb-4">
         {imageUrl && (
-          <Image
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
             src={imageUrl}
             alt={title}
             width={500}
