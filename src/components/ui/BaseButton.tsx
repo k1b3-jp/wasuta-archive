@@ -7,12 +7,22 @@ interface BaseButtonProps {
   disabled?: boolean;
   link?: string;
   danger?: boolean;
+  white?: boolean;
 }
 
-const BaseButton: React.FC<BaseButtonProps> = ({ label, onClick, disabled, link, danger }) => {
+const BaseButton: React.FC<BaseButtonProps> = ({
+  label,
+  onClick,
+  disabled,
+  link,
+  danger,
+  white,
+}) => {
   let buttonStyles = 'text-white bg-deep-green';
   if (danger) {
     buttonStyles = 'text-red-500 bg-white border border-red-500';
+  } else if (white) {
+    buttonStyles = 'text-deep-green bg-white border border-deep-green';
   }
 
   const button = (

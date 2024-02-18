@@ -130,6 +130,7 @@ const EventMovieList = () => {
                   <BaseButton
                     onClick={() => openDialog(movie.youtube_link_id)}
                     label="動画を削除する"
+                    white
                   />
                 </div>
               </div>

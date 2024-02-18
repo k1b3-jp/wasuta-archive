@@ -160,7 +160,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
               ))}
             </div>
             <div className="my-6 px-6 lg:w-1/3 lg:mx-auto">
-              <BaseButton label="もっと見る" link="/events" />
+              <BaseButton label="もっと見る" link="/events" white />
             </div>
           </div>
         </section>
