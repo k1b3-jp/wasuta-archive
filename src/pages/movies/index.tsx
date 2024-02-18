@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
+import MovieCard from '@/components/events/MovieCard';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getMovies } from '@/lib/supabase/getMovies';
 import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
-import BaseButton from '@/components/ui/BaseButton';
-import MovieCard from '@/components/events/MovieCard';
-import useSWRInfinite from 'swr/infinite';
-import { TagType } from '@/types/tag';
 import { Movie } from '@/types/movie';
+import { TagType } from '@/types/tag';
 
 const EventListPage = () => {
   const [allTags, setAllTags] = useState<TagType[]>([]);
@@ -67,12 +67,7 @@ const EventListPage = () => {
     return { page: pageIndex, limit: limit };
   };
 
-  const {
-    data: movies,
-    size,
-    setSize,
-    mutate,
-  } = useSWRInfinite<any>(getKey, fetchMovies);
+  const { data: movies, size, setSize, mutate } = useSWRInfinite<any>(getKey, fetchMovies);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -82,17 +77,20 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form p-8 bg-light-pink bg-100vw flex">
-            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100 w-full">
-              <div className="flex flex-wrap gap-2 m-4">
-                {allTags.map((tag) => (
-                  <Tag
-                    key={tag.id}
-                    label={tag.label}
-                    selected={selectedTags.some((t) => t.id === tag.id)}
-                    onSelect={() => handleTagSelect(tag)}
-                  />
-                ))}
+          <div className="search-form p-2 bg-light-gray bg-100vw flex">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タグ</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {allTags.map((tag) => (
+                    <Tag
+                      key={tag.id}
+                      label={tag.label}
+                      selected={selectedTags.some((t) => t.id === tag.id)}
+                      onSelect={() => handleTagSelect(tag)}
+                    />
+                  ))}
+                </div>
               </div>
               <BaseButton onClick={handleSearch} label="検索" />
             </div>
@@ -104,20 +102,24 @@ const EventListPage = () => {
               return items?.map((link: Movie) => {
                 return (
                   <div key={link.youtube_link_id} className="min-w-80">
-                    <MovieCard videoUrl={link?.youtube_links?.url}></MovieCard>
+                    <MovieCard
+                      videoUrl={link?.youtube_links?.url}
+                      id={link.youtube_link_id}
+                    ></MovieCard>
                   </div>
                 );
               });
             })}
-            <button
-              className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
+          </main>
+          <div className="mx-auto mb-6 px-6 lg:w-1/2">
+            <BaseButton
+              label="もっと見る"
               onClick={() => {
                 setSize(size + 1);
               }}
-            >
-              さらに読み込む
-            </button>
-          </main>
+              white
+            />
+          </div>
         </div>
       </div>
     </DefaultLayout>

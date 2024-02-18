@@ -1,19 +1,19 @@
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
+import BaseButton from '@/components/ui/BaseButton';
+import MiniTag from '@/components/ui/MiniTag';
+import Tag from '@/components/ui/Tag';
 import createEvent from '@/lib/supabase/createEvent';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import Tag from '@/components/ui/Tag';
-import BaseButton from '@/components/ui/BaseButton';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 import { uploadStorage } from '@/lib/supabase/uploadStorage';
+import { supabase } from '@/lib/supabaseClient';
 import { TagType } from '@/types/tag';
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventName, setEventName] = useState('');
-  const [eventTime, setEventTime] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
@@ -22,6 +22,7 @@ const CreateEvent = () => {
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const router = useRouter();
   const [fileList, setFileList] = useState<FileList | null>(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [path, setPathName] = useState<string | undefined>();
 
   const validateAccess = async () => {
@@ -55,38 +56,40 @@ const CreateEvent = () => {
     }
   };
 
-  // 日付と時刻をISO 8601形式に変換します
-  let combinedDateTime: string | null = null;
-  if (date && eventTime) {
-    let [year, month, day] = date.split('-');
-    let [hour, minute] = eventTime.split(':');
-    combinedDateTime = new Date(
-      Date.UTC(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        Number(hour),
-        Number(minute),
-      ),
-    ).toISOString();
-  }
-
   // Validation function
   type Fields = {
     [key: string]: string;
   };
   const validateFields = (fields: Fields) => {
-    let errors = [];
+    let isValid = true;
     for (let fieldName in fields) {
       if (!fields[fieldName]) {
-        errors.push(`${fieldName}は必須です。`);
+        toast.error(`${fieldName}は必須です😥`);
+        isValid = false;
       }
     }
-    if (errors.length > 0) {
-      setErrorMessage(errors.join(' '));
-      return false;
+    return isValid;
+  };
+
+  // ファイルが選択された際の処理
+  const handleFileChange = (e: any) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setFileList(files); // ファイルリストの状態を更新
+
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        if (typeof fileReader.result === 'string') {
+          setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
+        }
+      };
+      fileReader.readAsDataURL(file);
+    } else {
+      // ファイルが選択されていない場合、プレビューをクリア
+      setPreviewUrl('');
+      setFileList(null);
     }
-    return true;
   };
 
   const handleUploadStorage = async (folder: FileList | null) => {
@@ -110,7 +113,6 @@ const CreateEvent = () => {
         日付: date,
       };
       if (!validateFields(fields)) {
-        toast.error('不足項目があります😢');
         return;
       }
 
@@ -118,7 +120,6 @@ const CreateEvent = () => {
         const newPath = await handleUploadStorage(fileList);
         const eventData = {
           eventName,
-          eventTime: combinedDateTime,
           date,
           location,
           imageUrl: newPath || undefined,
@@ -129,7 +130,11 @@ const CreateEvent = () => {
         const id = insertedData[0].event_id;
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
-        toast.error('エラーがあります😢');
+        if ((error as any).code === '23505') {
+          toast.error('そのイベント名は既に存在します。別の名前を試してください🙇‍♂️');
+        } else {
+          toast.error(`エラーがあります😢`);
+        }
       }
     } else {
       toast.error('ログインが必要です。');
@@ -138,45 +143,33 @@ const CreateEvent = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-10">
-        <h1 className="text-2xl font-bold mb-8 text-deep-pink">
-          イベントの作成
-        </h1>
+      <div className="container mx-auto p-6 lg:max-w-3xl">
+        <h1 className="text-2xl font-bold mb-8 text-font-color">イベントの作成</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="eventName" className="block text-sm font-bold mb-2">
               イベント名
+              <MiniTag label="必須" />
             </label>
             <input
               id="eventName"
               type="text"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
             <label htmlFor="date" className="block text-sm font-bold mb-2">
               日付
+              <MiniTag label="必須" />
             </label>
             <input
               id="date"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="eventTime" className="block text-sm font-bold mb-2">
-              時刻
-            </label>
-            <input
-              id="eventTime"
-              type="time"
-              value={eventTime}
-              onChange={(e) => setEventTime(e.target.value)}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
@@ -188,14 +181,11 @@ const CreateEvent = () => {
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <div>
-            <label
-              htmlFor="file-upload"
-              className="block text-sm font-bold mb-2"
-            >
+            <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
               カバー画像
             </label>
             <input
@@ -204,14 +194,13 @@ const CreateEvent = () => {
               type="file"
               className=""
               accept="image/png, image/jpeg"
-              onChange={(e) => setFileList(e.target?.files)}
+              onChange={handleFileChange}
             />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {previewUrl && <img src={previewUrl} alt="Preview" />}
           </div>
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-bold mb-2"
-            >
+            <label htmlFor="description" className="block text-sm font-bold mb-2">
               説明文
             </label>
             <textarea
@@ -219,7 +208,7 @@ const CreateEvent = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
             />
           </div>
           <label className="block text-sm font-bold mb-2">タグ</label>

@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import supabase from '../lib/supabaseClient';
-import DefaultLayout from '../app/layout';
-import { toast } from 'react-toastify';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import DefaultLayout from '../app/layout';
+import supabase from '../lib/supabaseClient';
 
 export default function Google() {
   const query = useSearchParams();
@@ -28,6 +27,17 @@ export default function Google() {
             providers={['google']}
           />
         </div>
+        <p className="text-sm text-center">
+          サインアップすることで、
+          <Link href="/terms" className="underline">
+            利用規約
+          </Link>
+          および
+          <Link href="/policy" className="underline">
+            プライバシーポリシー
+          </Link>
+          に同意したことになります。
+        </p>
       </DefaultLayout>
     </>
   );

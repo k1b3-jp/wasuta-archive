@@ -1,22 +1,12 @@
-import React from 'react';
-import { EventCard } from '../../types/event';
 import Image from 'next/image';
+import React from 'react';
+import formatDate from '@/utils/formatDate';
+import { EventCardProps } from '../../types/event';
 import BaseButton from '../ui/BaseButton';
 
 const defaultImageUrl = '/event-placeholder.png';
 
-const EventCard: React.FC<EventCard> = ({
-  title,
-  location,
-  date,
-  imageUrl,
-  id,
-}) => {
-  const formattedDate = new Date(date).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
+const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl, id }) => {
   return (
     <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
       <Image
@@ -24,10 +14,10 @@ const EventCard: React.FC<EventCard> = ({
         alt={title}
         width={500}
         height={300}
-        className="w-full"
+        className="w-full h-52 object-cover"
       />
-      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-blue text-white">
-        {formattedDate}
+      <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-gray">
+        {formatDate(date)}
       </div>
       <div className="p-4">
         <div className="mb-4">

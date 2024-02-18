@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '@/app/layout';
+import HistoryItem from '@/components/events/HistoryItem';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import BaseButton from '@/components/ui/BaseButton';
-import HistoryItem from '@/components/events/HistoryItem';
 import { Event } from '@/types/event';
 import { TagType } from '@/types/tag';
 
@@ -68,36 +68,48 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form mb-8 p-10 bg-light-pink bg-100vw flex">
-            <div className="mx-auto bg-white p-10 rounded-lg border border-gray-100">
-              <input
-                className="border border-gray-300 rounded-md p-2"
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <input
-                className="border border-gray-300 rounded-md p-2 ml-2"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                className="border border-gray-300 rounded-md p-2 ml-2"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-              <div className="flex flex-wrap gap-2 my-4">
-                {allTags.map((tag) => (
-                  <Tag
-                    key={tag.id}
-                    label={tag.label}
-                    selected={selectedTags.some((t) => t.id === tag.id)}
-                    onSelect={() => handleTagSelect(tag)}
+          <div className="search-form p-2 bg-light-gray bg-100vw flex">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タイトル</label>
+                <input
+                  className="bg-light-gray rounded-md p-3"
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">期間</label>
+                <div className="flex flex-row flex-nowrap items-center">
+                  <input
+                    className="bg-light-gray rounded-md p-3"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
-                ))}
+                  <span className="mx-1">〜</span>
+                  <input
+                    className="bg-light-gray rounded-md p-3"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タグ</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {allTags.map((tag) => (
+                    <Tag
+                      key={tag.id}
+                      label={tag.label}
+                      selected={selectedTags.some((t) => t.id === tag.id)}
+                      onSelect={() => handleTagSelect(tag)}
+                    />
+                  ))}
+                </div>
               </div>
               <BaseButton onClick={handleSearch} label="検索" />
             </div>
@@ -106,7 +118,7 @@ const EventListPage = () => {
             {loading && <p>読み込み中...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            <ol className="relative border-s border-gray-200">
+            <ol className="relative border-s border-gray-200 lg:max-w-sm lg:mx-auto">
               {events.map((event) => (
                 <HistoryItem
                   key={event.event_id}

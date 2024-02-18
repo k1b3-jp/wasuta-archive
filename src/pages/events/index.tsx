@@ -1,11 +1,13 @@
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
 import EventCard from '@/components/events/EventCard';
+import BaseButton from '@/components/ui/BaseButton';
 import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
-import BaseButton from '@/components/ui/BaseButton';
-import useSWRInfinite from 'swr/infinite';
 import { TagType } from '@/types/tag';
 
 const EventListPage = () => {
@@ -17,9 +19,31 @@ const EventListPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  const query = useSearchParams();
+  const toastParams = query?.get('toast');
+
   useEffect(() => {
+    const queryTags = query?.get('tags');
+    const queryTagIds = queryTags?.split(',').map((id) => parseInt(id, 10));
+
+    const selectTagsById = () => {
+      const selected = allTags.filter((tag) => queryTagIds?.includes(Number(tag.id)));
+      setSelectedTags(selected);
+    };
+
+    selectTagsById();
+  }, [allTags]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [selectedTags]);
+
+  useEffect(() => {
+    if (toastParams === 'eventDeleted') {
+      toast.success('イベントを削除しました');
+    }
     fetchAllTags();
-  }, []);
+  }, [toastParams]);
 
   const fetchAllTags = async () => {
     const tags = await getEventTags();
@@ -72,12 +96,7 @@ const EventListPage = () => {
     return { page: pageIndex, limit: limit };
   };
 
-  const {
-    data: events,
-    size,
-    setSize,
-    mutate,
-  } = useSWRInfinite(getKey, fetchEvents);
+  const { data: events, size, setSize, mutate } = useSWRInfinite(getKey, fetchEvents);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -87,36 +106,48 @@ const EventListPage = () => {
     <DefaultLayout>
       <div>
         <div className="mx-auto">
-          <div className="search-form p-8 bg-light-pink bg-100vw flex">
-            <div className="mx-auto bg-white p-8 rounded-lg border border-gray-100">
-              <input
-                className="border border-gray-300 rounded-md p-2"
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <input
-                className="border border-gray-300 rounded-md p-2 ml-2"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                className="border border-gray-300 rounded-md p-2 ml-2"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-              <div className="flex flex-wrap gap-2 my-4">
-                {allTags.map((tag) => (
-                  <Tag
-                    key={tag.id}
-                    label={tag.label}
-                    selected={selectedTags.some((t) => t.id === tag.id)}
-                    onSelect={() => handleTagSelect(tag)}
+          <div className="search-form p-2 bg-light-gray bg-100vw flex">
+            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タイトル</label>
+                <input
+                  className="bg-light-gray rounded-md p-3"
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">期間</label>
+                <div className="flex flex-row flex-nowrap items-center">
+                  <input
+                    className="bg-light-gray rounded-md p-3"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
-                ))}
+                  <span className="mx-1">〜</span>
+                  <input
+                    className="bg-light-gray rounded-md p-3"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold">タグ</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {allTags.map((tag) => (
+                    <Tag
+                      key={tag.id}
+                      label={tag.label}
+                      selected={selectedTags.some((t) => t.id === tag.id)}
+                      onSelect={() => handleTagSelect(tag)}
+                    />
+                  ))}
+                </div>
               </div>
               <BaseButton onClick={handleSearch} label="検索" />
             </div>
@@ -146,15 +177,16 @@ const EventListPage = () => {
                 },
               );
             })}
-            <button
-              className="flex items-center justify-center border-gray-200 px-4 py-2 rounded-md border hover:border-blue-400"
+          </main>
+          <div className="mx-auto mb-6 px-6 lg:w-1/2">
+            <BaseButton
+              label="もっと見る"
               onClick={() => {
                 setSize(size + 1);
               }}
-            >
-              さらに読み込む
-            </button>
-          </main>
+              white
+            />
+          </div>
         </div>
       </div>
     </DefaultLayout>
