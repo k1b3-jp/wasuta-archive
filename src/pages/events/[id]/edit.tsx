@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -276,7 +275,8 @@ const EditEvent = () => {
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {(previewUrl && <img src={previewUrl} alt="Preview" />) || (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={imageUrl || defaultImageUrl}
                   alt={eventName}
                   width={500}
