@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 import DefaultLayout from '../app/layout';
 
 export default function Term() {
   return (
     <>
+      <NextSeo title="利用規約" />
       <DefaultLayout>
         <div className="p-8">
           <h1 className="font-bold text-2xl mb-6">利用規約</h1>

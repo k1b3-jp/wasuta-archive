@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
@@ -102,51 +103,54 @@ const EventMovieList = () => {
   };
 
   return (
-    <DefaultLayout>
-      <div>
-        <div className="search-form p-8 bg-light-gray bg-100vw flex">
-          <div className="mx-auto bg-white p-6 rounded-lg lg:w-[700px] w-full">
-            <div className="flex flex-wrap gap-2 mb-4">
-              {allTags.map((tag) => (
-                <Tag
-                  key={tag.id}
-                  label={tag.label}
-                  selected={selectedTags.some((t) => t.id === tag.id)}
-                  onSelect={() => handleTagSelect(tag)}
-                />
-              ))}
-            </div>
-            <BaseButton onClick={handleSearch} label="絞り込む" />
-          </div>
-        </div>
-        <main className="event-list grid-base py-8">
-          {movies.map((movie) => (
-            <div key={movie.youtube_link_id}>
-              <div className="mb-2">
-                <MovieCard videoUrl={movie.youtube_links.url} id={movie.youtube_link_id} />
-              </div>
-              <div className="flex justify-end">
-                <div className="w-6/12">
-                  <BaseButton
-                    onClick={() => openDialog(movie.youtube_link_id)}
-                    label="動画を削除する"
-                    white
+    <>
+      <NextSeo title="イベントに紐づく動画一覧" />
+      <DefaultLayout>
+        <div>
+          <div className="search-form p-8 bg-light-gray bg-100vw flex">
+            <div className="mx-auto bg-white p-6 rounded-lg lg:w-[700px] w-full">
+              <div className="flex flex-wrap gap-2 mb-4">
+                {allTags.map((tag) => (
+                  <Tag
+                    key={tag.id}
+                    label={tag.label}
+                    selected={selectedTags.some((t) => t.id === tag.id)}
+                    onSelect={() => handleTagSelect(tag)}
                   />
+                ))}
+              </div>
+              <BaseButton onClick={handleSearch} label="絞り込む" />
+            </div>
+          </div>
+          <main className="event-list grid-base py-8">
+            {movies.map((movie) => (
+              <div key={movie.youtube_link_id}>
+                <div className="mb-2">
+                  <MovieCard videoUrl={movie.youtube_links.url} id={movie.youtube_link_id} />
+                </div>
+                <div className="flex justify-end">
+                  <div className="w-6/12">
+                    <BaseButton
+                      onClick={() => openDialog(movie.youtube_link_id)}
+                      label="動画を削除する"
+                      white
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </main>
-        <ConfirmDialog
-          open={isDialogOpen}
-          onClose={closeDialog}
-          onConfirm={handleConfirm}
-          title="動画を削除しますか？"
-          text="この操作は取り消せません。"
-          confirmText="削除する"
-        />
-      </div>
-    </DefaultLayout>
+            ))}
+          </main>
+          <ConfirmDialog
+            open={isDialogOpen}
+            onClose={closeDialog}
+            onConfirm={handleConfirm}
+            title="動画を削除しますか？"
+            text="この操作は取り消せません。"
+            confirmText="削除する"
+          />
+        </div>
+      </DefaultLayout>
+    </>
   );
 };
 

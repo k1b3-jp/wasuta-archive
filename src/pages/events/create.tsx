@@ -1,4 +1,5 @@
 import { useRouter } from 'next/navigation';
+import { NextSeo } from 'next-seo';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
@@ -142,91 +143,94 @@ const CreateEvent = () => {
   };
 
   return (
-    <DefaultLayout>
-      <div className="container mx-auto p-6 lg:max-w-3xl">
-        <h1 className="text-2xl font-bold mb-8 text-font-color">イベントの作成</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="eventName" className="block text-sm font-bold mb-2">
-              イベント名
-              <MiniTag label="必須" />
-            </label>
-            <input
-              id="eventName"
-              type="text"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="date" className="block text-sm font-bold mb-2">
-              日付
-              <MiniTag label="必須" />
-            </label>
-            <input
-              id="date"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="location" className="block text-sm font-bold mb-2">
-              場所
-            </label>
-            <input
-              id="location"
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
-              カバー画像
-            </label>
-            <input
-              id="file-upload"
-              name="file-upload"
-              type="file"
-              className=""
-              accept="image/png, image/jpeg"
-              onChange={handleFileChange}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {previewUrl && <img src={previewUrl} alt="Preview" />}
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-sm font-bold mb-2">
-              説明文
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-              className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
-            />
-          </div>
-          <label className="block text-sm font-bold mb-2">タグ</label>
-          <div className="flex flex-wrap gap-2 pb-8">
-            {allTags.map((tag) => (
-              <Tag
-                key={tag.id}
-                label={tag.label}
-                selected={selectedTags.some((t) => t.id === tag.id)}
-                onSelect={() => handleTagSelect(tag)}
+    <>
+      <NextSeo title="イベント作成" />
+      <DefaultLayout>
+        <div className="container mx-auto p-6 lg:max-w-3xl">
+          <h1 className="text-2xl font-bold mb-8 text-font-color">イベントの作成</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="eventName" className="block text-sm font-bold mb-2">
+                イベント名
+                <MiniTag label="必須" />
+              </label>
+              <input
+                id="eventName"
+                type="text"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+                className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
               />
-            ))}
-          </div>
-          {errorMessage && <p>{errorMessage}</p>}
-          <BaseButton label="作成する" onClick={handleSubmit} />
-        </form>
-      </div>
-    </DefaultLayout>
+            </div>
+            <div>
+              <label htmlFor="date" className="block text-sm font-bold mb-2">
+                日付
+                <MiniTag label="必須" />
+              </label>
+              <input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              />
+            </div>
+            <div>
+              <label htmlFor="location" className="block text-sm font-bold mb-2">
+                場所
+              </label>
+              <input
+                id="location"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              />
+            </div>
+            <div>
+              <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
+                カバー画像
+              </label>
+              <input
+                id="file-upload"
+                name="file-upload"
+                type="file"
+                className=""
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {previewUrl && <img src={previewUrl} alt="Preview" />}
+            </div>
+            <div>
+              <label htmlFor="description" className="block text-sm font-bold mb-2">
+                説明文
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+              />
+            </div>
+            <label className="block text-sm font-bold mb-2">タグ</label>
+            <div className="flex flex-wrap gap-2 pb-8">
+              {allTags.map((tag) => (
+                <Tag
+                  key={tag.id}
+                  label={tag.label}
+                  selected={selectedTags.some((t) => t.id === tag.id)}
+                  onSelect={() => handleTagSelect(tag)}
+                />
+              ))}
+            </div>
+            {errorMessage && <p>{errorMessage}</p>}
+            <BaseButton label="作成する" onClick={handleSubmit} />
+          </form>
+        </div>
+      </DefaultLayout>
+    </>
   );
 };
 
