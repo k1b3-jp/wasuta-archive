@@ -2,6 +2,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { NextSeo } from 'next-seo';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../app/layout';
@@ -19,6 +20,7 @@ export default function Google() {
 
   return (
     <>
+      <NextSeo title="ログイン" />
       <DefaultLayout>
         <div className="py-4 px-8">
           <Auth

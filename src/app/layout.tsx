@@ -1,7 +1,7 @@
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { Analytics } from '@vercel/analytics/react';
 import { Noto_Sans_JP, Rubik } from 'next/font/google';
-import { NextSeo } from 'next-seo';
+import { DefaultSeo } from 'next-seo';
 import React from 'react';
 import '@/styles/globals.scss';
 import { ToastContainer } from 'react-toastify';
@@ -19,38 +19,37 @@ const rubik = Rubik({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <DefaultSeo
+        titleTemplate="%s | わーすたアーカイブ"
+        description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
+        openGraph={{
+          type: 'website',
+          description:
+            'わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。',
+          site_name: 'わーすたアーカイブ',
+          url: 'https://www.wasuta-archive.com/',
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+              type: 'image/png',
+            },
+          ],
+        }}
+        twitter={{
+          handle: 'tws_kotaro',
+          site: 'tws_kotaro',
+          cardType: 'summary_large_image',
+        }}
+      />
       <div
         style={{
           margin: 0,
         }}
         className={`${noto.className} flex flex-col min-h-screen`}
       >
-        <NextSeo
-          defaultTitle="わーすたアーカイブ"
-          description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
-          openGraph={{
-            type: 'website',
-            title: 'わーすたアーカイブ',
-            description:
-              'わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。',
-            site_name: 'わーすたアーカイブ',
-            url: 'https://www.wasuta-archive.com/',
-            // images: [
-            //   {
-            //     url: 'https://www.example.ie/og-image-01.jpg',
-            //     width: 800,
-            //     height: 600,
-            //     alt: 'Og Image Alt',
-            //     type: 'image/jpeg',
-            //   },
-            // ],
-          }}
-          twitter={{
-            handle: '@tws_kotaro',
-            site: '@tws_kotaro',
-            cardType: 'summary_large_image',
-          }}
-        />
         <NavBar />
         <main className="flex-grow">
           <div className="container mx-auto">{children}</div>
