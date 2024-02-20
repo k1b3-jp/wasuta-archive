@@ -1,4 +1,5 @@
 import { useSearchParams } from 'next/navigation';
+import { NextSeo } from 'next-seo';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWRInfinite from 'swr/infinite';
@@ -103,93 +104,96 @@ const EventListPage = () => {
   };
 
   return (
-    <DefaultLayout>
-      <div>
-        <div className="mx-auto">
-          <div className="search-form p-2 bg-light-gray bg-100vw flex">
-            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold">タイトル</label>
-                <input
-                  className="bg-light-gray rounded-md p-3"
-                  type="text"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold">期間</label>
-                <div className="flex flex-row flex-nowrap items-center">
+    <>
+      <NextSeo title="イベント一覧" />
+      <DefaultLayout>
+        <div>
+          <div className="mx-auto">
+            <div className="search-form p-2 bg-light-gray bg-100vw flex">
+              <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold">タイトル</label>
                   <input
                     className="bg-light-gray rounded-md p-3"
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                  <span className="mx-1">〜</span>
-                  <input
-                    className="bg-light-gray rounded-md p-3"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    type="text"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold">タグ</label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {allTags.map((tag) => (
-                    <Tag
-                      key={tag.id}
-                      label={tag.label}
-                      selected={selectedTags.some((t) => t.id === tag.id)}
-                      onSelect={() => handleTagSelect(tag)}
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold">期間</label>
+                  <div className="flex flex-row flex-nowrap items-center">
+                    <input
+                      className="bg-light-gray rounded-md p-3"
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
                     />
-                  ))}
+                    <span className="mx-1">〜</span>
+                    <input
+                      className="bg-light-gray rounded-md p-3"
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold">タグ</label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {allTags.map((tag) => (
+                      <Tag
+                        key={tag.id}
+                        label={tag.label}
+                        selected={selectedTags.some((t) => t.id === tag.id)}
+                        onSelect={() => handleTagSelect(tag)}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <BaseButton onClick={handleSearch} label="検索" />
               </div>
-              <BaseButton onClick={handleSearch} label="検索" />
+            </div>
+            <main className="event-list grid-base py-8">
+              {loading && <p>読み込み中...</p>}
+              {error && <p className="text-red-500">{error}</p>}
+              {events?.map((items) => {
+                return items?.map(
+                  (event: {
+                    event_id: any;
+                    event_name: any;
+                    location: any;
+                    date: any;
+                    image_url: any;
+                  }) => {
+                    return (
+                      <EventCard
+                        key={event.event_id}
+                        title={event.event_name}
+                        location={event.location}
+                        date={event.date}
+                        imageUrl={event.image_url}
+                        id={event.event_id}
+                      />
+                    );
+                  },
+                );
+              })}
+            </main>
+            <div className="mx-auto mb-6 px-6 lg:w-1/2">
+              <BaseButton
+                label="もっと見る"
+                onClick={() => {
+                  setSize(size + 1);
+                }}
+                white
+              />
             </div>
           </div>
-          <main className="event-list grid-base py-8">
-            {loading && <p>読み込み中...</p>}
-            {error && <p className="text-red-500">{error}</p>}
-            {events?.map((items) => {
-              return items?.map(
-                (event: {
-                  event_id: any;
-                  event_name: any;
-                  location: any;
-                  date: any;
-                  image_url: any;
-                }) => {
-                  return (
-                    <EventCard
-                      key={event.event_id}
-                      title={event.event_name}
-                      location={event.location}
-                      date={event.date}
-                      imageUrl={event.image_url}
-                      id={event.event_id}
-                    />
-                  );
-                },
-              );
-            })}
-          </main>
-          <div className="mx-auto mb-6 px-6 lg:w-1/2">
-            <BaseButton
-              label="もっと見る"
-              onClick={() => {
-                setSize(size + 1);
-              }}
-              white
-            />
-          </div>
         </div>
-      </div>
-    </DefaultLayout>
+      </DefaultLayout>
+    </>
   );
 };
 
