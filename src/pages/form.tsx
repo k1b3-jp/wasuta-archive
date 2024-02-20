@@ -1,8 +1,10 @@
+import { NextSeo } from 'next-seo';
 import DefaultLayout from '../app/layout';
 
 export default function Form() {
   return (
     <>
+      <NextSeo title="お問い合わせ" />
       <DefaultLayout>
         <div className="mx-auto">
           <iframe

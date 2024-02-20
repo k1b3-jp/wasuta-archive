@@ -1,3 +1,4 @@
+import { NextSeo } from 'next-seo';
 import React, { useEffect, useState } from 'react';
 import useSWRInfinite from 'swr/infinite';
 import DefaultLayout from '@/app/layout';
@@ -74,55 +75,58 @@ const EventListPage = () => {
   };
 
   return (
-    <DefaultLayout>
-      <div>
-        <div className="mx-auto">
-          <div className="search-form p-2 bg-light-gray bg-100vw flex">
-            <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold">タグ</label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {allTags.map((tag) => (
-                    <Tag
-                      key={tag.id}
-                      label={tag.label}
-                      selected={selectedTags.some((t) => t.id === tag.id)}
-                      onSelect={() => handleTagSelect(tag)}
-                    />
-                  ))}
+    <>
+      <NextSeo title="動画一覧" />
+      <DefaultLayout>
+        <div>
+          <div className="mx-auto">
+            <div className="search-form p-2 bg-light-gray bg-100vw flex">
+              <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold">タグ</label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {allTags.map((tag) => (
+                      <Tag
+                        key={tag.id}
+                        label={tag.label}
+                        selected={selectedTags.some((t) => t.id === tag.id)}
+                        onSelect={() => handleTagSelect(tag)}
+                      />
+                    ))}
+                  </div>
                 </div>
+                <BaseButton onClick={handleSearch} label="検索" />
               </div>
-              <BaseButton onClick={handleSearch} label="検索" />
+            </div>
+            <main className="event-list grid-base py-10">
+              {loading && <p>読み込み中...</p>}
+              {error && <p className="text-red-500">{error}</p>}
+              {movies?.map((items) => {
+                return items?.map((link: Movie) => {
+                  return (
+                    <div key={link.youtube_link_id} className="min-w-80">
+                      <MovieCard
+                        videoUrl={link?.youtube_links?.url}
+                        id={link.youtube_link_id}
+                      ></MovieCard>
+                    </div>
+                  );
+                });
+              })}
+            </main>
+            <div className="mx-auto mb-6 px-6 lg:w-1/2">
+              <BaseButton
+                label="もっと見る"
+                onClick={() => {
+                  setSize(size + 1);
+                }}
+                white
+              />
             </div>
           </div>
-          <main className="event-list grid-base py-10">
-            {loading && <p>読み込み中...</p>}
-            {error && <p className="text-red-500">{error}</p>}
-            {movies?.map((items) => {
-              return items?.map((link: Movie) => {
-                return (
-                  <div key={link.youtube_link_id} className="min-w-80">
-                    <MovieCard
-                      videoUrl={link?.youtube_links?.url}
-                      id={link.youtube_link_id}
-                    ></MovieCard>
-                  </div>
-                );
-              });
-            })}
-          </main>
-          <div className="mx-auto mb-6 px-6 lg:w-1/2">
-            <BaseButton
-              label="もっと見る"
-              onClick={() => {
-                setSize(size + 1);
-              }}
-              white
-            />
-          </div>
         </div>
-      </div>
-    </DefaultLayout>
+      </DefaultLayout>
+    </>
   );
 };
 
