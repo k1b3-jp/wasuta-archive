@@ -6,7 +6,7 @@ interface GetMoviesOptions {
   tags?: string[];
   start?: number;
   end?: number;
-  order?: string;
+  sortBy?: string;
   ascending?: boolean;
 }
 
@@ -41,8 +41,8 @@ export const getMovies = async (options?: GetMoviesOptions) => {
     query = query.in('youtube_link_id', youtubeLinkIds);
   }
 
-  if (options?.order) {
-    query = query.order(options.order, { ascending: options.ascending ?? false });
+  if (options?.sortBy) {
+    query = query.order(options.sortBy, { ascending: options.ascending ?? false });
   }
 
   // リミットが指定されていれば適用します
