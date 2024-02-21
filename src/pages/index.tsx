@@ -39,6 +39,8 @@ export async function getServerSideProps() {
     // イベントに紐づくYouTubeリンクを取得
     movies = await getMovies({
       limit: 6,
+      order: 'youtube_link_id',
+      ascending: false,
     });
   } catch (error) {
     if (error instanceof Error) {
