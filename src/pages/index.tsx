@@ -63,7 +63,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
         openGraph={{
           images: [
             {
-              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              url: process.env.defaultOgpImage || '',
               width: 1200,
               height: 630,
               alt: 'Og Image Alt',
