@@ -226,6 +226,8 @@ const EditEvent = () => {
           images: [
             {
               url: imageUrl,
+              width: 1200,
+              height: 630,
             },
           ],
         }}

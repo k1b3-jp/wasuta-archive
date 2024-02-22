@@ -144,7 +144,19 @@ const CreateEvent = () => {
 
   return (
     <>
-      <NextSeo title="イベント作成" />
+      <NextSeo
+        title="イベント作成"
+        openGraph={{
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="container mx-auto p-6 lg:max-w-3xl">
           <h1 className="text-2xl font-bold mb-8 text-font-color">イベントの作成</h1>

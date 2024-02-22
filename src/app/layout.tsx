@@ -28,15 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             'わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。',
           site_name: 'わーすたアーカイブ',
           url: 'https://www.wasuta-archive.com/',
-          images: [
-            {
-              url: 'https://www.wasuta-archive.com/opengraph-image.png',
-              width: 1200,
-              height: 630,
-              alt: 'Og Image Alt',
-              type: 'image/png',
-            },
-          ],
         }}
         twitter={{
           handle: 'tws_kotaro',

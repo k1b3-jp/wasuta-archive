@@ -67,7 +67,19 @@ const EventListPage = () => {
 
   return (
     <>
-      <NextSeo title="年表" />
+      <NextSeo
+        title="年表"
+        openGraph={{
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div>
           <div className="mx-auto">

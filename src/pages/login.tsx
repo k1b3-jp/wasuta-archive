@@ -20,7 +20,19 @@ export default function Google() {
 
   return (
     <>
-      <NextSeo title="ログイン" />
+      <NextSeo
+        title="ログイン"
+        openGraph={{
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="py-4 px-8">
           <Auth

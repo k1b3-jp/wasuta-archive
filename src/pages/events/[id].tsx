@@ -139,6 +139,8 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
           images: [
             {
               url: event.image_url,
+              width: 1200,
+              height: 630,
             },
           ],
         }}
