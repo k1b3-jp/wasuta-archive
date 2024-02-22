@@ -58,7 +58,7 @@ export async function getServerSideProps() {
 const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
   return (
     <>
-      <NextSeo title="Top" />
+      <NextSeo title="わーすたアーカイブ" />
       <DefaultLayout>
         <div>
           <section className="welcome px-4 pt-14 pb-4 lg:pb-10 flex flex-col lg:flex-row lg:items-center lg:justify-between relative">

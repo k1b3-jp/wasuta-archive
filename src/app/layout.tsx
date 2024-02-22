@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <DefaultSeo
-        titleTemplate="わーすたアーカイブ | %s"
+        titleTemplate="%s | わーすたアーカイブ"
         description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
         openGraph={{
           type: 'website',
