@@ -225,7 +225,7 @@ const EditEvent = () => {
         openGraph={{
           images: [
             {
-              url: imageUrl,
+              url: imageUrl || 'https://www.wasuta-archive.com/opengraph-image.png',
               width: 1200,
               height: 630,
             },
