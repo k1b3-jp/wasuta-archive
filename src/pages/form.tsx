@@ -4,7 +4,19 @@ import DefaultLayout from '../app/layout';
 export default function Form() {
   return (
     <>
-      <NextSeo title="お問い合わせ" />
+      <NextSeo
+        title="お問い合わせ"
+        openGraph={{
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="mx-auto">
           <iframe

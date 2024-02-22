@@ -4,7 +4,19 @@ import DefaultLayout from '@/app/layout';
 export default function Custom404() {
   return (
     <>
-      <NextSeo title="404" />
+      <NextSeo
+        title="404"
+        openGraph={{
+          images: [
+            {
+              url: 'https://www.wasuta-archive.com/opengraph-image.png',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="px-4 pt-14 pb-4 text-center">
           <h1 className="text-2xl font-bold mb-8">ページが見つかりません😢</h1>
