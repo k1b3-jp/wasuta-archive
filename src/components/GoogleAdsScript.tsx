@@ -13,5 +13,5 @@ export const GoogleAdScript = () => {
       />
     );
   }
-  return <></>;
+  return null;
 };
