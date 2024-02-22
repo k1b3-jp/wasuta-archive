@@ -138,7 +138,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         openGraph={{
           images: [
             {
-              url: event.image_url,
+              url: event.image_url || process.env.defaultOgpImage || '',
+              width: 1200,
+              height: 630,
             },
           ],
         }}

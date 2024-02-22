@@ -104,7 +104,19 @@ const EventMovieList = () => {
 
   return (
     <>
-      <NextSeo title="イベントに紐づく動画一覧" />
+      <NextSeo
+        title="イベントに紐づく動画一覧"
+        openGraph={{
+          images: [
+            {
+              url: process.env.defaultOgpImage || '',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div>
           <div className="search-form p-8 bg-light-gray bg-100vw flex">

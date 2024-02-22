@@ -5,7 +5,19 @@ import DefaultLayout from '../app/layout';
 export default function Policy() {
   return (
     <>
-      <NextSeo title="プライバシーポリシー" />
+      <NextSeo
+        title="プライバシーポリシー"
+        openGraph={{
+          images: [
+            {
+              url: process.env.defaultOgpImage || '',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="p-8">
           <h1 className="font-bold text-2xl mb-6">プライバシーポリシー</h1>

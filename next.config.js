@@ -17,6 +17,9 @@ const nextConfig = {
     domains: ['127.0.0.1'],
     disableStaticImages: true, // importした画像の型定義設定を無効にする
   },
+  env: {
+    defaultOgpImage: 'https://www.wasuta-archive.com/opengraph-image.png',
+  },
 };
 
 module.exports = nextConfig;

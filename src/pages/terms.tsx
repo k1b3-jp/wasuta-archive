@@ -5,7 +5,19 @@ import DefaultLayout from '../app/layout';
 export default function Term() {
   return (
     <>
-      <NextSeo title="利用規約" />
+      <NextSeo
+        title="利用規約"
+        openGraph={{
+          images: [
+            {
+              url: process.env.defaultOgpImage || '',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div className="p-8">
           <h1 className="font-bold text-2xl mb-6">利用規約</h1>
