@@ -225,7 +225,7 @@ const EditEvent = () => {
         openGraph={{
           images: [
             {
-              url: imageUrl || process.env.defaultOgpImage,
+              url: imageUrl || process.env.defaultOgpImage || '',
               width: 1200,
               height: 630,
             },
