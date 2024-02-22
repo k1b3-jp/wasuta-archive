@@ -3,7 +3,7 @@ import Script from 'next/script';
 const PUBLISHER_ID = '4850378479891783';
 
 export const GoogleAdScript = () => {
-  if (process.env.VERCEL_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     return (
       <Script
         async
