@@ -5,6 +5,7 @@ import { DefaultSeo } from 'next-seo';
 import React from 'react';
 import '@/styles/globals.scss';
 import { ToastContainer } from 'react-toastify';
+import { GoogleAdScript } from '@/components/GoogleAdsScript';
 import BottomBar from '@/components/navigation/BottomBar';
 import Footer from '@/components/navigation/Footer';
 import NavBar from '@/components/navigation/NavBar';
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           theme="light"
         />
         <Analytics />
+        <GoogleAdScript />
       </div>
     </>
   );
