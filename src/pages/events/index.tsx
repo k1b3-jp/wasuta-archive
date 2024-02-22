@@ -105,7 +105,19 @@ const EventListPage = () => {
 
   return (
     <>
-      <NextSeo title="イベント一覧" />
+      <NextSeo
+        title="イベント一覧"
+        openGraph={{
+          images: [
+            {
+              url: process.env.defaultOgpImage || '',
+              width: 1200,
+              height: 630,
+              alt: 'Og Image Alt',
+            },
+          ],
+        }}
+      />
       <DefaultLayout>
         <div>
           <div className="mx-auto">
