@@ -47,7 +47,6 @@ const EventListPage = () => {
       const selectedTagIds = selectedTags.map((tag) => tag.id);
       const eventsData = await getEvents({
         keyword: keyword,
-        limit: 12,
         startDate: startDate,
         endDate: endDate,
         tags: selectedTagIds,
