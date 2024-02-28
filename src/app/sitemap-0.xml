@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://www.wasuta-archive.com</loc><lastmod>2024-02-22T11:47:59.352Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.wasuta-archive.com/robots.txt</loc><lastmod>2024-02-22T11:47:59.353Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.wasuta-archive.com/opengraph-image.png</loc><lastmod>2024-02-22T11:47:59.353Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.wasuta-archive.com/apple-icon.png</loc><lastmod>2024-02-22T11:47:59.353Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.wasuta-archive.com/sitemap.xml</loc><lastmod>2024-02-22T11:47:59.353Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com</loc><lastmod>2024-02-28T07:51:46.361Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/events</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/events/create</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/events/history</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/form</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/login</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/movies</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/policy</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/terms</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/opengraph-image.png</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/apple-icon.png</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/robots.txt</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.wasuta-archive.com/sitemap.xml</loc><lastmod>2024-02-28T07:51:46.363Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>
