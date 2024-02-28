@@ -1,5 +1,6 @@
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Noto_Sans_JP, Rubik } from 'next/font/google';
 import Head from 'next/head';
 import { DefaultSeo } from 'next-seo';
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           theme="light"
         />
         <Analytics />
+        <SpeedInsights />
       </div>
     </>
   );
