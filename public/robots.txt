@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.wasuta-archive.com/
+
+# Sitemaps
+Sitemap: https://www.wasuta-archive.com/sitemap.xml
