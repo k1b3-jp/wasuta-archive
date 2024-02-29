@@ -21,9 +21,9 @@ const EventCard: React.FC<EventCardProps> = ({ title, location, date, imageUrl, 
       </div>
       <div className="p-4">
         <div className="mb-4">
-          <div className="text-lg font-semibold">{title}</div>
+          <div className="text-lg font-semibold line-clamp-2 min-h-14">{title}</div>
         </div>
-        <div className="text-gray-500 mb-4 min-h-6">{location}</div>
+        <div className="text-gray-500 mb-6 line-clamp-1 min-h-6">{location}</div>
         <BaseButton label="詳細を見る" link={`/events/${id}`} />
       </div>
     </div>
