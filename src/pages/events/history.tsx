@@ -1,9 +1,7 @@
+import { Player } from '@lottiefiles/react-lottie-player';
 import { NextSeo } from 'next-seo';
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '@/app/layout';
-import HistoryItem from '@/components/events/HistoryItem';
-import BaseButton from '@/components/ui/BaseButton';
-import Tag from '@/components/ui/Tag';
 import { getEvents } from '@/lib/supabase/getEvents';
 import { getEventTags } from '@/lib/supabase/getEventTags';
 import { Event } from '@/types/event';
@@ -81,7 +79,19 @@ const EventListPage = () => {
       />
       <DefaultLayout>
         <div>
-          <div className="mx-auto">
+          <div className="px-4 pt-14 pb-4 text-center">
+            <h1 className="text-2xl font-bold mb-8">準備中🙇‍♂️</h1>
+            <p className="mb-6">鋭意開発中です。もうしばらくお待ちください。</p>
+            <div className="lg:w-4/5 mx-auto">
+              <Player
+                autoplay
+                loop
+                src="https://lottie.host/e78d39ae-52c5-476e-b569-d97a591062b3/JfYmCDw0DB.json"
+                style={{ height: '100%', width: '100%' }}
+              ></Player>
+            </div>
+          </div>
+          {/* <div className="mx-auto">
             <div className="search-form p-2 bg-light-gray bg-100vw flex">
               <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
                 <div className="flex flex-col gap-2">
@@ -146,7 +156,7 @@ const EventListPage = () => {
                 ))}
               </ol>
             </main>
-          </div>
+          </div> */}
         </div>
       </DefaultLayout>
     </>
