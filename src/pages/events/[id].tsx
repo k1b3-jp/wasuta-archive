@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
+import { TwitterShareButton, XIcon } from 'react-share';
 import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
@@ -175,6 +176,16 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               <div className="flex flex-col gap-2 mb-6">
                 <h2 className="text-l font-bold">イベントについて</h2>
                 <p>{event.description || '未設定'}</p>
+              </div>
+              <div className="flex flex-col gap-2 mb-8">
+                <h2 className="text-l font-bold">Share</h2>
+                <TwitterShareButton
+                  url={`https://www.wasuta-archive.com/events/${id}`}
+                  title={event.title}
+                  hashtags={['わーすた', 'わーすたアーカイブ']}
+                >
+                  <XIcon size={32} round={true} />
+                </TwitterShareButton>
               </div>
               <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集" white></BaseButton>
             </div>
