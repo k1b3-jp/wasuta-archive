@@ -238,7 +238,9 @@ const CreateEvent = () => {
               ))}
             </div>
             {errorMessage && <p>{errorMessage}</p>}
-            <BaseButton label="作成する" onClick={handleSubmit} />
+            <div className="text-center">
+              <BaseButton label="作成する" onClick={handleSubmit} />
+            </div>
           </form>
         </div>
       </DefaultLayout>
