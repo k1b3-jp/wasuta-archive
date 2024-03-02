@@ -164,7 +164,9 @@ const EventListPage = () => {
                     ))}
                   </div>
                 </div>
-                <BaseButton onClick={handleSearch} label="検索" />
+                <div className="text-center">
+                  <BaseButton onClick={handleSearch} label="検索" />
+                </div>
               </div>
             </div>
             <main className="event-list grid-base py-8">
@@ -193,7 +195,7 @@ const EventListPage = () => {
                 );
               })}
             </main>
-            <div className="mx-auto mb-6 px-6 lg:w-1/2">
+            <div className="mx-auto mb-6 px-6 text-center">
               <BaseButton
                 label="もっと見る"
                 onClick={() => {

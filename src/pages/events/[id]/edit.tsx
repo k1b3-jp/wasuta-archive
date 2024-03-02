@@ -325,10 +325,20 @@ const EditEvent = () => {
                 </div>
               </div>
               {errorMessage && <p>{errorMessage}</p>}
-              <BaseButton onClick={handleSubmit} label="イベントを更新する" />
+              <div className="text-center">
+                <BaseButton onClick={handleSubmit} label="イベントを更新する" />
+              </div>
             </div>
           </form>
-          <BaseButton onClick={() => openDialog(Number(id))} label="イベントを削除する" danger />
+          <div className="flex justify-center">
+            <div className="max-w-xs">
+              <BaseButton
+                onClick={() => openDialog(Number(id))}
+                label="イベントを削除する"
+                danger
+              />
+            </div>
+          </div>
           <ConfirmDialog
             open={isDialogOpen}
             onClose={closeDialog}

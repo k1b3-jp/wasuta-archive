@@ -187,7 +187,13 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                   <XIcon size={32} round={true} />
                 </TwitterShareButton>
               </div>
-              <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集" white></BaseButton>
+              <div className="text-center">
+                <BaseButton
+                  link={`/events/${id}/edit`}
+                  label="イベント情報を編集"
+                  white
+                ></BaseButton>
+              </div>
             </div>
             <div className="event-movie bg-100vw">
               <div className="container mx-auto p-6">
@@ -241,7 +247,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                       </div>
                     </div>
                   </div>
-                  <BaseButton label="登録する" onClick={handleSubmit} />
+                  <div className="text-center">
+                    <BaseButton label="登録する" onClick={handleSubmit} />
+                  </div>
                 </div>
               </div>
             </div>
