@@ -29,7 +29,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-full py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md font-bold
+      className={`w-full max-w-sm py-2 px-4 rounded-3xl transition-colors transition duration-300 ease-in-out shadow-md font-bold
     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
     ${buttonStyles}
     `}

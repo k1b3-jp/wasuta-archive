@@ -131,7 +131,9 @@ const EventMovieList = () => {
                   />
                 ))}
               </div>
-              <BaseButton onClick={handleSearch} label="絞り込む" />
+              <div className="text-center">
+                <BaseButton onClick={handleSearch} label="絞り込む" />
+              </div>
             </div>
           </div>
           <main className="event-list grid-base py-8">
@@ -145,7 +147,7 @@ const EventMovieList = () => {
                     <BaseButton
                       onClick={() => openDialog(movie.youtube_link_id)}
                       label="動画を削除する"
-                      white
+                      danger
                     />
                   </div>
                 </div>

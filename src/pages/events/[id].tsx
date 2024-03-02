@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
+import { TwitterShareButton, XIcon } from 'react-share';
 import { toast } from 'react-toastify';
 import DefaultLayout from '@/app/layout';
 import MovieCard from '@/components/events/MovieCard';
@@ -176,7 +177,23 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                 <h2 className="text-l font-bold">イベントについて</h2>
                 <p>{event.description || '未設定'}</p>
               </div>
-              <BaseButton link={`/events/${id}/edit`} label="イベント情報を編集" white></BaseButton>
+              <div className="flex flex-col gap-2 mb-8">
+                <h2 className="text-l font-bold">Share</h2>
+                <TwitterShareButton
+                  url={`https://www.wasuta-archive.com/events/${id}`}
+                  title={event.title}
+                  hashtags={['わーすた', 'わーすたアーカイブ']}
+                >
+                  <XIcon size={32} round={true} />
+                </TwitterShareButton>
+              </div>
+              <div className="text-center">
+                <BaseButton
+                  link={`/events/${id}/edit`}
+                  label="イベント情報を編集"
+                  white
+                ></BaseButton>
+              </div>
             </div>
             <div className="event-movie bg-100vw">
               <div className="container mx-auto p-6">
@@ -230,7 +247,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                       </div>
                     </div>
                   </div>
-                  <BaseButton label="登録する" onClick={handleSubmit} />
+                  <div className="text-center">
+                    <BaseButton label="登録する" onClick={handleSubmit} />
+                  </div>
                 </div>
               </div>
             </div>
