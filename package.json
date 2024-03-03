@@ -37,6 +37,7 @@
     "react-share": "^5.1.0",
     "react-toastify": "^10.0.3",
     "sass": "^1.69.6",
+    "string-width": "^7.1.0",
     "swr": "^2.2.4"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
     "@storybook/addon-interactions": "^7.6.6",
     "@storybook/addon-links": "^7.6.6",
     "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/addon-postcss": "^2.0.0",
     "@storybook/blocks": "^7.6.6",
     "@storybook/nextjs": "^7.6.6",
     "@storybook/react": "^7.6.6",
