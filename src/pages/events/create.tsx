@@ -1,30 +1,32 @@
-import { useRouter } from 'next/navigation';
-import { NextSeo } from 'next-seo';
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import DefaultLayout from '@/app/layout';
-import BaseButton from '@/components/ui/BaseButton';
-import MiniTag from '@/components/ui/MiniTag';
-import Tag from '@/components/ui/Tag';
-import createEvent from '@/lib/supabase/createEvent';
-import { getEventTags } from '@/lib/supabase/getEventTags';
-import { uploadStorage } from '@/lib/supabase/uploadStorage';
-import { supabase } from '@/lib/supabaseClient';
-import { TagType } from '@/types/tag';
+import DefaultLayout from "@/app/layout";
+import BaseButton from "@/components/ui/BaseButton";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import MiniTag from "@/components/ui/MiniTag";
+import Tag from "@/components/ui/Tag";
+import createEvent from "@/lib/supabase/createEvent";
+import { getEventTags } from "@/lib/supabase/getEventTags";
+import { uploadStorage } from "@/lib/supabase/uploadStorage";
+import { supabase } from "@/lib/supabaseClient";
+import { TagType } from "@/types/tag";
+import { NextSeo } from "next-seo";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const CreateEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [eventName, setEventName] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const router = useRouter();
   const [fileList, setFileList] = useState<FileList | null>(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState("");
   const [path, setPathName] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const validateAccess = async () => {
     const { data } = await supabase.auth.getSession();
@@ -37,7 +39,7 @@ const CreateEvent = () => {
 
   useEffect(() => {
     //エラーをリセットする
-    setErrorMessage('');
+    setErrorMessage("");
     validateAccess();
     fetchAllTags();
   }, []);
@@ -63,7 +65,7 @@ const CreateEvent = () => {
   };
   const validateFields = (fields: Fields) => {
     let isValid = true;
-    for (let fieldName in fields) {
+    for (const fieldName in fields) {
       if (!fields[fieldName]) {
         toast.error(`${fieldName}は必須です😥`);
         isValid = false;
@@ -81,14 +83,14 @@ const CreateEvent = () => {
 
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        if (typeof fileReader.result === 'string') {
+        if (typeof fileReader.result === "string") {
           setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
         }
       };
       fileReader.readAsDataURL(file);
     } else {
       // ファイルが選択されていない場合、プレビューをクリア
-      setPreviewUrl('');
+      setPreviewUrl("");
       setFileList(null);
     }
   };
@@ -97,15 +99,16 @@ const CreateEvent = () => {
     if (!folder || !folder.length) return null;
     const { path } = await uploadStorage({
       folder,
-      bucketName: 'event_pics',
+      bucketName: "event_pics",
     });
-    const { data } = supabase.storage.from('event_pics').getPublicUrl(path);
+    const { data } = supabase.storage.from("event_pics").getPublicUrl(path);
     return data.publicUrl;
   };
 
   // Handle form submission
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setLoading(true);
 
     if (isLoggedIn) {
       // Check if required fields are filled
@@ -114,6 +117,7 @@ const CreateEvent = () => {
         日付: date,
       };
       if (!validateFields(fields)) {
+        setLoading(false);
         return;
       }
 
@@ -129,16 +133,22 @@ const CreateEvent = () => {
         const selectedTagIds = selectedTags.map((tag) => tag.id);
         const insertedData = await createEvent(eventData, selectedTagIds);
         const id = insertedData[0].event_id;
+        setLoading(false);
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
-        if ((error as any).code === '23505') {
-          toast.error('そのイベント名は既に存在します。別の名前を試してください🙇‍♂️');
+        if ((error as any).code === "23505") {
+          setLoading(false);
+          toast.error(
+            "そのイベント名は既に存在します。別の名前を試してください🙇‍♂️"
+          );
         } else {
+          setLoading(false);
           toast.error(`エラーがあります😢`);
         }
       }
     } else {
-      toast.error('ログインが必要です。');
+      setLoading(false);
+      toast.error("ログインが必要です。");
     }
   };
 
@@ -149,20 +159,25 @@ const CreateEvent = () => {
         openGraph={{
           images: [
             {
-              url: process.env.defaultOgpImage || '',
+              url: process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
-              alt: 'Og Image Alt',
+              alt: "Og Image Alt",
             },
           ],
         }}
       />
       <DefaultLayout>
         <div className="container mx-auto p-6 lg:max-w-3xl">
-          <h1 className="text-2xl font-bold mb-8 text-font-color">イベントの作成</h1>
+          <h1 className="text-2xl font-bold mb-8 text-font-color">
+            イベントの作成
+          </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="eventName" className="block text-sm font-bold mb-2">
+              <label
+                htmlFor="eventName"
+                className="block text-sm font-bold mb-2"
+              >
                 イベント名
                 <MiniTag label="必須" />
               </label>
@@ -188,7 +203,10 @@ const CreateEvent = () => {
               />
             </div>
             <div>
-              <label htmlFor="location" className="block text-sm font-bold mb-2">
+              <label
+                htmlFor="location"
+                className="block text-sm font-bold mb-2"
+              >
                 場所
               </label>
               <input
@@ -200,7 +218,10 @@ const CreateEvent = () => {
               />
             </div>
             <div>
-              <label htmlFor="file-upload" className="block text-sm font-bold mb-2">
+              <label
+                htmlFor="file-upload"
+                className="block text-sm font-bold mb-2"
+              >
                 カバー画像
               </label>
               <input
@@ -211,11 +232,13 @@ const CreateEvent = () => {
                 accept="image/png, image/jpeg"
                 onChange={handleFileChange}
               />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               {previewUrl && <img src={previewUrl} alt="Preview" />}
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-bold mb-2">
+              <label
+                htmlFor="description"
+                className="block text-sm font-bold mb-2"
+              >
                 説明文
               </label>
               <textarea
@@ -243,6 +266,7 @@ const CreateEvent = () => {
             </div>
           </form>
         </div>
+        {loading && <LoadingSpinner />}
       </DefaultLayout>
     </>
   );

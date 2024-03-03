@@ -1,35 +1,37 @@
-import { useRouter, useParams } from 'next/navigation';
-import { NextSeo } from 'next-seo';
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import DefaultLayout from '@/app/layout';
-import BaseButton from '@/components/ui/BaseButton';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import MiniTag from '@/components/ui/MiniTag';
-import Tag from '@/components/ui/Tag';
-import { deleteEvent } from '@/lib/supabase/deleteEvent';
-import { deleteStorage } from '@/lib/supabase/deleteStorage';
-import { getEvents } from '@/lib/supabase/getEvents';
-import { getEventTags } from '@/lib/supabase/getEventTags';
-import updateEvent from '@/lib/supabase/updateEvent'; // 既存のイベントを更新するための関数
-import { uploadStorage } from '@/lib/supabase/uploadStorage';
-import { supabase } from '@/lib/supabaseClient';
-import { TagType } from '@/types/tag';
+import DefaultLayout from "@/app/layout";
+import BaseButton from "@/components/ui/BaseButton";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import MiniTag from "@/components/ui/MiniTag";
+import Tag from "@/components/ui/Tag";
+import { deleteEvent } from "@/lib/supabase/deleteEvent";
+import { deleteStorage } from "@/lib/supabase/deleteStorage";
+import { getEventTags } from "@/lib/supabase/getEventTags";
+import { getEvents } from "@/lib/supabase/getEvents";
+import updateEvent from "@/lib/supabase/updateEvent"; // 既存のイベントを更新するための関数
+import { uploadStorage } from "@/lib/supabase/uploadStorage";
+import { supabase } from "@/lib/supabaseClient";
+import { TagType } from "@/types/tag";
+import { NextSeo } from "next-seo";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const defaultImageUrl = '/event-placeholder.png';
+const defaultImageUrl = "/event-placeholder.png";
 
 const EditEvent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [eventName, setEventName] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
   const [fileList, setFileList] = useState<FileList | null>(null);
-  const [previewUrl, setPreviewUrl] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [description, setDescription] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
@@ -44,7 +46,7 @@ const EditEvent = () => {
   };
 
   useEffect(() => {
-    setErrorMessage('');
+    setErrorMessage("");
     validateAccess();
     fetchEventAndTags();
   }, [id]);
@@ -63,9 +65,9 @@ const EditEvent = () => {
 
       // イベントに紐づくタグを取得
       const { data: eventTags } = await supabase
-        .from('event_tags')
-        .select('tag_id')
-        .eq('event_id', id);
+        .from("event_tags")
+        .select("tag_id")
+        .eq("event_id", id);
       if (eventTags) {
         const tagIds = eventTags.map((tag) => tag.tag_id);
         setSelectedTags(tagIds);
@@ -85,15 +87,19 @@ const EditEvent = () => {
     }
   };
 
-  const validateFields = (fields: { [x: string]: any; イベント名?: string; 日付?: string }) => {
-    let errors = [];
-    for (let fieldName in fields) {
+  const validateFields = (fields: {
+    [x: string]: any;
+    イベント名?: string;
+    日付?: string;
+  }) => {
+    const errors = [];
+    for (const fieldName in fields) {
       if (!fields[fieldName]) {
         errors.push(`${fieldName}は必須です。`);
       }
     }
     if (errors.length > 0) {
-      setErrorMessage(errors.join(' '));
+      setErrorMessage(errors.join(" "));
       return false;
     }
     return true;
@@ -108,14 +114,14 @@ const EditEvent = () => {
 
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        if (typeof fileReader.result === 'string') {
+        if (typeof fileReader.result === "string") {
           setPreviewUrl(fileReader.result); // 画像のプレビューURLを設定
         }
       };
       fileReader.readAsDataURL(file);
     } else {
       // ファイルが選択されていない場合、プレビューをクリア
-      setPreviewUrl('');
+      setPreviewUrl("");
       setFileList(null);
     }
   };
@@ -124,16 +130,16 @@ const EditEvent = () => {
     if (!folder || !folder.length) return null;
     const { path } = await uploadStorage({
       folder,
-      bucketName: 'event_pics',
+      bucketName: "event_pics",
     });
-    const { data } = supabase.storage.from('event_pics').getPublicUrl(path);
+    const { data } = supabase.storage.from("event_pics").getPublicUrl(path);
     return data.publicUrl;
   };
 
   function extractPathFromUrl(url: string | URL) {
     const urlParts = new URL(url);
     // URLのパス部分を取得し、'/'で分割
-    const pathSegments = urlParts.pathname.split('/');
+    const pathSegments = urlParts.pathname.split("/");
 
     // パスの最後のセグメントを取得
     const lastSegment = pathSegments[pathSegments.length - 1];
@@ -143,13 +149,16 @@ const EditEvent = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
+
     if (isLoggedIn) {
       const fields = {
         イベント名: eventName,
         日付: date,
       };
       if (!validateFields(fields)) {
-        toast.error('不足項目があります😢');
+        setLoading(false);
+        toast.error("不足項目があります😢");
         return;
       }
 
@@ -161,7 +170,10 @@ const EditEvent = () => {
           // 既存のimageUrlのファイルを削除
           let deletePics;
           if (imageUrl) {
-            deletePics = await deleteStorage(extractPathFromUrl(imageUrl), 'event_pics');
+            deletePics = await deleteStorage(
+              extractPathFromUrl(imageUrl),
+              "event_pics"
+            );
           }
         }
         const eventData = {
@@ -176,16 +188,19 @@ const EditEvent = () => {
           {
             ...eventData,
           },
-          id?.toString() ?? '',
-          selectedTags,
+          id?.toString() ?? "",
+          selectedTags
         );
+        setLoading(false);
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
-        toast.error('エラーがあります😢');
-        console.error('Error updating event', error);
+        setLoading(false);
+        toast.error("エラーがあります😢");
+        console.error("Error updating event", error);
       }
     } else {
-      toast.error('ログインが必要です。');
+      setLoading(false);
+      toast.error("ログインが必要です。");
     }
   };
 
@@ -211,8 +226,8 @@ const EditEvent = () => {
         await deleteEvent(selectedEventId);
         await router.push(`/events?toast=eventDeleted`);
       } catch (error) {
-        console.error('An error occurred:', error);
-        toast.error('イベントの削除中にエラーが発生しました。');
+        console.error("An error occurred:", error);
+        toast.error("イベントの削除中にエラーが発生しました。");
       }
       closeDialog();
     }
@@ -225,7 +240,7 @@ const EditEvent = () => {
         openGraph={{
           images: [
             {
-              url: imageUrl || process.env.defaultOgpImage || '',
+              url: imageUrl || process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
             },
@@ -287,9 +302,7 @@ const EditEvent = () => {
                   accept="image/png, image/jpeg"
                   onChange={handleFileChange}
                 />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 {(previewUrl && <img src={previewUrl} alt="Preview" />) || (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={imageUrl || defaultImageUrl}
                     alt={eventName}
@@ -348,6 +361,7 @@ const EditEvent = () => {
             confirmText="削除する"
           />
         </div>
+        {loading && <LoadingSpinner />}
       </DefaultLayout>
     </>
   );

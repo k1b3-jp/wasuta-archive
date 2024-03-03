@@ -1,34 +1,37 @@
-import { useSearchParams } from 'next/navigation';
-import { NextSeo } from 'next-seo';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import useSWRInfinite from 'swr/infinite';
-import DefaultLayout from '@/app/layout';
-import EventCard from '@/components/events/EventCard';
-import BaseButton from '@/components/ui/BaseButton';
-import Tag from '@/components/ui/Tag';
-import { getEvents } from '@/lib/supabase/getEvents';
-import { getEventTags } from '@/lib/supabase/getEventTags';
-import { TagType } from '@/types/tag';
+import DefaultLayout from "@/app/layout";
+import EventCard from "@/components/events/EventCard";
+import BaseButton from "@/components/ui/BaseButton";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Tag from "@/components/ui/Tag";
+import { getEventTags } from "@/lib/supabase/getEventTags";
+import { getEvents } from "@/lib/supabase/getEvents";
+import { TagType } from "@/types/tag";
+import { NextSeo } from "next-seo";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import useSWRInfinite from "swr/infinite";
 
 const EventListPage = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const query = useSearchParams();
-  const toastParams = query?.get('toast');
+  const toastParams = query?.get("toast");
 
   useEffect(() => {
-    const queryTags = query?.get('tags');
-    const queryTagIds = queryTags?.split(',').map((id) => parseInt(id, 10));
+    const queryTags = query?.get("tags");
+    const queryTagIds = queryTags?.split(",").map((id) => parseInt(id, 10));
 
     const selectTagsById = () => {
-      const selected = allTags.filter((tag) => queryTagIds?.includes(Number(tag.id)));
+      const selected = allTags.filter((tag) =>
+        queryTagIds?.includes(Number(tag.id))
+      );
       setSelectedTags(selected);
     };
 
@@ -40,8 +43,8 @@ const EventListPage = () => {
   }, [selectedTags]);
 
   useEffect(() => {
-    if (toastParams === 'eventDeleted') {
-      toast.success('イベントを削除しました');
+    if (toastParams === "eventDeleted") {
+      toast.success("イベントを削除しました");
     }
     fetchAllTags();
   }, [toastParams]);
@@ -71,7 +74,7 @@ const EventListPage = () => {
     const end = start + limit - 1;
 
     setLoading(true);
-    setError('');
+    setError("");
     try {
       const selectedTagIds = selectedTags.map((tag) => tag.id);
       const eventsData = await getEvents({
@@ -84,7 +87,8 @@ const EventListPage = () => {
       });
       return eventsData;
     } catch (err) {
-      setError('イベントの取得中にエラーが発生しました');
+      setLoading(false);
+      setError("イベントの取得中にエラーが発生しました");
       console.error(err);
     } finally {
       setLoading(false);
@@ -97,7 +101,12 @@ const EventListPage = () => {
     return { page: pageIndex, limit: limit };
   };
 
-  const { data: events, size, setSize, mutate } = useSWRInfinite(getKey, fetchEvents);
+  const {
+    data: events,
+    size,
+    setSize,
+    mutate,
+  } = useSWRInfinite(getKey, fetchEvents);
 
   const handleSearch = () => {
     setSize(1).then(() => mutate());
@@ -110,10 +119,10 @@ const EventListPage = () => {
         openGraph={{
           images: [
             {
-              url: process.env.defaultOgpImage || '',
+              url: process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
-              alt: 'Og Image Alt',
+              alt: "Og Image Alt",
             },
           ],
         }}
@@ -170,7 +179,6 @@ const EventListPage = () => {
               </div>
             </div>
             <main className="event-list grid-base py-8">
-              {loading && <p>読み込み中...</p>}
               {error && <p className="text-red-500">{error}</p>}
               {events?.map((items) => {
                 return items?.map(
@@ -191,7 +199,7 @@ const EventListPage = () => {
                         id={event.event_id}
                       />
                     );
-                  },
+                  }
                 );
               })}
             </main>
@@ -206,6 +214,7 @@ const EventListPage = () => {
             </div>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
       </DefaultLayout>
     </>
   );
