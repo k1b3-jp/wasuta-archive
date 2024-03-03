@@ -232,7 +232,6 @@ const CreateEvent = () => {
                 accept="image/png, image/jpeg"
                 onChange={handleFileChange}
               />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               {previewUrl && <img src={previewUrl} alt="Preview" />}
             </div>
             <div>

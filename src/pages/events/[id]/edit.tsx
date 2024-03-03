@@ -302,9 +302,7 @@ const EditEvent = () => {
                   accept="image/png, image/jpeg"
                   onChange={handleFileChange}
                 />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 {(previewUrl && <img src={previewUrl} alt="Preview" />) || (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={imageUrl || defaultImageUrl}
                     alt={eventName}
