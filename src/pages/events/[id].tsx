@@ -169,7 +169,6 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         <div>
           <div className="event">
             <div className="event-head bg-100vw bg-light-gray p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={event.image_url || defaultImageUrl}
                 alt={event.event_name}
