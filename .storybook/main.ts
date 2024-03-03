@@ -41,6 +41,14 @@ const config: StorybookConfig = {
       include: path.resolve(__dirname, '../'),
     });
 
+    if (!config.resolve) {
+      config.resolve = {};
+    }
+    if (!config.resolve.alias) {
+      config.resolve.alias = {};
+    }
+    config.resolve.alias['@'] = path.resolve(__dirname, '../src');
+
     return config;
   },
 };
