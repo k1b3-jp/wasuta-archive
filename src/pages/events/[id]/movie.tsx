@@ -1,17 +1,17 @@
-import { useRouter } from 'next/router';
-import { NextSeo } from 'next-seo';
-import { useEffect, useState, useCallback } from 'react';
-import { toast } from 'react-toastify';
-import DefaultLayout from '@/app/layout';
-import MovieCard from '@/components/events/MovieCard';
-import BaseButton from '@/components/ui/BaseButton';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import Tag from '@/components/ui/Tag';
-import { deleteYoutubeLink } from '@/lib/supabase/deleteYoutubeLink';
-import { getMovies } from '@/lib/supabase/getMovies';
-import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
-import { Movie } from '@/types/movie';
-import { TagType } from '@/types/tag';
+import DefaultLayout from "@/app/layout";
+import MovieCard from "@/components/events/MovieCard";
+import BaseButton from "@/components/ui/BaseButton";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import Tag from "@/components/ui/Tag";
+import { deleteYoutubeLink } from "@/lib/supabase/deleteYoutubeLink";
+import { getMovies } from "@/lib/supabase/getMovies";
+import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
+import { Movie } from "@/types/movie";
+import { TagType } from "@/types/tag";
+import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const EventMovieList = () => {
   const router = useRouter();
@@ -21,6 +21,7 @@ const EventMovieList = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   type ParamsType = {
     eventId: number;
@@ -33,13 +34,13 @@ const EventMovieList = () => {
         const params: ParamsType = { eventId: Number(id) };
         if (selectedTags) {
           const selectedTagIds = selectedTags.map((tag) => tag.id);
-          params['tags'] = selectedTagIds;
+          params["tags"] = selectedTagIds;
         }
         const fetchedMovies: Movie[] = await getMovies(params);
         setMovies(fetchedMovies);
       }
     },
-    [id],
+    [id]
   );
 
   useEffect(() => {
@@ -53,10 +54,10 @@ const EventMovieList = () => {
   const deleteMovie = async (youtubeLinkId: number) => {
     try {
       await deleteYoutubeLink(youtubeLinkId, Number(id));
-      toast.success('動画が正常に削除されました');
+      toast.success("動画が正常に削除されました");
       setRefreshKey((old) => old + 1);
     } catch (error) {
-      toast.error('動画の削除中にエラーが発生しました');
+      toast.error("動画の削除中にエラーが発生しました");
     }
   };
 
@@ -76,7 +77,15 @@ const EventMovieList = () => {
   };
 
   const handleSearch = () => {
-    fetchMovies(selectedTags);
+    try {
+      setLoading(true);
+      fetchMovies(selectedTags);
+    } catch (error) {
+      setLoading(false);
+      toast.error("動画の取得中にエラーが発生しました");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Dialogを使った確認と動画削除
@@ -109,10 +118,10 @@ const EventMovieList = () => {
         openGraph={{
           images: [
             {
-              url: process.env.defaultOgpImage || '',
+              url: process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
-              alt: 'Og Image Alt',
+              alt: "Og Image Alt",
             },
           ],
         }}
@@ -140,7 +149,10 @@ const EventMovieList = () => {
             {movies.map((movie) => (
               <div key={movie.youtube_link_id}>
                 <div className="mb-2">
-                  <MovieCard videoUrl={movie.youtube_links.url} id={movie.youtube_link_id} />
+                  <MovieCard
+                    videoUrl={movie.youtube_links.url}
+                    id={movie.youtube_link_id}
+                  />
                 </div>
                 <div className="flex justify-end">
                   <div className="w-6/12">

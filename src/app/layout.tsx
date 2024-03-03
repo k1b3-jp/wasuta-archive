@@ -1,43 +1,43 @@
-import { config } from '@fortawesome/fontawesome-svg-core';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Noto_Sans_JP, Rubik } from 'next/font/google';
-import Head from 'next/head';
-import { DefaultSeo } from 'next-seo';
-import React from 'react';
-import '@/styles/globals.scss';
-import { ToastContainer } from 'react-toastify';
-import BottomBar from '@/components/navigation/BottomBar';
-import Footer from '@/components/navigation/Footer';
-import NavBar from '@/components/navigation/NavBar';
-import 'react-toastify/dist/ReactToastify.css';
-import '@fortawesome/fontawesome-svg-core/styles.css';
+import BottomBar from "@/components/navigation/BottomBar";
+import Footer from "@/components/navigation/Footer";
+import NavBar from "@/components/navigation/NavBar";
+import "@/styles/globals.scss";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { DefaultSeo } from "next-seo";
+import { Noto_Sans_JP, Rubik } from "next/font/google";
+import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 config.autoAddCss = false;
 
-const noto = Noto_Sans_JP({ subsets: ['latin'] });
-const rubik = Rubik({ subsets: ['latin'] });
+const noto = Noto_Sans_JP({ subsets: ["latin"] });
+const rubik = Rubik({ subsets: ["latin"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
-      <Head>
-        <meta name="google-adsense-account" content="ca-pub-4850378479891783" />
-      </Head>
       <DefaultSeo
         titleTemplate="%s | わーすたアーカイブ"
         description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
         openGraph={{
-          type: 'website',
+          type: "website",
           description:
-            'わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。',
-          site_name: 'わーすたアーカイブ',
-          url: 'https://www.wasuta-archive.com/',
+            "わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。",
+          site_name: "わーすたアーカイブ",
+          url: "https://www.wasuta-archive.com/",
         }}
         twitter={{
-          handle: 'tws_kotaro',
-          site: 'tws_kotaro',
-          cardType: 'summary_large_image',
+          handle: "tws_kotaro",
+          site: "tws_kotaro",
+          cardType: "summary_large_image",
         }}
       />
       <div

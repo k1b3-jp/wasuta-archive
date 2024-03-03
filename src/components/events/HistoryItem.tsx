@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { getEventTags } from '@/lib/supabase/getEventTags';
-import { TagType } from '@/types/tag';
-import { EventCardProps } from '../../types/event';
-import BaseButton from '../ui/BaseButton';
-import MiniTag from '../ui/MiniTag';
+import { getEventTags } from "@/lib/supabase/getEventTags";
+import { TagType } from "@/types/tag";
+import React, { useEffect, useState } from "react";
+import { EventCardProps } from "../../types/event";
+import BaseButton from "../ui/BaseButton";
+import MiniTag from "../ui/MiniTag";
 
-const defaultImageUrl = '/event-placeholder.png';
+const defaultImageUrl = "/event-placeholder.png";
 
 const HistoryItem: React.FC<EventCardProps> = ({
   title,
@@ -15,10 +15,10 @@ const HistoryItem: React.FC<EventCardProps> = ({
   id,
   description,
 }) => {
-  const formattedDate = new Date(date).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
+  const formattedDate = new Date(date).toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   });
 
   //idに紐づくタグを取得する
@@ -53,13 +53,14 @@ const HistoryItem: React.FC<EventCardProps> = ({
         {formattedDate}
       </time>
       <div className="flex items-center flex-wrap mb-3 gap-2">
-        {eventTags?.map((tag: { id: React.Key | null | undefined; label: string }) => (
-          <MiniTag key={tag.id} label={tag.label} />
-        ))}
+        {eventTags?.map(
+          (tag: { id: React.Key | null | undefined; label: string }) => (
+            <MiniTag key={tag.id} label={tag.label} />
+          )
+        )}
       </div>
       <div className="mb-4">
         {imageUrl && (
-          /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={imageUrl}
             alt={title}
@@ -69,7 +70,9 @@ const HistoryItem: React.FC<EventCardProps> = ({
           />
         )}
       </div>
-      <p className="mb-2 text-base font-normal text-gray-500 break-words">{description}</p>
+      <p className="mb-2 text-base font-normal text-gray-500 break-words">
+        {description}
+      </p>
       <div className="inline-flex items-center py-2">
         <BaseButton label="詳細を見る" link={`/events/${id}`} />
       </div>

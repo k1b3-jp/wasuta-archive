@@ -1,22 +1,23 @@
-import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { NextSeo } from 'next-seo';
-import { useEffect, useState } from 'react';
-import { TwitterShareButton, XIcon } from 'react-share';
-import { toast } from 'react-toastify';
-import DefaultLayout from '@/app/layout';
-import MovieCard from '@/components/events/MovieCard';
-import BaseButton from '@/components/ui/BaseButton';
-import Tag from '@/components/ui/Tag';
-import { createYoutubeLink } from '@/lib/supabase/createYoutubeLink';
-import { getMovies } from '@/lib/supabase/getMovies';
-import { getYoutubeTags } from '@/lib/supabase/getYoutubeTags';
-import { Movie } from '@/types/movie';
-import { TagType } from '@/types/tag';
-import formatDate from '@/utils/formatDate';
-import { supabase } from '../../lib/supabaseClient';
+import DefaultLayout from "@/app/layout";
+import MovieCard from "@/components/events/MovieCard";
+import BaseButton from "@/components/ui/BaseButton";
+import Tag from "@/components/ui/Tag";
+import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
+import { getMovies } from "@/lib/supabase/getMovies";
+import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
+import { Movie } from "@/types/movie";
+import { TagType } from "@/types/tag";
+import formatDate from "@/utils/formatDate";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NextSeo } from "next-seo";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { TwitterShareButton, XIcon } from "react-share";
+import { toast } from "react-toastify";
+import { supabase } from "../../lib/supabaseClient";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -24,9 +25,13 @@ interface EventDetailsProps {
   youtubeLinks: any[]; // YouTubeリンクデータの型を適宜設定してください
 }
 
-const defaultImageUrl = '/event-placeholder.png';
+const defaultImageUrl = "/event-placeholder.png";
 
-export async function getServerSideProps({ params }: { params: { [key: string]: string } }) {
+export async function getServerSideProps({
+  params,
+}: {
+  params: { [key: string]: string };
+}) {
   const { id } = params;
 
   let event = null;
@@ -34,10 +39,10 @@ export async function getServerSideProps({ params }: { params: { [key: string]: 
 
   try {
     // IDに基づいてイベントの詳細を取得
-    let { data: eventData, error: eventError } = await supabase
-      .from('events')
-      .select('*')
-      .eq('event_id', id)
+    const { data: eventData, error: eventError } = await supabase
+      .from("events")
+      .select("*")
+      .eq("event_id", id)
       .single();
 
     if (eventError) throw eventError;
@@ -57,7 +62,7 @@ export async function getServerSideProps({ params }: { params: { [key: string]: 
 
     youtubeLinks = linksData || [];
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
   }
 
   return {
@@ -69,6 +74,7 @@ export async function getServerSideProps({ params }: { params: { [key: string]: 
 }
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const validateAccess = async () => {
     const { data } = await supabase.auth.getSession();
@@ -78,7 +84,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   };
 
   const id = event?.event_id;
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
 
   const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
   const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
@@ -90,7 +96,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   };
   const handleYoutubeTagSelect = (tag: TagType) => {
     if (selectedYoutubeTags.some((t) => t.id === tag.id)) {
-      setSelectedYoutubeTags(selectedYoutubeTags.filter((t) => t.id !== tag.id));
+      setSelectedYoutubeTags(
+        selectedYoutubeTags.filter((t) => t.id !== tag.id)
+      );
     } else {
       setSelectedYoutubeTags([...selectedYoutubeTags, tag]);
     }
@@ -98,11 +106,11 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 
   const router = useRouter();
   const query = useSearchParams();
-  const toastParams = query?.get('toast');
+  const toastParams = query?.get("toast");
 
   useEffect(() => {
-    if (toastParams === 'success') {
-      toast.success('保存しました🌏');
+    if (toastParams === "success") {
+      toast.success("保存しました🌏");
     }
     validateAccess();
     fetchAllYoutubeTags();
@@ -111,24 +119,35 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   // YouTubeリンクの追加処理
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setLoading(true);
 
     if (isLoggedIn) {
       try {
         const selectedYoutubeTagIds = selectedYoutubeTags.map((tag) => tag.id);
-        const insertedData = await createYoutubeLink(url, selectedYoutubeTagIds, id);
-        toast.success('動画を登録しました🌏');
+        const insertedData = await createYoutubeLink(
+          url,
+          selectedYoutubeTagIds,
+          id
+        );
+        setLoading(false);
+        toast.success("動画を登録しました🌏");
         router.push(`/events/${id}`);
-        setUrl('');
+        setUrl("");
         setSelectedYoutubeTags([]);
       } catch (error) {
-        if ((error as any).code === '23505') {
-          toast.error('その動画は既に登録されています。別のURLを入力してください🙇‍♂️');
+        if ((error as any).code === "23505") {
+          setLoading(false);
+          toast.error(
+            "その動画は既に登録されています。別のURLを入力してください🙇‍♂️"
+          );
         } else {
+          setLoading(false);
           toast.error(`動画の登録中にエラーが発生しました😢（${error}）`);
         }
       }
     } else {
-      toast.error('ログインが必要です🙇‍♂️');
+      setLoading(false);
+      toast.error("ログインが必要です🙇‍♂️");
     }
   };
 
@@ -139,7 +158,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         openGraph={{
           images: [
             {
-              url: event.image_url || process.env.defaultOgpImage || '',
+              url: event.image_url || process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
             },
@@ -150,7 +169,6 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         <div>
           <div className="event">
             <div className="event-head bg-100vw bg-light-gray p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={event.image_url || defaultImageUrl}
                 alt={event.event_name}
@@ -160,7 +178,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               />
             </div>
             <div className="event-detail p-6">
-              <h1 className="text-font-color font-bold text-xl mb-4">{event.event_name}</h1>
+              <h1 className="text-font-color font-bold text-xl mb-4">
+                {event.event_name}
+              </h1>
               <div className="flex flex-row gap-2 items-center mb-4">
                 <div className="bg-light-gray py-2 px-3 rounded">
                   <FontAwesomeIcon icon={faCalendar} />
@@ -171,18 +191,18 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                 <div className="bg-light-gray py-2 px-3 rounded">
                   <FontAwesomeIcon icon={faLocationDot} />
                 </div>
-                <p>{event.location || '未設定'}</p>
+                <p>{event.location || "未設定"}</p>
               </div>
               <div className="flex flex-col gap-2 mb-6">
                 <h2 className="text-l font-bold">イベントについて</h2>
-                <p>{event.description || '未設定'}</p>
+                <p>{event.description || "未設定"}</p>
               </div>
               <div className="flex flex-col gap-2 mb-8">
                 <h2 className="text-l font-bold">Share</h2>
                 <TwitterShareButton
                   url={`https://www.wasuta-archive.com/events/${id}`}
                   title={event.title}
-                  hashtags={['わーすた', 'わーすたアーカイブ']}
+                  hashtags={["わーすた", "わーすたアーカイブ"]}
                 >
                   <XIcon size={32} round={true} />
                 </TwitterShareButton>
@@ -198,11 +218,13 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             <div className="event-movie bg-100vw">
               <div className="container mx-auto p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-bold text-font-color">イベントの動画</h3>
+                  <h3 className="text-xl font-bold text-font-color">
+                    イベントの動画
+                  </h3>
                   <BaseButton label="もっと見る" link={`/events/${id}/movie`} />
                 </div>
                 <div
-                  style={{ marginRight: 'calc(50% - 50vw)' }}
+                  style={{ marginRight: "calc(50% - 50vw)" }}
                   className="movie-list min-h-60 flex items-center overflow-scroll mb-6"
                 >
                   {youtubeLinks.length > 0 ? (
@@ -216,10 +238,12 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                     ))
                   ) : (
                     <p>動画が登録されていません😢</p>
-                  )}{' '}
+                  )}{" "}
                 </div>
                 <div className="add-movie bg-white p-6 rounded-lg shadow-lg lg:w-[700px] mx-auto">
-                  <h4 className="text-xl font-bold text-deep-green mb-8">動画の登録</h4>
+                  <h4 className="text-xl font-bold text-deep-green mb-8">
+                    動画の登録
+                  </h4>
                   <div className="flex flex-col gap-4 mx-auto">
                     <div className="flex flex-col gap-2">
                       <label htmlFor="url" className="text-sm font-bold">
@@ -240,7 +264,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                           <Tag
                             key={tag.id}
                             label={tag.label}
-                            selected={selectedYoutubeTags.some((t) => t.id === tag.id)}
+                            selected={selectedYoutubeTags.some(
+                              (t) => t.id === tag.id
+                            )}
                             onSelect={() => handleYoutubeTagSelect(tag)}
                           />
                         ))}
@@ -255,6 +281,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             </div>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
       </DefaultLayout>
     </>
   );
