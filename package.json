@@ -7,11 +7,11 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome lint --apply src",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json,css}'",
-    "format:check": "eslint-config-prettier 'src/**/*.{js,jsx,ts,tsx}'"
+    "format": "biome format --write src",
+    "check": "biome check --apply src"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -28,7 +28,6 @@
     "@vercel/analytics": "^1.1.1",
     "@vercel/speed-insights": "^1.0.10",
     "browser-image-compression": "^2.0.2",
-    "eslint-plugin-import": "^2.29.1",
     "next": "14.0.4",
     "next-seo": "^6.5.0",
     "next-sitemap": "^4.2.3",
@@ -41,6 +40,7 @@
     "swr": "^2.2.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "@storybook/addon-essentials": "^7.6.6",
     "@storybook/addon-interactions": "^7.6.6",
     "@storybook/addon-links": "^7.6.6",
@@ -56,18 +56,13 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/parser": "^6.16.0",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-storybook": "^0.6.15",
-    "eslint-plugin-unused-imports": "^3.0.0",
     "postcss": "^8",
-    "prettier": "^3.1.1",
     "storybook": "^7.6.6",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   },
   "volta": {
     "node": "20.10.0"
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }
