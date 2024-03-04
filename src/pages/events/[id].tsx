@@ -18,6 +18,7 @@ import { TwitterShareButton, XIcon } from "react-share";
 import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import parse from "html-react-parser";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -72,6 +73,21 @@ export async function getServerSideProps({
     },
   };
 }
+
+// URLと改行を適切に扱う
+const formatDescription = (description: string): string => {
+  if (!description) return "未設定";
+
+  let formattedDescription: string = description.replace(/\n/g, "<br/>");
+  formattedDescription = formattedDescription.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    (url: string) => {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="underline">${url}</a>`;
+    }
+  );
+
+  return formattedDescription;
+};
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -195,7 +211,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
               </div>
               <div className="flex flex-col gap-2 mb-6">
                 <h2 className="text-l font-bold">イベントについて</h2>
-                <p>{event.description || "未設定"}</p>
+                <p>{parse(formatDescription(event.description))}</p>
               </div>
               <div className="flex flex-col gap-2 mb-8">
                 <h2 className="text-l font-bold">Share</h2>
