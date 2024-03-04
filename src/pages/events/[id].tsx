@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import parse from "html-react-parser";
-import DOMPurify from "dompurify";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -79,14 +78,7 @@ export async function getServerSideProps({
 const formatDescription = (description: string): string => {
   if (!description) return "未設定";
 
-  const sanitizedDescription = DOMPurify.sanitize(description, {
-    USE_PROFILES: { html: true },
-  });
-
-  let formattedDescription: string = sanitizedDescription.replace(
-    /\n/g,
-    "<br/>"
-  );
+  let formattedDescription: string = description.replace(/\n/g, "<br/>");
   formattedDescription = formattedDescription.replace(
     /(https?:\/\/[^\s<]+)/g,
     (url: string) => {
