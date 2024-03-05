@@ -2130,6 +2130,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/bundle-analyzer@npm:^14.1.2":
+  version: 14.1.2
+  resolution: "@next/bundle-analyzer@npm:14.1.2"
+  dependencies:
+    webpack-bundle-analyzer: "npm:4.10.1"
+  checksum: 10c0/2aca4d79504bd79faaa4587d8ec6752d32323134ef1fa3c21c4494a2716fc37e25c6440fd4392e01550e9a2fb782cf689843e2022f7da6371145ae928254b273
+  languageName: node
+  linkType: hard
+
 "@next/env@npm:14.0.4":
   version: 14.0.4
   resolution: "@next/env@npm:14.0.4"
@@ -4749,17 +4758,6 @@ __metadata:
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
   checksum: 10c0/b411b93054cb1d4361919579ef3508a1f12bf15b5fdd97337d3d351bece6c921b52b6daeef89b62340fd73fd60da407878432a1af777f40648cbe53a01723489
-  languageName: node
-  linkType: hard
-
-"@types/webpack-bundle-analyzer@npm:^4":
-  version: 4.7.0
-  resolution: "@types/webpack-bundle-analyzer@npm:4.7.0"
-  dependencies:
-    "@types/node": "npm:*"
-    tapable: "npm:^2.2.0"
-    webpack: "npm:^5"
-  checksum: 10c0/dd5294ab9654081848066b14b8f01fcabb61b0e3ed4975f1613cc5da0f473b4496164a3fce3ac63027a15bb2f27d9442562f5099e764d6c03f72fe5a69fcc9bc
   languageName: node
   linkType: hard
 
@@ -13838,6 +13836,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@headlessui/react": "npm:^1.7.18"
     "@lottiefiles/react-lottie-player": "npm:^3.5.3"
+    "@next/bundle-analyzer": "npm:^14.1.2"
     "@next/third-parties": "npm:^14.0.4"
     "@storybook/addon-essentials": "npm:^7.6.6"
     "@storybook/addon-interactions": "npm:^7.6.6"
@@ -13855,7 +13854,6 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
-    "@types/webpack-bundle-analyzer": "npm:^4"
     "@vercel/analytics": "npm:^1.1.1"
     "@vercel/speed-insights": "npm:^1.0.10"
     autoprefixer: "npm:^10.0.1"
@@ -13875,7 +13873,6 @@ __metadata:
     swr: "npm:^2.2.4"
     tailwindcss: "npm:^3.3.0"
     typescript: "npm:^5"
-    webpack-bundle-analyzer: "npm:^4.10.1"
   languageName: unknown
   linkType: soft
 
@@ -13905,7 +13902,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^4.10.1":
+"webpack-bundle-analyzer@npm:4.10.1":
   version: 4.10.1
   resolution: "webpack-bundle-analyzer@npm:4.10.1"
   dependencies:
@@ -13978,7 +13975,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:^5":
+"webpack@npm:5":
   version: 5.90.3
   resolution: "webpack@npm:5.90.3"
   dependencies:
