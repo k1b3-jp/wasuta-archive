@@ -1,6 +1,5 @@
 import formatDate from "@/utils/formatDate";
 import React from "react";
-import Image from "next/image";
 import { EventCardProps } from "../../types/event";
 import BaseButton from "../ui/BaseButton";
 
@@ -15,11 +14,11 @@ const EventCard: React.FC<EventCardProps> = ({
 }) => {
   return (
     <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
-      <Image
+      <img
         src={imageUrl || defaultImageUrl}
         alt={title}
-        width="320"
-        height="208"
+        width={320}
+        height={208}
         className="w-full h-52 object-cover"
       />
       <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-gray">

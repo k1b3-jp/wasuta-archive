@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import parse from "html-react-parser";
-import Image from "next/image";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -214,11 +213,11 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         <div>
           <div className="event">
             <div className="event-head bg-100vw bg-light-gray p-4">
-              <Image
+              <img
                 src={event.image_url || defaultImageUrl}
                 alt={event.event_name}
-                width="500"
-                height="300"
+                width={500}
+                height={300}
                 className="mx-auto"
               />
             </div>
