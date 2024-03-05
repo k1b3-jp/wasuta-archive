@@ -75,18 +75,46 @@ export async function getServerSideProps({
 }
 
 // URLと改行を適切に扱う
+const escapeHtml = (unsafe: string): string => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+const isValidUrl = (url: string): boolean => {
+  try {
+    const parsedUrl = new URL(url);
+    return ["http:", "https:"].includes(parsedUrl.protocol);
+  } catch (e) {
+    return false; // 不正な形式またはサポートされていないプロトコルのURL
+  }
+};
+
 const formatDescription = (description: string): string => {
   if (!description) return "未設定";
 
-  let formattedDescription: string = description.replace(/\n/g, "<br/>");
-  formattedDescription = formattedDescription.replace(
+  let sanitizedDescription: string = escapeHtml(description);
+
+  sanitizedDescription = sanitizedDescription.replace(/\n/g, "<br/>");
+  sanitizedDescription = sanitizedDescription.replace(
     /(https?:\/\/[^\s<]+)/g,
     (url: string) => {
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="underline">${url}</a>`;
+      if (isValidUrl(url)) {
+        return `<a href="${escapeHtml(
+          url
+        )}" target="_blank" rel="noopener noreferrer" class="underline">${escapeHtml(
+          url
+        )}</a>`;
+      } else {
+        return escapeHtml(url); // URLが無効な場合は、リンク化せずにエスケープしたテキストを返す
+      }
     }
   );
 
-  return formattedDescription;
+  return sanitizedDescription;
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
