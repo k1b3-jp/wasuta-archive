@@ -7,7 +7,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DefaultSeo } from "next-seo";
-import { Noto_Sans_JP, Rubik } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +15,6 @@ import "react-toastify/dist/ReactToastify.css";
 config.autoAddCss = false;
 
 const noto = Noto_Sans_JP({ subsets: ["latin"] });
-const rubik = Rubik({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
