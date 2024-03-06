@@ -1,25 +1,26 @@
-const { default: next } = require('next');
+const { default: next } = require("next");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
+  webpack: (config, options) => {
+    // SVGファイルのためのルールを追加
     config.module.rules.push({
       test: /\.svg$/,
-      use: [
-        {
-          loader: '@svgr/webpack',
-        },
-      ],
+      use: ["@svgr/webpack"],
     });
-    return config;
+
+    return config; // この関数では設定を直接返します
   },
   images: {
-    domains: ['127.0.0.1'],
-    disableStaticImages: true, // importした画像の型定義設定を無効にする
+    domains: ["127.0.0.1"],
+    disableStaticImages: true,
   },
   env: {
-    defaultOgpImage: 'https://www.wasuta-archive.com/opengraph-image.png',
+    defaultOgpImage: "https://www.wasuta-archive.com/opengraph-image.png",
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

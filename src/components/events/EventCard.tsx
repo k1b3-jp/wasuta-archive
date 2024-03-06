@@ -17,8 +17,8 @@ const EventCard: React.FC<EventCardProps> = ({
       <img
         src={imageUrl || defaultImageUrl}
         alt={title}
-        width={500}
-        height={300}
+        width={320}
+        height={208}
         className="w-full h-52 object-cover"
       />
       <div className="absolute top-0 right-0 py-1 px-3 rounded-bl-lg bg-light-gray">

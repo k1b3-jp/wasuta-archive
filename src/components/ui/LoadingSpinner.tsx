@@ -1,5 +1,13 @@
-import { Player } from "@lottiefiles/react-lottie-player";
 import React from "react";
+import dynamic from "next/dynamic";
+
+const Player = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  {
+    ssr: false,
+    loading: () => <div>Loading...</div>,
+  }
+);
 
 const LoadingSpinner: React.FC = () => {
   return (
