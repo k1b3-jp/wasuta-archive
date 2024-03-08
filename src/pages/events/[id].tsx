@@ -11,7 +11,7 @@ import formatDate from "@/utils/formatDate";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NextSeo } from "next-seo";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
@@ -208,6 +208,15 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
             },
           ],
         }}
+      />
+      <ArticleJsonLd
+        type="BlogPosting"
+        url={`https://www.wasuta-archive.com/events/${id}`}
+        title={event.event_name}
+        images={[event.image_url || process.env.defaultOgpImage || ""]}
+        datePublished={`${event.date}T00:00:00+09:00`}
+        authorName="わーすたアーカイブ"
+        description={event.description}
       />
       <DefaultLayout>
         <div>
