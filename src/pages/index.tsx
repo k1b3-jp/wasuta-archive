@@ -13,7 +13,7 @@ import {
   faSun,
   faTicket,
 } from "@fortawesome/free-solid-svg-icons";
-import { NextSeo } from "next-seo";
+import { NextSeo, WebPageJsonLd } from "next-seo";
 import Image from "next/image";
 interface HomeProps {
   events: Event[];
@@ -70,6 +70,10 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
             },
           ],
         }}
+      />
+      <WebPageJsonLd
+        description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
+        id="https://www.wasuta-archive.com/"
       />
       <DefaultLayout>
         <div>
