@@ -1,11 +1,15 @@
 import DefaultLayout from "@/app/layout";
 import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
-import { Event } from "@/types/event";
-import { TagType } from "@/types/tag";
+import type { Event } from "@/types/event";
+import type { TagType } from "@/types/tag";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import HistoryItem from "@/components/events/HistoryItem";
+import BaseButton from "@/components/ui/BaseButton";
+import Tag from "@/components/ui/Tag";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -26,7 +30,6 @@ const EventListPage = () => {
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    // 初期ロード時に全イベントを取得
     fetchEvents();
     fetchAllTags();
   }, []);
@@ -56,6 +59,7 @@ const EventListPage = () => {
         startDate: startDate,
         endDate: endDate,
         tags: selectedTagIds,
+        ascending: true,
       });
       setEvents(eventsData);
     } catch (err) {
@@ -65,6 +69,21 @@ const EventListPage = () => {
       setLoading(false);
     }
   };
+
+  // イベントを年度ごとにグルーピングする関数
+  const groupEventsByYear = (events: Event[]): Record<number, Event[]> => {
+    return events.reduce((acc: Record<number, Event[]>, event) => {
+      const year = new Date(event.date).getFullYear(); // イベントの日付から年を取得
+      if (!acc[year]) {
+        acc[year] = []; // その年の配列がなければ作成
+      }
+      acc[year].push(event);
+      return acc;
+    }, {});
+  };
+
+  // EventListPage コンポーネント内のレンダリング部分
+  const groupedEvents = groupEventsByYear(events); // イベントを年度ごとにグルーピング
 
   const handleSearch = () => {
     fetchEvents(searchTerm);
@@ -87,19 +106,7 @@ const EventListPage = () => {
       />
       <DefaultLayout>
         <div>
-          <div className="px-4 pt-14 pb-4 text-center">
-            <h1 className="text-2xl font-bold mb-8">準備中🙇‍♂️</h1>
-            <p className="mb-6">鋭意開発中です。もうしばらくお待ちください。</p>
-            <div className="lg:w-4/5 mx-auto">
-              <Player
-                autoplay
-                loop
-                src="https://lottie.host/e78d39ae-52c5-476e-b569-d97a591062b3/JfYmCDw0DB.json"
-                style={{ height: "100%", width: "100%" }}
-              ></Player>
-            </div>
-          </div>
-          {/* <div className="mx-auto">
+          <div className="mx-auto">
             <div className="search-form p-2 bg-light-gray bg-100vw flex">
               <div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
                 <div className="flex flex-col gap-2">
@@ -143,28 +150,57 @@ const EventListPage = () => {
                     ))}
                   </div>
                 </div>
-                <BaseButton onClick={handleSearch} label="検索" />
+                <div className="text-center">
+                  <BaseButton onClick={handleSearch} label="検索" />
+                </div>
               </div>
             </div>
-            <main className="p-10 mx-auto container">
-              {loading && <p>読み込み中...</p>}
+            <main className="mb-10">
+              {loading && <LoadingSpinner />}
               {error && <p className="text-red-500">{error}</p>}
 
-              <ol className="relative border-s border-gray-200 lg:max-w-sm lg:mx-auto">
-                {events.map((event) => (
-                  <HistoryItem
-                    key={event.event_id}
-                    title={event.event_name}
-                    location={event.location}
-                    date={event.date}
-                    imageUrl={event.image_url}
-                    id={event.event_id}
-                    description={event.description}
-                  />
+              {Object.keys(groupedEvents)
+                .sort()
+                // .reverse()
+                .map((year) => (
+                  <div
+                    key={year}
+                    id={year}
+                    className="px-8 bg-gradient bg-100vw"
+                  >
+                    <h2 className="flex flex-row flex-nowrap items-center my-10">
+                      <span className="flex-grow block border-t border-deep-green" />
+                      <span className="flex-none block mx-4 px-4 py-2.5 text-3xl font-bold leading-none text-deep-green">
+                        {year}年
+                      </span>
+                      <span className="flex-grow block border-t border-deep-green" />
+                    </h2>
+                    <div className="container mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                      {groupedEvents[Number(year)].map(
+                        (event: {
+                          event_id: string | undefined;
+                          event_name: string | undefined;
+                          location: string | undefined;
+                          date: string | undefined;
+                          image_url: string | undefined;
+                          description: string | undefined;
+                        }) => (
+                          <HistoryItem
+                            key={event.event_id}
+                            title={event.event_name}
+                            location={event.location}
+                            date={event.date}
+                            imageUrl={event.image_url}
+                            id={event.event_id}
+                            description={event.description}
+                          />
+                        )
+                      )}
+                    </div>
+                  </div>
                 ))}
-              </ol>
             </main>
-          </div> */}
+          </div>
         </div>
       </DefaultLayout>
     </>
