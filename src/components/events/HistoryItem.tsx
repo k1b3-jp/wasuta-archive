@@ -95,8 +95,8 @@ const HistoryItem: React.FC<EventCardProps> = ({
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute left-1 top-full drop-shadow-lg z-10 mt-3 w-screen max-w-sm -translate-x-1/5 transform px-4 sm:px-0 md:left-1/3 lg:max-w-lg">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5">
-                  <div className="relative bg-white p-4">
+                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5 bg-white">
+                  <div className="relative p-4 border-b">
                     <img
                       src={imageUrl || defaultImageUrl}
                       alt={title}
@@ -105,7 +105,18 @@ const HistoryItem: React.FC<EventCardProps> = ({
                       className="w-full h-auto object-cover"
                     />
                   </div>
-                  <div className="bg-gray-50 p-4">{description}</div>
+                  <div className="p-4">{description}</div>
+                  <div className="flex flex-col md:flex-row p-4 gap-2">
+                    <Popover.Button as="div" className="basis-1/2">
+                      <BaseButton label="閉じる" white onClick={close} />
+                    </Popover.Button>
+                    <div className="basis-1/2">
+                      <BaseButton
+                        label="イベントページへ"
+                        link={`/events/${id}`}
+                      />
+                    </div>
+                  </div>
                 </div>
               </Popover.Panel>
             </Transition>
