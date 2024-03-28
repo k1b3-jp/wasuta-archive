@@ -10,6 +10,7 @@ import HistoryItem from "@/components/events/HistoryItem";
 import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Link from "next/link";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -200,6 +201,15 @@ const EventListPage = () => {
                   </div>
                 ))}
             </main>
+            <div className="fixed right-0 md:right-4 top-2/4 -translate-y-2/4 flex flex-col gap-3 bg-white font-light p-3 shadow-lg backdrop-blur-sm rounded-lg bg-opacity-10">
+              {Object.keys(groupedEvents)
+                .sort()
+                .map((year) => (
+                  <Link href={`#${year}`} className="">
+                    {year}年
+                  </Link>
+                ))}
+            </div>
           </div>
         </div>
       </DefaultLayout>
