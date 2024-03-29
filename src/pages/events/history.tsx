@@ -11,6 +11,12 @@ import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
+import {
+  faCalendarDays,
+  faChevronUp,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -29,6 +35,7 @@ const EventListPage = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [yearListVisible, setYearListVisible] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -201,14 +208,33 @@ const EventListPage = () => {
                   </div>
                 ))}
             </main>
-            <div className="fixed right-0 md:right-4 top-2/4 -translate-y-2/4 flex flex-col gap-3 bg-white font-light p-3 shadow-lg backdrop-blur-sm rounded-lg bg-opacity-10">
-              {Object.keys(groupedEvents)
-                .sort()
-                .map((year) => (
-                  <Link href={`#${year}`} className="">
-                    {year}年
-                  </Link>
-                ))}
+            {yearListVisible && (
+              <div className="fixed right-2 md:right-4 bottom-36 flex flex-col gap-3 bg-white font-light text-deep-gray text-center p-3 shadow-lg backdrop-blur-sm rounded-lg bg-opacity-20">
+                <Link href="#top">
+                  <FontAwesomeIcon icon={faChevronUp} />
+                </Link>
+                {Object.keys(groupedEvents)
+                  .sort()
+                  .map((year) => (
+                    <Link href={`#${year}`} className="">
+                      {year}年
+                    </Link>
+                  ))}
+              </div>
+            )}
+            <div
+              className="fixed right-2 md:right-4 bottom-20 w-14 h-14 bg-white shadow-lg rounded-full flex justify-center items-center"
+              onKeyUp={(event) => {
+                if (event.key === "Enter") {
+                  setYearListVisible(!yearListVisible);
+                }
+              }}
+              onClick={() => setYearListVisible(!yearListVisible)}
+            >
+              <FontAwesomeIcon
+                icon={yearListVisible ? faXmark : faCalendarDays}
+                className="text-xl text-deep-gray"
+              />
             </div>
           </div>
         </div>
