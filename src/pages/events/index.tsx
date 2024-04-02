@@ -84,6 +84,7 @@ const EventListPage = () => {
         tags: selectedTagIds,
         start: start,
         end: end,
+        pagination: true,
       });
       return eventsData;
     } catch (err) {

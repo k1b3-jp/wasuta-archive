@@ -44,6 +44,7 @@ export default function RootLayout({
           margin: 0,
         }}
         className={`${noto.className} flex flex-col min-h-screen`}
+        id="top"
       >
         <NavBar />
         <main className="flex-grow">
