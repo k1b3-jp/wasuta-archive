@@ -94,7 +94,7 @@ const HistoryItem: React.FC<EventCardProps> = ({
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute left-1 top-full drop-shadow-lg z-10 mt-3 w-screen max-w-sm -translate-x-1/5 transform px-4 sm:px-0 md:left-1/3 lg:max-w-lg">
+              <Popover.Panel className="absolute left-1 top-full drop-shadow-lg z-10 mt-3 w-screen max-w-xs -translate-x-1/5 transform md:left-1/3 md:max-w-md lg:max-w-lg">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5 bg-white">
                   <div className="relative p-4 border-b">
                     <img
