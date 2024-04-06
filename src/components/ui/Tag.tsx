@@ -7,34 +7,38 @@ interface TagProps {
 }
 
 const Tag: React.FC<TagProps> = ({ label, selected, onSelect }) => {
-  let selectedStyles: string;
-  let unselectedStyles: string;
-  switch (label) {
-    case "奈々聖":
-      selectedStyles = "bg-light-green text-white";
-      unselectedStyles = "bg-white text-light-green border border-light-green";
-      break;
-    case "瑠香":
-      selectedStyles = "bg-pink text-white";
-      unselectedStyles = "bg-white text-pink border border-pink";
-      break;
-    case "美里":
-      selectedStyles = "bg-purple text-white";
-      unselectedStyles = "bg-white text-purple border border-purple";
-      break;
-    case "梨々華":
-      selectedStyles = "bg-light-blue text-white";
-      unselectedStyles = "bg-white text-light-blue border border-light-blue";
-      break;
-    case "葉月":
-      selectedStyles = "bg-yellow text-white";
-      unselectedStyles = "bg-white text-yellow border border-yellow";
-      break;
-    default:
-      selectedStyles = "bg-gray-500 text-white"; // デフォルトの選択スタイル
-      unselectedStyles = "bg-white text-gray-500 border border-gray-500"; // デフォルトの非選択スタイル
-      break;
-  }
+  const stylesMap: { [key: string]: { selected: string; unselected: string } } =
+    {
+      奈々聖: {
+        selected: "bg-light-green text-white",
+        unselected: "bg-white text-light-green border border-light-green",
+      },
+      瑠香: {
+        selected: "bg-pink text-white",
+        unselected: "bg-white text-pink border border-pink",
+      },
+      美里: {
+        selected: "bg-purple text-white",
+        unselected: "bg-white text-purple border border-purple",
+      },
+      梨々華: {
+        selected: "bg-light-blue text-white",
+        unselected: "bg-white text-light-blue border border-light-blue",
+      },
+      葉月: {
+        selected: "bg-yellow text-white",
+        unselected: "bg-white text-yellow border border-yellow",
+      },
+      default: {
+        selected: "bg-gray-500 text-white",
+        unselected: "bg-white text-gray-500 border border-gray-500",
+      },
+    };
+
+  const selectedStyles =
+    stylesMap[label]?.selected || stylesMap.default.selected;
+  const unselectedStyles =
+    stylesMap[label]?.unselected || stylesMap.default.unselected;
 
   const buttonStyles = selected ? selectedStyles : unselectedStyles;
 

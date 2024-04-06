@@ -11,7 +11,7 @@ import { getEvents } from "@/lib/supabase/getEvents";
 import updateEvent from "@/lib/supabase/updateEvent"; // 既存のイベントを更新するための関数
 import { uploadStorage } from "@/lib/supabase/uploadStorage";
 import { supabase } from "@/lib/supabaseClient";
-import { TagType } from "@/types/tag";
+import type { TagType } from "@/types/tag";
 import { NextSeo } from "next-seo";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,7 +41,19 @@ const EditEvent = () => {
     if (data.session !== null) {
       setIsLoggedIn(true);
     } else {
-      router.push(`/login?toast=login`);
+      router.push("/login?toast=login");
+    }
+  };
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const isSuperAdmin = async () => {
+    const { data } = await supabase.auth.getUser();
+    const userEmail = data?.user?.email;
+
+    if (userEmail === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
     }
   };
 
@@ -49,6 +61,7 @@ const EditEvent = () => {
     setErrorMessage("");
     validateAccess();
     fetchEventAndTags();
+    isSuperAdmin();
   }, [id]);
 
   const fetchEventAndTags = async () => {
@@ -184,13 +197,6 @@ const EditEvent = () => {
           description,
         };
 
-        const updatedData = await updateEvent(
-          {
-            ...eventData,
-          },
-          id?.toString() ?? "",
-          selectedTags
-        );
         setLoading(false);
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
@@ -224,7 +230,7 @@ const EditEvent = () => {
     if (selectedEventId) {
       try {
         await deleteEvent(selectedEventId);
-        await router.push(`/events?toast=eventDeleted`);
+        await router.push("/events?toast=eventDeleted");
       } catch (error) {
         console.error("An error occurred:", error);
         toast.error("イベントの削除中にエラーが発生しました。");
@@ -322,7 +328,7 @@ const EditEvent = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
                   className="bg-light-gray rounded-md p-3"
-                ></textarea>
+                />
               </div>
               <div className="flex flex-col gap-2 mb-4">
                 <label className="text-sm font-bold">タグ</label>
@@ -331,8 +337,8 @@ const EditEvent = () => {
                     <Tag
                       key={tag.id}
                       label={tag.label}
-                      selected={selectedTags.includes(parseInt(tag.id))}
-                      onSelect={() => handleTagSelect(parseInt(tag.id))}
+                      selected={selectedTags.includes(Number.parseInt(tag.id))}
+                      onSelect={() => handleTagSelect(Number.parseInt(tag.id))}
                     />
                   ))}
                 </div>
@@ -345,11 +351,13 @@ const EditEvent = () => {
           </form>
           <div className="flex justify-center">
             <div className="max-w-xs">
-              <BaseButton
-                onClick={() => openDialog(Number(id))}
-                label="イベントを削除する"
-                danger
-              />
+              {isAdmin && (
+                <BaseButton
+                  onClick={() => openDialog(Number(id))}
+                  label="イベントを削除する"
+                  danger
+                />
+              )}
             </div>
           </div>
           <ConfirmDialog
