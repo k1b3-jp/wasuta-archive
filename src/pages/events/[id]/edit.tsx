@@ -197,6 +197,14 @@ const EditEvent = () => {
           description,
         };
 
+        const updatedData = await updateEvent(
+          {
+            ...eventData,
+          },
+          id?.toString() ?? "",
+          selectedTags
+        );
+
         setLoading(false);
         router.push(`/events/${id}?toast=success`);
       } catch (error) {
