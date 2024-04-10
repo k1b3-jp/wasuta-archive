@@ -5,8 +5,8 @@ import BaseButton from "@/components/ui/BaseButton";
 import CategoryCard from "@/components/ui/CategoryCard";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { getMovies } from "@/lib/supabase/getMovies";
-import { Event } from "@/types/event";
-import { Movie } from "@/types/movie";
+import type { Event } from "@/types/event";
+import type { Movie } from "@/types/movie";
 import {
   faCakeCandles,
   faHandshakeSimple,
@@ -154,7 +154,7 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
                       <MovieCard
                         videoUrl={link.youtube_links.url}
                         id={link.youtube_link_id}
-                      ></MovieCard>
+                      />
                     </div>
                   ))
                 ) : (
