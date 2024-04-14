@@ -15,9 +15,9 @@ const TopFeaturedEventCard: React.FC<EventCardProps> = ({
   id,
 }) => {
   return (
-    <div className="bg-white rounded-lg w-full relative">
+    <div className="bg-white rounded-lg shadow-md w-full relative my-5">
       <Link href={`/events/${id}`}>
-        <div className="overflow-hidden h-52 lg:h-80">
+        <div className="rounded-t-lg overflow-hidden h-56 md:h-70 lg:h-96">
           <img
             src={imageUrl || defaultImageUrl}
             alt={title}
@@ -26,13 +26,13 @@ const TopFeaturedEventCard: React.FC<EventCardProps> = ({
         </div>
         <div className="p-4">
           <div className="mb-2">
-            <div className="text-lg font-semibold line-clamp-2 min-h-14">
+            <div className="text-base font-semibold line-clamp-2 min-h-12">
               {title}
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between text-sm">
             <div className="text-gray-500 line-clamp-1 min-h-6">{location}</div>
-            <div className="text-gray-500 line-clamp-1 min-h-6">
+            <div className="text-gray-500 line-clamp-1 min-h-6 min-w-[74px]">
               {formatDate(date)}
             </div>
           </div>
