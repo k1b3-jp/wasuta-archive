@@ -15,15 +15,13 @@ const TopFeaturedEventCard: React.FC<EventCardProps> = ({
   id,
 }) => {
   return (
-    <div className="bg-white rounded-lg overflow-hidden w-full relative">
+    <div className="bg-white rounded-lg w-full relative">
       <Link href={`/events/${id}`}>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden h-52 lg:h-80">
           <img
             src={imageUrl || defaultImageUrl}
             alt={title}
-            width="100%"
-            height="100%"
-            className="w-full object-cover hover:scale-110 transition-all duration-500"
+            className="hover:scale-110 transition-all duration-500 w-full h-full object-cover object-center"
           />
         </div>
         <div className="p-4">

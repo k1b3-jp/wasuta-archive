@@ -1,6 +1,7 @@
 import DefaultLayout from "@/app/layout";
 import EventCard from "@/components/events/EventCard";
 import MovieCard from "@/components/events/MovieCard";
+import TopFeaturedEventCard from "@/components/events/TopFeaturedEventCard";
 import BaseButton from "@/components/ui/BaseButton";
 import CategoryCard from "@/components/ui/CategoryCard";
 import { getEvents } from "@/lib/supabase/getEvents";
@@ -14,6 +15,12 @@ import {
   faTicket,
 } from "@fortawesome/free-solid-svg-icons";
 import { NextSeo, WebPageJsonLd } from "next-seo";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper/modules";
+
 interface HomeProps {
   events: Event[];
   movies: Movie[];
@@ -76,34 +83,36 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
       />
       <DefaultLayout>
         <div>
-          {/* <section className="welcome px-4 pt-14 pb-4 lg:pb-10 flex flex-col lg:flex-row lg:items-center lg:justify-between relative">
-						<div>
-							<h2 className="text-left text-3xl font-bold mb-6 text-font-color leading-normal">
-								あの日のわーすた
-								<br />
-								<span className="gradient-marker">動画で見つかる。</span>
-							</h2>
-							<p className="mb-8 text-left text-sm font-bold leading-relaxed">
-								わーすたアーカイブはわーすたの動画が
-								<br />
-								イベント毎に見つかるサイトです。
-								<br />
-								<br />
-								タグで過去のライブを探したり、
-								<br />
-								年表表示で歴史を振り返ることができます。
-							</p>
-						</div>
-						<div className="overflow-hidden lg:w-1/2 mr-[calc(50%-50vw)] lg:mr-0">
-							<Image
-								src="/main-mockup.webp"
-								alt="スクリーンショット画像"
-								width="1344"
-								height="1920"
-								className="translate-x-[7%] lg:translate-x-0"
-							/>
-						</div>
-					</section> */}
+          <section className="bg-100vw">
+            <div className="relative w-full py-5">
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={10}
+                slidesPerView={1.3}
+                centeredSlides
+                loop={true}
+                navigation
+                // onSwiper={(swiper) => console.log(swiper)}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+              >
+                {events.map((event) => (
+                  <SwiperSlide key={event.event_id}>
+                    <TopFeaturedEventCard
+                      key={event.event_id}
+                      id={event.event_id}
+                      title={event.event_name}
+                      date={event.date}
+                      location={event.location}
+                      imageUrl={event.image_url}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </section>
           <section>今日は何の日？</section>
           <section className="flex flex-col bg-light-gray bg-100vw">
             <div className="container mx-auto p-6">
