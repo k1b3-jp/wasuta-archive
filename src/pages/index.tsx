@@ -19,16 +19,30 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper/modules";
+import SwiperCore, { Navigation, Autoplay } from "swiper/modules";
 
 interface HomeProps {
+  featuredEvents: Event[];
   events: Event[];
   movies: Movie[];
 }
 
 export async function getServerSideProps() {
+  let featuredEvents: Event[] = [];
   let events: Event[] = [];
   let movies: Movie[] = [];
+
+  try {
+    featuredEvents = await getEvents({
+      limit: 6,
+      tags: ["1"],
+      byToday: true,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Error fetching featured events: ${error.message}`);
+    }
+  }
 
   try {
     events = await getEvents({
@@ -55,13 +69,14 @@ export async function getServerSideProps() {
 
   return {
     props: {
+      featuredEvents,
       events,
       movies,
     },
   };
 }
 
-const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
+const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
   return (
     <>
       <NextSeo
@@ -84,21 +99,37 @@ const HomePage: React.FC<HomeProps> = ({ events, movies }) => {
       <DefaultLayout>
         <div>
           <section className="bg-100vw">
-            <div className="relative w-full py-5">
+            <div className="relative w-full">
               <Swiper
                 modules={[Navigation, Autoplay]}
                 spaceBetween={10}
-                slidesPerView={1.3}
+                breakpoints={{
+                  320: {
+                    slidesPerView: 1.2,
+                    spaceBetween: 10,
+                  },
+                  640: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 1.8,
+                    spaceBetween: 30,
+                  },
+                  1280: {
+                    slidesPerView: 2.5,
+                    spaceBetween: 40,
+                  },
+                }}
                 centeredSlides
                 loop={true}
                 navigation
-                // onSwiper={(swiper) => console.log(swiper)}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,
                 }}
               >
-                {events.map((event) => (
+                {featuredEvents.map((event) => (
                   <SwiperSlide key={event.event_id}>
                     <TopFeaturedEventCard
                       key={event.event_id}
