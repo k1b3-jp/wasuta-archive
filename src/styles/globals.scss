@@ -53,3 +53,17 @@ ol {
     display: none;
   }
 }
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff !important;
+  background-color: #2cb;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 1rem !important;
+}
