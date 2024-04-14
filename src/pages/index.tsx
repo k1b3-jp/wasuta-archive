@@ -144,7 +144,7 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
               </Swiper>
             </div>
           </section>
-          <section>今日は何の日？</section>
+          {/* <section>今日は何の日？</section> */}
           <section className="flex flex-col bg-light-gray bg-100vw">
             <div className="container mx-auto p-6">
               <h3 className="text-xl font-bold text-font-color mb-6">
