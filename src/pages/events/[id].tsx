@@ -256,6 +256,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                   url={`https://www.wasuta-archive.com/events/${id}`}
                   title={event.title}
                   hashtags={["わーすた", "わーすたアーカイブ"]}
+                  className="w-8"
                 >
                   <XIcon size={32} round={true} />
                 </TwitterShareButton>
