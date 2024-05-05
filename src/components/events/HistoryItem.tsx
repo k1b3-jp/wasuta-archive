@@ -114,6 +114,7 @@ const HistoryItem: React.FC<EventCardProps> = ({
                       <BaseButton
                         label="イベントページへ"
                         link={`/events/${id}`}
+                        targetBlank
                       />
                     </div>
                   </div>
