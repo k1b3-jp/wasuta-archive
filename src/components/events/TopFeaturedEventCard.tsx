@@ -16,7 +16,7 @@ const TopFeaturedEventCard: React.FC<EventCardProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md w-full relative my-5">
-      <Link href={`/events/${id}`}>
+      <Link href={`/events/${id}`} rel="noopener noreferrer" target="_blank">
         <div className="rounded-t-lg overflow-hidden h-56 md:h-70 lg:h-96">
           <img
             src={imageUrl || defaultImageUrl}
