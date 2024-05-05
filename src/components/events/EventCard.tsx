@@ -15,7 +15,7 @@ const EventCard: React.FC<EventCardProps> = ({
 }) => {
   return (
     <div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
-      <Link href={`/events/${id}`}>
+      <Link href={`/events/${id}`} rel="noopener noreferrer" target="_blank">
         <div className="overflow-hidden">
           <img
             src={imageUrl || defaultImageUrl}
