@@ -3,6 +3,7 @@ import EventCard from "@/components/events/EventCard";
 import BaseButton from "@/components/ui/BaseButton";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Tag from "@/components/ui/Tag";
+import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
 import type { TagType } from "@/types/tag";
@@ -23,6 +24,7 @@ const EventListPage = () => {
 
   const query = useSearchParams();
   const toastParams = query?.get("toast");
+  useClearQueryParam("toast", toastParams === "eventDeleted");
 
   useEffect(() => {
     const queryTags = query?.get("tags");
