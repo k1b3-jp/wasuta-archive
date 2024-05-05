@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import parse from "html-react-parser";
+import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -151,6 +152,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const router = useRouter();
   const query = useSearchParams();
   const toastParams = query?.get("toast");
+  useClearQueryParam("toast", toastParams === "success");
 
   useEffect(() => {
     if (toastParams === "success") {
