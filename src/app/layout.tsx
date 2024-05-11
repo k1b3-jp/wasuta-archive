@@ -17,68 +17,68 @@ config.autoAddCss = false;
 const noto = Noto_Sans_JP({ subsets: ["latin"] });
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <>
-      <DefaultSeo
-        titleTemplate="%s | わーすたアーカイブ"
-        description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
-        openGraph={{
-          type: "website",
-          description:
-            "わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。",
-          site_name: "わーすたアーカイブ",
-          url: "https://www.wasuta-archive.com/",
-        }}
-        twitter={{
-          handle: "tws_kotaro",
-          site: "tws_kotaro",
-          cardType: "summary_large_image",
-        }}
-      />
-      <link
-        href="https://unpkg.com/weploy-translate/dist/weploy-translate.css"
-        rel="stylesheet"
-      />
-      <script
-        src="https://unpkg.com/weploy-translate/dist/weploy-translate.js"
-        data-weploy-key="b43d48cd-bb5d-46d0-b1c1-deea0b414fbb"
-        data-use-browser-language="true"
-        data-original-language="ja"
-        data-allowed-languages="en, es, ko, pt, zh"
-        data-exclude-classes=""
-      />
-      <div
-        style={{
-          margin: 0,
-        }}
-        className={`${noto.className} flex flex-col min-h-screen`}
-        id="top"
-      >
-        <NavBar />
-        <main className="flex-grow">
-          <div className="container mx-auto">{children}</div>
-        </main>
-        <BottomBar />
-        <Footer />
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <Analytics />
-        <SpeedInsights />
-      </div>
-    </>
-  );
+	return (
+		<>
+			<DefaultSeo
+				titleTemplate="%s | わーすたアーカイブ"
+				description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
+				openGraph={{
+					type: "website",
+					description:
+						"わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。",
+					site_name: "わーすたアーカイブ",
+					url: "https://www.wasuta-archive.com/",
+				}}
+				twitter={{
+					handle: "tws_kotaro",
+					site: "tws_kotaro",
+					cardType: "summary_large_image",
+				}}
+			/>
+			<link
+				href="https://unpkg.com/weploy-translate/dist/weploy-translate.css"
+				rel="stylesheet"
+			/>
+			<script
+				src="https://unpkg.com/weploy-translate/dist/weploy-translate.js"
+				data-weploy-key="b43d48cd-bb5d-46d0-b1c1-deea0b414fbb"
+				data-use-browser-language="true"
+				data-original-language="ja"
+				data-allowed-languages="en, es, ko, pt, zh"
+				data-exclude-classes=""
+			/>
+			<div
+				style={{
+					margin: 0,
+				}}
+				className={`${noto.className} flex flex-col min-h-screen`}
+				id="top"
+			>
+				<NavBar />
+				<main className="flex-grow">
+					<div className="container mx-auto">{children}</div>
+				</main>
+				<BottomBar />
+				<Footer />
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="light"
+				/>
+				<Analytics />
+				<SpeedInsights />
+			</div>
+		</>
+	);
 }
