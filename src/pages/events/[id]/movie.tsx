@@ -48,13 +48,18 @@ const EventMovieList = () => {
   const fetchMovies = useCallback(
     async (selectedTags?: TagType[]) => {
       if (id !== undefined) {
-        const params: ParamsType = { eventId: Number(id) };
-        if (selectedTags) {
-          const selectedTagIds = selectedTags.map((tag) => tag.id);
-          params["tags"] = selectedTagIds;
+        try {
+          const params: ParamsType = { eventId: Number(id) };
+          if (selectedTags) {
+            const selectedTagIds = selectedTags.map((tag) => tag.id);
+            params["tags"] = selectedTagIds;
+          }
+          const fetchedMovies: Movie[] = await getMovies(params);
+          setMovies(fetchedMovies);
+        } catch (error) {
+          console.error("Error fetching movies:", error);
+          toast.error("動画の取得中にエラーが発生しました");
         }
-        const fetchedMovies: Movie[] = await getMovies(params);
-        setMovies(fetchedMovies);
       }
     },
     [id]
