@@ -85,9 +85,14 @@ const EventMovieList = () => {
   };
 
   const fetchAllTags = async () => {
-    const tags = await getYoutubeTags();
-    if (tags) {
-      setAllTags(tags);
+    try {
+      const tags = await getYoutubeTags();
+      if (tags) {
+        setAllTags(tags);
+      }
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+      toast.error("タグの取得中にエラーが発生しました");
     }
   };
 
