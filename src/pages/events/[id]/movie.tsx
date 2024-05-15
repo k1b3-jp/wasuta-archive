@@ -104,12 +104,11 @@ const EventMovieList = () => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     try {
       setLoading(true);
-      fetchMovies(selectedTags);
+      await fetchMovies(selectedTags);
     } catch (error) {
-      setLoading(false);
       toast.error("動画の取得中にエラーが発生しました");
     } finally {
       setLoading(false);
