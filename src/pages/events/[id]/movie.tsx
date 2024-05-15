@@ -26,12 +26,16 @@ const EventMovieList = () => {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const isSuperAdmin = async () => {
-    const { data } = await supabase.auth.getUser();
-    const userEmail = data?.user?.email;
-
-    if (userEmail === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL) {
-      setIsAdmin(true);
-    } else {
+    try {
+      const { data } = await supabase.auth.getUser();
+      const userEmail = data?.user?.email;
+      if (userEmail === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
       setIsAdmin(false);
     }
   };
