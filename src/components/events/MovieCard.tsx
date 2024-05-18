@@ -43,8 +43,18 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
   };
 
   const fetchEventName = async () => {
-    const event = await getEventsByYoutubeLink(id);
-    setEventName(event?.event_name);
+    try {
+      const event = await getEventsByYoutubeLink(id); // 'id'は整数である必要があります
+      if (event) {
+        setEventName(event.event_name);
+      } else {
+        console.error(
+          "指定されたYouTubeリンクIDに対するイベントが見つかりませんでした"
+        );
+      }
+    } catch (error) {
+      console.error("イベント名の取得中にエラーが発生しました:", error);
+    }
   };
 
   return (
@@ -52,7 +62,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
       <div className="mb-2">
         {videoId ? <YouTubeEmbed videoid={videoId} /> : <p>Invalid URL</p>}
       </div>
-      <div className="text-sm line-clamp-1 leading-7 h-7">{eventName}</div>
+      <div className="text-sm line-clamp-1 leading-7 h-7 mb-2">{eventName}</div>
       <div className="min-h-[28px]">
         {youtubeTags?.map(
           (tag: { id: React.Key | null | undefined; label: string }) => (
