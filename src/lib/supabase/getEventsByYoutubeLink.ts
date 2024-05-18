@@ -1,6 +1,10 @@
 import { supabase } from "../supabaseClient";
 
 export async function getEventsByYoutubeLink(youtubeLinkId: number) {
+  if (!Number.isInteger(youtubeLinkId)) {
+    throw new Error("無効なYouTubeリンクIDです");
+  }
+
   const query = supabase
     .from("event_youtube_links")
     .select(
@@ -18,5 +22,5 @@ export async function getEventsByYoutubeLink(youtubeLinkId: number) {
     throw new Error(error.message);
   }
 
-  return data ? data[0].events : null;
+  return data && data.length > 0 ? data[0].events : null;
 }
