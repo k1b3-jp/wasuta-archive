@@ -9,10 +9,9 @@ export async function getEventsByYoutubeLink(youtubeLinkId: number) {
     .from("event_youtube_links")
     .select(
       `
-            events (
-                event_name
-            )
-        `
+      event_id,
+      events!inner(event_name)     
+      `
     )
     .eq("youtube_link_id", youtubeLinkId);
 
@@ -22,5 +21,5 @@ export async function getEventsByYoutubeLink(youtubeLinkId: number) {
     throw new Error(error.message);
   }
 
-  return data && data.length > 0 ? data[0].events : null;
+  return data;
 }

@@ -28,7 +28,7 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
   const videoId = extractYouTubeVideoId(videoUrl); // URLからビデオIDを抽出
 
-  //idに紐づくタグを取得する
+  // idに紐づくタグを取得する
   const [youtubeTags, setYoutubeTags] = useState<TagType[] | undefined>([]);
   const [eventName, setEventName] = useState<string | null>(null);
 
@@ -43,18 +43,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
   };
 
   const fetchEventName = async () => {
-    try {
-      const event = await getEventsByYoutubeLink(id); // 'id'は整数である必要があります
-      if (event) {
-        setEventName(event.event_name);
-      } else {
-        console.error(
-          "指定されたYouTubeリンクIDに対するイベントが見つかりませんでした"
-        );
-      }
-    } catch (error) {
-      console.error("イベント名の取得中にエラーが発生しました:", error);
-    }
+    const data: any = await getEventsByYoutubeLink(id);
+    setEventName(data[0].events.event_name);
   };
 
   return (
