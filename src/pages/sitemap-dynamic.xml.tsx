@@ -5,11 +5,11 @@ async function getPages(): Promise<any[]> {
   const query = supabase.from("events").select("*");
   const { data: events, error } = await query;
   if (error) {
-    console.error(`failed to fetch post data: ${error.message}`);
+    console.error(`イベントデータの取得に失敗しました: ${error.message}`);
     return [];
   }
   if (!events) {
-    console.warn("did not get any pages back");
+    console.warn("イベントデータが空です。");
     return [];
   }
   return events;
