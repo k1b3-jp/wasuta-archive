@@ -7,3 +7,4 @@ Host: https://www.wasuta-archive.com/
 
 # Sitemaps
 Sitemap: https://www.wasuta-archive.com/sitemap.xml
+Sitemap: https://www.wasuta-archive.com/sitemap-dynamic.xml
