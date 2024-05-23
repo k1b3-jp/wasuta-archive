@@ -21,7 +21,7 @@ function getSitemap(events: any[]) {
     ${events
       .map(
         (event) => `<url>
-          <loc>'https://www.wasuta-archive.com/events/${event.event_id}'</loc>
+          <loc>https://www.wasuta-archive.com/events/${event.event_id}</loc>
           <lastmod>${new Date().toISOString()}</lastmod>
         </url>,`
       )
