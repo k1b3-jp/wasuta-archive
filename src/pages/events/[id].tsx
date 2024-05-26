@@ -13,7 +13,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArticleJsonLd, NextSeo } from "next-seo";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
@@ -131,6 +131,12 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const id = event?.event_id;
   const [url, setUrl] = useState("");
 
+  const ogImage = useMemo(() => {
+    return `https://www.wasuta-archive.com/api/og?title=${
+      event.event_name
+    }&image=${event.image_url || defaultImageUrl}`;
+  }, [event.event_name, event.image_url]);
+
   const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
   const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
   const fetchAllYoutubeTags = async () => {
@@ -204,7 +210,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
         openGraph={{
           images: [
             {
-              url: event.image_url || process.env.defaultOgpImage || "",
+              url: ogImage || process.env.defaultOgpImage || "",
               width: 1200,
               height: 630,
             },
