@@ -6,7 +6,7 @@ export const config = {
 };
 
 const font = fetch(
-  new URL("../../assets/NotoSansJP-Bold.otf", import.meta.url)
+  new URL("../../assets/NotoSansJP-Bold.woff", import.meta.url)
 ).then((res) => res.arrayBuffer());
 
 export default async function handler(req: NextRequest) {
