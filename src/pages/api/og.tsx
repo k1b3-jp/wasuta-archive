@@ -33,12 +33,12 @@ export default async function handler(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const hasTitle = searchParams.has("title");
-    const title = hasTitle ? searchParams.get("title")?.slice(0, 100) : "";
+    const title = hasTitle ? searchParams.get("title") : "";
 
     const font = fetchFont(`${title}わーすたアーカイブ`);
     const fontData = await font;
 
-    const imageURL = searchParams.get("image")?.slice(0, 100);
+    const imageURL = searchParams.get("image");
 
     return new ImageResponse(
       (
@@ -86,7 +86,7 @@ export default async function handler(req: NextRequest) {
             </div>
           </div>
           <img
-            src={imageURL}
+            src={imageURL || ""}
             alt="イベントの様子"
             style={{
               flexBasis: "55%",
