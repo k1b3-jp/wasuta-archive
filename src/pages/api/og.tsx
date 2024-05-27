@@ -86,7 +86,7 @@ export default async function handler(req: NextRequest) {
             </div>
           </div>
           <img
-            src={imageURL}
+            src={imageURL || ""}
             alt="イベントの様子"
             style={{
               flexBasis: "55%",
