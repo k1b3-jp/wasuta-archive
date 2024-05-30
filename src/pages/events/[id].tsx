@@ -107,7 +107,7 @@ const formatDescription = (description: string): string => {
       if (isValidUrl(url)) {
         return `<a href="${escapeHtml(
           url
-        )}" target="_blank" rel="noopener noreferrer" class="underline">${escapeHtml(
+        )}" target="_blank" rel="noopener noreferrer" class="underline break-all">${escapeHtml(
           url
         )}</a>`;
       }
