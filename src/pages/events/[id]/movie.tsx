@@ -72,7 +72,7 @@ const EventMovieList = () => {
     if (id !== undefined) {
       fetchMovies();
     }
-  }, [id, refreshKey, fetchMovies]);
+  }, [id, fetchMovies, isSuperAdmin]);
 
   const deleteMovie = async (youtubeLinkId: number) => {
     try {

@@ -22,7 +22,7 @@ const NavBar = () => {
 
   useEffect(() => {
     getCurrentUser();
-  }, []);
+  }, [getCurrentUser]);
 
   const Logout = async () => {
     const { error } = await supabase.auth.signOut();

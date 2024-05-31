@@ -95,25 +95,26 @@ const isValidUrl = (url: string): boolean => {
   }
 };
 
+function linkifyUrls(text: string): string {
+  return text.replace(/(https?:\/\/[^\s<]+)/g, (url: string) => {
+    if (isValidUrl(url)) {
+      return `<a href="${escapeHtml(
+        url
+      )}" target="_blank" rel="noopener noreferrer" class="underline break-all">${escapeHtml(
+        url
+      )}</a>`;
+    }
+    return escapeHtml(url); // URLが無効な場合は、リンク化せずにエスケープしたテキストを返す
+  });
+}
+
 const formatDescription = (description: string): string => {
   if (!description) return "未設定";
 
   let sanitizedDescription: string = escapeHtml(description);
 
   sanitizedDescription = sanitizedDescription.replace(/\n/g, "<br/>");
-  sanitizedDescription = sanitizedDescription.replace(
-    /(https?:\/\/[^\s<]+)/g,
-    (url: string) => {
-      if (isValidUrl(url)) {
-        return `<a href="${escapeHtml(
-          url
-        )}" target="_blank" rel="noopener noreferrer" class="underline">${escapeHtml(
-          url
-        )}</a>`;
-      }
-      return escapeHtml(url); // URLが無効な場合は、リンク化せずにエスケープしたテキストを返す
-    }
-  );
+  sanitizedDescription = linkifyUrls(sanitizedDescription);
 
   return sanitizedDescription;
 };

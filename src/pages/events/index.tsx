@@ -40,11 +40,11 @@ const EventListPage = () => {
     };
 
     selectTagsById();
-  }, [allTags]);
+  }, [allTags, query]);
 
   useEffect(() => {
     handleSearch();
-  }, [selectedTags]);
+  }, []);
 
   useEffect(() => {
     if (toastParams === "eventDeleted") {

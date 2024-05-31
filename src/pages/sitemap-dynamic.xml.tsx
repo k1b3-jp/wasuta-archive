@@ -30,7 +30,7 @@ function getSitemap(events: any[]) {
   `;
 }
 
-export const getServerSideProps: GetServerSideProps<{}> = async ({ res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   res.setHeader("Content-Type", "text/xml");
   res.write(getSitemap(await getPages()));
   res.end();
