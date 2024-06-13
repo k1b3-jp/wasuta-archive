@@ -42,41 +42,51 @@ const HistoryItem: React.FC<EventCardProps> = ({
 		filterIcon(tags); // tagsを引数として直接渡す
 	};
 
+	const [textColor, setTextColor] = useState("text-deep-green");
+
 	const filterIcon = (tags: TagType[]) => {
 		let icon = faSun;
-		const tagLabel = tags[0]?.label; // Assuming tags array is not empty
+		let textColor = "text-deep-green";
+
+		const tagLabel = tags[0]?.label;
 
 		switch (tagLabel) {
 			case "単独":
 				icon = faTicket;
+				textColor = "text-deep-green";
 				break;
 			case "対バン":
 				icon = faSun;
+				textColor = "text-pink";
 				break;
 			case "リリイベ":
 				icon = faHandshakeSimple;
+				textColor = "text-purple";
 				break;
 			case "生誕":
 				icon = faCakeCandles;
+				textColor = "text-light-blue";
 				break;
 			default:
 				icon = faPaw;
+				textColor = "text-deep-gray";
 		}
 
 		setSrc(icon);
+		setTextColor(textColor);
 	};
 
 	return (
 		<>
 			<div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
 				<div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-white text-slate-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-					<FontAwesomeIcon icon={src} className="text-2xl text-deep-green" />
+					<FontAwesomeIcon icon={src} className={`text-2xl ${textColor}`} /> {/* Use the textColor variable */}
 				</div>
 
 				<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
 					<div className="md:flex items-center justify-between md:space-x-2 mb-1">
 						<div className="font-bold text-slate-900">{title}</div>
-						<div className="font-caveat font-medium text-deep-green">
+						<div className="font-caveat font-medium ${textColor}"> {/* Use the textColor variable */}
 							{formattedDate}
 						</div>
 					</div>
