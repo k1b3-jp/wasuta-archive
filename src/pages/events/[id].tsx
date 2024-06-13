@@ -133,9 +133,8 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
   const [url, setUrl] = useState("");
 
   const ogImage = useMemo(() => {
-    return `https://www.wasuta-archive.com/api/og?title=${
-      event.event_name
-    }&image=${event.image_url || defaultImageUrl}`;
+    return `https://www.wasuta-archive.com/api/og?title=${event.event_name
+      }&image=${event.image_url || defaultImageUrl}`;
   }, [event.event_name, event.image_url]);
 
   const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
@@ -317,7 +316,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                         type="url"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        className="mt-1 bg-light-gray py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm"
                       />
                     </div>
                     <div className="flex flex-col gap-2">
