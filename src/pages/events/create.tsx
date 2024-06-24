@@ -186,7 +186,7 @@ const CreateEvent = () => {
 								type="text"
 								value={eventName}
 								onChange={(e) => setEventName(e.target.value)}
-								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none"
 							/>
 						</div>
 						<div>
@@ -199,7 +199,7 @@ const CreateEvent = () => {
 								type="date"
 								value={date}
 								onChange={(e) => setDate(e.target.value)}
-								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none"
 							/>
 						</div>
 						<div>
@@ -214,7 +214,7 @@ const CreateEvent = () => {
 								type="text"
 								value={location}
 								onChange={(e) => setLocation(e.target.value)}
-								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none"
 							/>
 						</div>
 						<div>
@@ -246,7 +246,7 @@ const CreateEvent = () => {
 								value={description}
 								onChange={(e) => setDescription(e.target.value)}
 								rows={4}
-								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none"
+								className="bg-light-gray mb-6 py-3 px-4 block w-full border border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none"
 							/>
 						</div>
 						<label className="block text-sm font-bold mb-2">タグ</label>
