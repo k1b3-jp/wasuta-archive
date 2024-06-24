@@ -316,7 +316,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
                         type="url"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        className="mt-1 bg-light-gray py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm"
+                        className="mt-1 bg-light-gray py-3 px-4 block w-full border border-gray-200 rounded-lg"
                       />
                     </div>
                     <div className="flex flex-col gap-2">
