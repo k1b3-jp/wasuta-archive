@@ -20,6 +20,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import SwiperCore, { Navigation, Autoplay } from "swiper/modules";
+import Link from "next/link";
 
 interface HomeProps {
 	featuredEvents: Event[];
@@ -142,6 +143,27 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 									</SwiperSlide>
 								))}
 							</Swiper>
+						</div>
+					</section>
+					<section className="bg-white px-5 pb-4">
+						<div className="bg-gradient-to-r from-blue-200 to-cyan-200 border p-4">
+							<Link href="/exclusive/summer-love-tour-2024">
+								<div className="title">
+									<div className="text-white">
+										- 特集 -
+									</div>
+									<h1 className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
+										<span className="block">
+											わーすた
+											<span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-teal-500">
+												夏恋
+											</span>
+											ツアー<br />
+											2024
+										</span>
+									</h1>
+								</div>
+							</Link>
 						</div>
 					</section>
 					<section className="flex flex-col bg-light-gray bg-100vw">
