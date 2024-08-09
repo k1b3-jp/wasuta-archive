@@ -16,12 +16,9 @@ body {
 
 .grid-base {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 320px);
+  grid-template-columns: repeat(auto-fit, 340px);
   justify-content: center;
-  grid-gap: 2rem 1.5rem;
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(auto-fit, 280px);
-  }
+  grid-gap: 2rem 1rem;
 }
 
 ol {
