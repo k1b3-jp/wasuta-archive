@@ -1,6 +1,5 @@
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
 import type { TagType } from "@/types/tag";
-import { YouTubeEmbed } from "@next/third-parties/google";
 import type React from "react";
 import { useEffect, useState } from "react";
 import MiniTag from "../ui/MiniTag";
@@ -50,7 +49,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 	return (
 		<div>
 			<div className="mb-2">
-				{videoId ? <YouTubeEmbed videoid={videoId} /> : <p>Invalid URL</p>}
+				{videoId ? <iframe width="340" height="190" src={`https://www.youtube.com/embed/${videoId}`} loading="lazy" title="YouTube video player" allowFullScreen /> : <p>Invalid URL</p>}
 			</div>
 			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2">{eventName}</div>
 			<div className="min-h-[28px]">
