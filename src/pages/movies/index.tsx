@@ -123,7 +123,7 @@ const EventListPage = () => {
 							{movies?.map((items) => {
 								return items?.map((link: Movie) => {
 									return (
-										<div key={link.youtube_link_id} className="min-w-72">
+										<div key={link.youtube_link_id}>
 											<MovieCard
 												videoUrl={link?.youtube_links?.url}
 												id={link.youtube_link_id}
