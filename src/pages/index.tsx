@@ -145,7 +145,8 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 							</Swiper>
 						</div>
 					</section>
-					<section className="bg-white px-5 pb-4">
+					{/* 特集ページは一旦非表示 */}
+					{/* <section className="bg-white px-5 pb-4">
 						<div className="bg-gradient-to-r from-blue-200 to-cyan-200 border p-4">
 							<Link href="/exclusive/summer-love-tour-2024">
 								<div className="title">
@@ -165,7 +166,7 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 								</div>
 							</Link>
 						</div>
-					</section>
+					</section> */}
 					<section className="flex flex-col bg-light-gray bg-100vw">
 						<div className="container mx-auto p-6">
 							<h3 className="text-xl font-bold text-font-color mb-6">
