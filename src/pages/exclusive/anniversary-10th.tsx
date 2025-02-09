@@ -99,7 +99,15 @@ const Anniversary10th = () => {
     }
 
     setImages(sortedImages);
+    // スクロール位置をリセット
     setScrollPosition(0);
+    setBgScrollPosition(0);
+
+    // スクロール位置を最上部に移動
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, [sortByDate]);
 
   // 配列をシャッフルする関数を修正
