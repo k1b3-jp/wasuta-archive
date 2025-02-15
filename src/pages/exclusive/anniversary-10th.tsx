@@ -35,7 +35,25 @@ const Anniversary10th = () => {
   const [backgroundImages, setBackgroundImages] = useState<EventImage[]>([]);
   const [bgScrollPosition, setBgScrollPosition] = useState(0);
   const [videoLoadCount, setVideoLoadCount] = useState(0);
-  const totalVideos = 16; // 4x4グリッドの総数
+
+  // 画面サイズに応じて必要な動画数を計算する関数
+  const calculateTotalVideos = useCallback(() => {
+    if (typeof window === 'undefined') return 4; // SSR時のデフォルト値
+    if (window.innerWidth >= 1024) return 9; // lg
+    return 4; // sm, md
+  }, []);
+
+  const [totalVideos, setTotalVideos] = useState(calculateTotalVideos());
+
+  // 画面サイズ変更時に動画数を更新
+  useEffect(() => {
+    const handleResize = () => {
+      setTotalVideos(calculateTotalVideos());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [calculateTotalVideos]);
 
   // YouTube IFrame APIの読み込み
   useEffect(() => {
@@ -235,14 +253,15 @@ const Anniversary10th = () => {
   useEffect(() => {
     // 動画IDをシャッフル
     const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
-    // 4x4のグリッド用に16個の動画を選択し、4つずつの配列に分割
-    const selected = shuffled.slice(0, 16);
+    // 3x3のグリッド用に9個の動画を選択し、3つずつの配列に分割
+    const selected = shuffled.slice(0, totalVideos);
     const grid = [];
-    for (let i = 0; i < selected.length; i += 4) {
-      grid.push(selected.slice(i, i + 4));
+    const cols = totalVideos === 9 ? 3 : 2;
+    for (let i = 0; i < selected.length; i += cols) {
+      grid.push(selected.slice(i, i + cols));
     }
     setGridVideoIds(grid);
-  }, []);
+  }, [totalVideos]); // totalVideosが変更されたときに再生成
 
   // imagesの定義を削除（useState で管理するため）
 
@@ -292,22 +311,25 @@ const Anniversary10th = () => {
         {/* 背景レイヤー */}
         <div className="fixed inset-0 overflow-hidden bg-black">
           <div className="absolute inset-0 w-full h-full">
-            <div className="grid grid-cols-4 h-full">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
               {gridVideoIds.map((row, rowIndex) => (
                 row.map((videoId, colIndex) => (
                   <div
                     key={`video-${rowIndex}-${colIndex}`}
-                    className="relative aspect-video overflow-hidden"
+                    className="relative w-full h-full overflow-hidden"
                   >
-                    <iframe
-                      src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      className="absolute w-[150%] h-[150%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                      style={{
-                        pointerEvents: 'none',
-                      }}
-                      title={`わーすた Background Video ${rowIndex}-${colIndex}`}
-                    />
+                    <div className="absolute inset-0">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        className="absolute w-[120%] h-[120%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                        style={{
+                          pointerEvents: 'none',
+                          objectFit: 'cover',
+                        }}
+                        title={`わーすた Background Video ${rowIndex}-${colIndex}`}
+                      />
+                    </div>
                   </div>
                 ))
               ))}
@@ -376,12 +398,12 @@ const Anniversary10th = () => {
 
               <div
                 className={cn(
-                  "grid gap-16",
+                  "grid gap-8 md:gap-16",
                   "relative overflow-hidden -mt-14 pt-14",
                   isMobile
-                    ? "grid-cols-1"
+                    ? "grid-cols-2"
                     : [
-                      "grid-cols-2",
+                      "grid-cols-3",
                       "lg:grid-cols-3",
                       "xl:grid-cols-3",
                       "2xl:grid-cols-4",
