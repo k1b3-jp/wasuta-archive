@@ -307,7 +307,7 @@ const Anniversary10th = () => {
   return (
     <>
       <NextSeo
-        title="わーすた夏恋ツアー"
+        title="わーすた10周年記念特設ページ"
         openGraph={{
           images: [
             {

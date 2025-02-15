@@ -145,29 +145,24 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 							</Swiper>
 						</div>
 					</section>
-					{/* 特集ページは一旦非表示 */}
-					{/* <section className="bg-white px-5 pb-4">
-						<div className="bg-gradient-to-r from-blue-200 to-cyan-200 border p-4">
-							<Link href="/exclusive/summer-love-tour-2024">
+					<section className="bg-white px-5 pb-4">
+						<div className="bg-gradient-to-r from-[#f2a2c8] via-[#fbcc7e] to-[#7ec8d9] border p-4 bg-[url('/bg-10th.png')] bg-cover bg-center bg-no-repeat">
+							<Link href="/exclusive/anniversary-10th">
 								<div className="title">
 									<div className="text-white">
 										- 特集 -
 									</div>
 									<h1 className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
 										<span className="block">
-											わーすた
-											<span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-teal-500">
-												夏恋
-											</span>
-											ツアー<br />
-											2024
+											わーすた10周年記念<br />
+											特設ページ
 										</span>
 									</h1>
 								</div>
 							</Link>
 						</div>
-					</section> */}
-					<section className="flex flex-col bg-light-gray bg-100vw">
+					</section>
+					<section className="flex flex-col bg-gradient-to-r from-[#f2a2c8]/10 to-[#7ec8d9]/10 bg-100vw">
 						<div className="container mx-auto p-6">
 							<h3 className="text-xl font-bold text-font-color mb-6">
 								カテゴリ
