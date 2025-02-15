@@ -289,10 +289,10 @@ const Anniversary10th = () => {
               <div className="h-[1px] w-12 bg-gray-400"></div>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-              わーすた10年間の歩み
+              わーすた10周年記念特設ページ
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base mb-8">
-              10年間の思い出と感動を、写真とともに振り返ります
+              10年間の思い出と感動を、写真とともに。
             </p>
             <div className="flex justify-center">
               <Loader2 className="w-6 h-6 animate-spin text-gray-600" />
