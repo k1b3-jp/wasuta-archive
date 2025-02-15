@@ -376,8 +376,9 @@ const Anniversary10th = () => {
                     "max-w-[1200px]",
                     "mx-auto",
                     "[&>button]:w-8 [&>button]:h-8",
-                    "[&>button]:hover:bg-gray-100",
-                    "[&>button]:flex [&>button]:items-center [&>button]:justify-center"
+                    "[&>button]:hover:bg-white",
+                    "[&>button]:flex [&>button]:items-center [&>button]:justify-center",
+                    "[&>button]:top-6 [&>button]:right-6"
                   )}
                 >
                   {selectedImage && (
