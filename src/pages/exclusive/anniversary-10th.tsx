@@ -1,6 +1,6 @@
 import DefaultLayout from "@/app/layout";
 import { NextSeo } from "next-seo";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -34,10 +34,44 @@ const Anniversary10th = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [backgroundImages, setBackgroundImages] = useState<EventImage[]>([]);
   const [bgScrollPosition, setBgScrollPosition] = useState(0);
+  const [videoLoadCount, setVideoLoadCount] = useState(0);
+  const totalVideos = 16; // 4x4グリッドの総数
 
+  // YouTube IFrame APIの読み込み
+  useEffect(() => {
+    // APIスクリプトの読み込み
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // APIの準備完了時のコールバック
+    (window as any).onYouTubeIframeAPIReady = () => {
+      setVideoLoadCount(prev => prev + 1);
+    };
+  }, []);
+
+  // 動画の読み込み状態を監視する関数
+  const handleVideoReady = useCallback(() => {
+    setVideoLoadCount(prev => {
+      const newCount = prev + 1;
+      if (newCount >= totalVideos && events.length > 0) {
+        setTimeout(() => {
+          const loadingElement = document.querySelector('.loading-screen');
+          loadingElement?.classList.add('animate-fade-out');
+
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 800);
+        }, 1000);
+      }
+      return newCount;
+    });
+  }, [events.length, totalVideos]);
+
+  // イベントデータの取得
   const fetchEvents = async () => {
     try {
-      setIsLoading(true);
       const eventsData = await getEvents({
         sortBy: "date",
         ascending: true,
@@ -64,23 +98,22 @@ const Anniversary10th = () => {
           description: event.description,
         }));
 
-      // メインとバックグラウンドで別々のシャッフル配列を作成
       setImages(shuffleArray([...imageData]));
       setBackgroundImages(shuffleArray([...imageData]));
 
-      // データ読み込み完了後、少し待ってからフェードアウト
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // データ読み込み完了後、フェードアウト
+      setTimeout(() => {
+        const loadingElement = document.querySelector('.loading-screen');
+        loadingElement?.classList.add('animate-fade-out');
+
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 800);
+      }, 1000);
+
     } catch (err) {
       console.error(err);
-    } finally {
-      // フェードアウトクラスを追加してからローディングを終了
-      const loadingElement = document.querySelector('.loading-screen');
-      loadingElement?.classList.add('animate-fade-out');
-
-      // フェードアウトアニメーション完了後にローディング状態を更新
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 800); // フェードアウトアニメーションの時間
+      setIsLoading(false); // エラー時もローディングを終了
     }
   };
 
@@ -160,9 +193,77 @@ const Anniversary10th = () => {
     return () => clearInterval(interval);
   }, [backgroundImages, selectedImage]);
 
+  // 動画IDのリストを追加
+  const videoIds = [
+    "5jMtROX6p6o", "L5wPVj3QyWM", "NdKu3RjUfFk", "PUbJz2J-lbI", "7ZZX2uLo3Xg",
+    "a-P8qfhNq64", "m4Uv92LMeKU", "fR83P2yGIoI", "QfSzMDESNgM", "XHT2YnLF80c",
+    "xCBBk7z8muc", "B8Kh2tWuGhw", "5H4EfDri4OQ", "CH5R6VSVR1o", "tHDNx_WE9gg",
+    "sEEfRa7VNX8", "rmO0mKHFVvw", "TQMojC1f774", "Lgf7DQnlais", "SX1fZsQGWzM",
+    "bc1QaebMxZc", "-Q4OD-YuJQ4", "U8PH96BPpQM", "kncpJJfZOxg", "UEnPOCgUyQQ",
+    "JhvrJ7y9foE", "baA5GDFTINw", "eLNQH92beRA", "1vbV6E5_Tfs", "NjoayfiJBO8",
+    "Tgo9CzEVORA", "M6SUHcMZmrs", "rg3v1tSsNgw", "Am63abcoWw8", "jzOQzCRa2cU",
+    "11yKCctu7AI", "89BE6NYaI1s", "XQtELQyvioU", "6dB0JInOWik", "D0iu8VpTUTo",
+    "ojYMzvmJMck", "pY7Kzkpbll0", "bScqO9ruPyI", "KY5LUduAj0E", "P4uB90L-8fA",
+    "IrRh1rY5SVQ", "8JNxSshPGC8", "XxeSZ2S05NI", "yS60HSMvyno", "o4L2NDm7srU",
+    "dCzq63g7wtM", "_ogxK3WdBlw", "wy4X7UOWRXI", "CW_Bhzw_IqI", "az51FK_eKG4",
+    "MUDhbrFR2yU", "FpPZp0bq2-o", "baA5GDFTINw", "a3uKb1FknAU", "B2oHJKQdHkM",
+    "XC0lvic0ARE", "UGdUBSbc1Y8", "JVFHAIYqfa8", "dICksPYlIIk", "GRjYnQ2Ef-s",
+    "jmH7fAggZuw", "qH7mffgS8gk", "Qz0ImIiuwT4", "ZzrOLkDK1kM", "vejxiCbio_k",
+    "m4Uv92LMeKU", "r55f_RDjiwc", "Ysvg83eY-50", "5H4EfDri4OQ", "M_-xOX-VrLc",
+    "5kmyOfvucp8", "M6SUHcMZmrs", "uN6NxjwhPxk", "PsHwmaeyDmc", "Uj7J36-ECB4",
+    "4ZcKBBo5DF0", "Mm2I-3eqfTQ", "q0ZRAzbuheY", "vb_X5nr1-Qc", "SrFzR6AcC2E",
+    "5Ces-C_SivE", "6ed9pegAW5s", "Itgm6jNIdTI", "tHDNx_WE9gg", "KVljyMCcuPM",
+    "U3AaJ9-qWag", "bIjUhS37kyM", "l_rrBHR5iUs", "rodef9FQDF0", "Oa5MrW26FCs",
+    "kHR-0PZI9t8", "38xYeot-ciM", "G5AcWhaJzCY", "RdEzQlecBPA", "a3uKb1FknAU",
+    "A6Nxxk9xCP8", "g0ile6HqrRU", "-Q4OD-YuJQ4", "fNlcOsxxm10", "VL16K9t3Prs",
+    "rg3v1tSsNgw", "mSMnl8peoFI", "5nQq9kvIRvU", "W7whR4L4P6U", "ze97B94nrVY",
+    "MM-enoUnz2w", "bvTwKWncHME", "IqGN3oI9eXg", "GEfbUUeSb9I", "xx9E-drxprs",
+    "WPUcPDeDkZc", "IvRjj1C2YWc", "1Z9-ImlHU1E", "FYepzthtpM0", "bOviFZgJn9E",
+    "Oa5MrW26FCs", "Mm2I-3eqfTQ", "sbZ3Cto6Ngc", "24WFVmFsIeU", "gwDjQw-WbPE",
+    "PCY82Arqsgs", "lQuwKtvHLaE", "aFset-_yU1s", "SXG3N059ywY", "7WUlT8O2ow0",
+    "kVMgYTeVk9Y", "tOw1wC72wVw", "il01yJvKx0s", "vejxiCbio_k", "yudhtfD2ANc",
+    "apodPJgtAEY", "kSJsF3Zl_Iw", "ZpEWGLMD-BY", "wq7D4wNXafA", "iZD9a6PWmaw",
+    "ncEFEjyh78Q", "U_4vRd2Uef8", "OC1UuGeVaLc", "iL7lePjR10U", "Z1Doc3_xB3I",
+    "er59Rd_6O-Y", "W5kt7wvVpoo", "kSJsF3Zl_Iw", "a3uKb1FknAU", "KVljyMCcuPM",
+    "i2eiJJWBIhU", "5jMtROX6p6o", "5Ts_rVheplA", "mhpulQZMR-s", "jDO9OtgGmM4",
+    "yD7Xz8043x4", "wy4X7UOWRXI", "LSvP8x_Bypk", "B6szoHv_o2s", "N-h_lgAWsiE",
+    "bkrR0CgxwZY", "4RJAyo6o10I", "qdXmWj2etos", "dXT55zGpPEo", "Nzn_-VfBSeQ",
+    "JaZIOJOdfwo", "l3e-3MLxf6I", "IgDTZm33IcY", "ShWikZ_Kbnk", "_S5FvU2JxP0",
+    "F3P8vcZkIh4", "edjp8iylfPI", "F3P8vcZkIh4", "YkE3wgW9FCY", "qNe7ESPPpKE",
+    "_ex8PPpl-u4", "U_4vRd2Uef8", "_S5FvU2JxP0", "jzOQzCRa2cU", "iZD9a6PWmaw",
+    "tOswgrDp404", "5g-8xkdCNyM", "N-h_lgAWsiE", "9J8OJiV1k7s", "r55f_RDjiwc"
+  ];
+
+  // ランダムな動画IDを選択する状態を追加
+  const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
+
+  // コンポーネントマウント時にランダムな動画を選択
+  useEffect(() => {
+    // 動画IDをシャッフル
+    const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
+    // 最初の20個を選択（パフォーマンスのため）
+    setSelectedVideoIds(shuffled.slice(0, 20));
+  }, []);
+
+  // 複数の動画を表示するための状態
+  const [gridVideoIds, setGridVideoIds] = useState<string[][]>([]);
+
+  // コンポーネントマウント時に動画グリッドを設定
+  useEffect(() => {
+    // 動画IDをシャッフル
+    const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
+    // 4x4のグリッド用に16個の動画を選択し、4つずつの配列に分割
+    const selected = shuffled.slice(0, 16);
+    const grid = [];
+    for (let i = 0; i < selected.length; i += 4) {
+      grid.push(selected.slice(i, i + 4));
+    }
+    setGridVideoIds(grid);
+  }, []);
+
   // imagesの定義を削除（useState で管理するため）
 
-  // ローディング画面の表示
+  // ローディング画面を簡略化
   if (isLoading) {
     return (
       <DefaultLayout hideHeader hideBottomNav>
@@ -207,31 +308,30 @@ const Anniversary10th = () => {
       <DefaultLayout hideHeader hideBottomNav>
         {/* 背景レイヤー */}
         <div className="fixed inset-0 overflow-hidden bg-black">
-          <div
-            className="absolute inset-0 opacity-70"
-            style={{
-              transform: `translateY(${-bgScrollPosition}px)`,
-              transition: "transform 0.5s ease-out",
-            }}
-          >
-            <div className="grid grid-cols-4 gap-2 p-2">
-              {[...backgroundImages, ...backgroundImages].map((image, index) => (
-                <div
-                  key={`bg-${image.id}-${index}`}
-                  className="aspect-square overflow-hidden"
-                >
-                  <img
-                    src={`${image.url}?auto=format&fit=crop&w=400&q=60`}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
+          <div className="absolute inset-0 w-full h-full">
+            <div className="grid grid-cols-4 h-full">
+              {gridVideoIds.map((row, rowIndex) => (
+                row.map((videoId, colIndex) => (
+                  <div
+                    key={`video-${rowIndex}-${colIndex}`}
+                    className="relative aspect-video overflow-hidden"
+                  >
+                    <iframe
+                      src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      className="absolute w-[150%] h-[150%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                      style={{
+                        pointerEvents: 'none',
+                      }}
+                      title={`わーすた Background Video ${rowIndex}-${colIndex}`}
+                    />
+                  </div>
+                ))
               ))}
             </div>
           </div>
-          {/* オーバーレイ */}
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+          {/* オーバーレイ - 透明度を調整 */}
+          <div className="absolute inset-0 bg-black/85 backdrop-blur-[2px]" />
         </div>
 
         {/* メインコンテンツ */}
