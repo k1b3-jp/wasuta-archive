@@ -249,19 +249,31 @@ const Anniversary10th = () => {
   // 複数の動画を表示するための状態
   const [gridVideoIds, setGridVideoIds] = useState<string[][]>([]);
 
-  // コンポーネントマウント時に動画グリッドを設定
+  // 動画の開始位置をランダムに生成する関数
+  const generateRandomStart = useCallback(() => {
+    return Math.floor(Math.random() * 180);
+  }, []);
+
+  // 動画URLを生成する関数
+  const generateVideoUrl = useCallback((videoId: string) => {
+    const startTime = generateRandomStart();
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1`;
+  }, [generateRandomStart]);
+
+  // グリッド用の動画配列を生成
   useEffect(() => {
-    // 動画IDをシャッフル
     const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
-    // 3x3のグリッド用に9個の動画を選択し、3つずつの配列に分割
     const selected = shuffled.slice(0, totalVideos);
     const grid = [];
     const cols = totalVideos === 9 ? 3 : 2;
     for (let i = 0; i < selected.length; i += cols) {
-      grid.push(selected.slice(i, i + cols));
+      grid.push(selected.slice(i, i + cols).map(id => ({
+        id,
+        url: generateVideoUrl(id)
+      })));
     }
     setGridVideoIds(grid);
-  }, [totalVideos]); // totalVideosが変更されたときに再生成
+  }, [totalVideos, generateVideoUrl]);
 
   // imagesの定義を削除（useState で管理するため）
 
@@ -313,14 +325,14 @@ const Anniversary10th = () => {
           <div className="absolute inset-0 w-full h-full">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
               {gridVideoIds.map((row, rowIndex) => (
-                row.map((videoId, colIndex) => (
+                row.map((video, colIndex) => (
                   <div
                     key={`video-${rowIndex}-${colIndex}`}
                     className="relative w-full h-full overflow-hidden"
                   >
                     <div className="absolute inset-0">
                       <iframe
-                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
+                        src={video.url}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         className="absolute w-[200%] h-[200%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                         style={{
@@ -330,6 +342,8 @@ const Anniversary10th = () => {
                           minHeight: '200%',
                         }}
                         title={`わーすた Background Video ${rowIndex}-${colIndex}`}
+                        loading="lazy"
+                        frameBorder="0"
                       />
                     </div>
                   </div>
