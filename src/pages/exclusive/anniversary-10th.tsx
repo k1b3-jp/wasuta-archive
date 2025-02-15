@@ -195,43 +195,26 @@ const Anniversary10th = () => {
 
   // 動画IDのリストを追加
   const videoIds = [
-    "5jMtROX6p6o", "L5wPVj3QyWM", "NdKu3RjUfFk", "PUbJz2J-lbI", "7ZZX2uLo3Xg",
-    "a-P8qfhNq64", "m4Uv92LMeKU", "fR83P2yGIoI", "QfSzMDESNgM", "XHT2YnLF80c",
-    "xCBBk7z8muc", "B8Kh2tWuGhw", "5H4EfDri4OQ", "CH5R6VSVR1o", "tHDNx_WE9gg",
-    "sEEfRa7VNX8", "rmO0mKHFVvw", "TQMojC1f774", "Lgf7DQnlais", "SX1fZsQGWzM",
-    "bc1QaebMxZc", "-Q4OD-YuJQ4", "U8PH96BPpQM", "kncpJJfZOxg", "UEnPOCgUyQQ",
-    "JhvrJ7y9foE", "baA5GDFTINw", "eLNQH92beRA", "1vbV6E5_Tfs", "NjoayfiJBO8",
-    "Tgo9CzEVORA", "M6SUHcMZmrs", "rg3v1tSsNgw", "Am63abcoWw8", "jzOQzCRa2cU",
-    "11yKCctu7AI", "89BE6NYaI1s", "XQtELQyvioU", "6dB0JInOWik", "D0iu8VpTUTo",
-    "ojYMzvmJMck", "pY7Kzkpbll0", "bScqO9ruPyI", "KY5LUduAj0E", "P4uB90L-8fA",
-    "IrRh1rY5SVQ", "8JNxSshPGC8", "XxeSZ2S05NI", "yS60HSMvyno", "o4L2NDm7srU",
-    "dCzq63g7wtM", "_ogxK3WdBlw", "wy4X7UOWRXI", "CW_Bhzw_IqI", "az51FK_eKG4",
-    "MUDhbrFR2yU", "FpPZp0bq2-o", "baA5GDFTINw", "a3uKb1FknAU", "B2oHJKQdHkM",
-    "XC0lvic0ARE", "UGdUBSbc1Y8", "JVFHAIYqfa8", "dICksPYlIIk", "GRjYnQ2Ef-s",
-    "jmH7fAggZuw", "qH7mffgS8gk", "Qz0ImIiuwT4", "ZzrOLkDK1kM", "vejxiCbio_k",
-    "m4Uv92LMeKU", "r55f_RDjiwc", "Ysvg83eY-50", "5H4EfDri4OQ", "M_-xOX-VrLc",
-    "5kmyOfvucp8", "M6SUHcMZmrs", "uN6NxjwhPxk", "PsHwmaeyDmc", "Uj7J36-ECB4",
-    "4ZcKBBo5DF0", "Mm2I-3eqfTQ", "q0ZRAzbuheY", "vb_X5nr1-Qc", "SrFzR6AcC2E",
-    "5Ces-C_SivE", "6ed9pegAW5s", "Itgm6jNIdTI", "tHDNx_WE9gg", "KVljyMCcuPM",
-    "U3AaJ9-qWag", "bIjUhS37kyM", "l_rrBHR5iUs", "rodef9FQDF0", "Oa5MrW26FCs",
-    "kHR-0PZI9t8", "38xYeot-ciM", "G5AcWhaJzCY", "RdEzQlecBPA", "a3uKb1FknAU",
-    "A6Nxxk9xCP8", "g0ile6HqrRU", "-Q4OD-YuJQ4", "fNlcOsxxm10", "VL16K9t3Prs",
-    "rg3v1tSsNgw", "mSMnl8peoFI", "5nQq9kvIRvU", "W7whR4L4P6U", "ze97B94nrVY",
-    "MM-enoUnz2w", "bvTwKWncHME", "IqGN3oI9eXg", "GEfbUUeSb9I", "xx9E-drxprs",
-    "WPUcPDeDkZc", "IvRjj1C2YWc", "1Z9-ImlHU1E", "FYepzthtpM0", "bOviFZgJn9E",
-    "Oa5MrW26FCs", "Mm2I-3eqfTQ", "sbZ3Cto6Ngc", "24WFVmFsIeU", "gwDjQw-WbPE",
-    "PCY82Arqsgs", "lQuwKtvHLaE", "aFset-_yU1s", "SXG3N059ywY", "7WUlT8O2ow0",
-    "kVMgYTeVk9Y", "tOw1wC72wVw", "il01yJvKx0s", "vejxiCbio_k", "yudhtfD2ANc",
-    "apodPJgtAEY", "kSJsF3Zl_Iw", "ZpEWGLMD-BY", "wq7D4wNXafA", "iZD9a6PWmaw",
-    "ncEFEjyh78Q", "U_4vRd2Uef8", "OC1UuGeVaLc", "iL7lePjR10U", "Z1Doc3_xB3I",
-    "er59Rd_6O-Y", "W5kt7wvVpoo", "kSJsF3Zl_Iw", "a3uKb1FknAU", "KVljyMCcuPM",
-    "i2eiJJWBIhU", "5jMtROX6p6o", "5Ts_rVheplA", "mhpulQZMR-s", "jDO9OtgGmM4",
-    "yD7Xz8043x4", "wy4X7UOWRXI", "LSvP8x_Bypk", "B6szoHv_o2s", "N-h_lgAWsiE",
-    "bkrR0CgxwZY", "4RJAyo6o10I", "qdXmWj2etos", "dXT55zGpPEo", "Nzn_-VfBSeQ",
-    "JaZIOJOdfwo", "l3e-3MLxf6I", "IgDTZm33IcY", "ShWikZ_Kbnk", "_S5FvU2JxP0",
-    "F3P8vcZkIh4", "edjp8iylfPI", "F3P8vcZkIh4", "YkE3wgW9FCY", "qNe7ESPPpKE",
-    "_ex8PPpl-u4", "U_4vRd2Uef8", "_S5FvU2JxP0", "jzOQzCRa2cU", "iZD9a6PWmaw",
-    "tOswgrDp404", "5g-8xkdCNyM", "N-h_lgAWsiE", "9J8OJiV1k7s", "r55f_RDjiwc"
+    "a3uKb1FknAU", "N-h_lgAWsiE", "5H4EfDri4OQ", "Itgm6jNIdTI", "89BE6NYaI1s",
+    "vb_X5nr1-Qc", "B6szoHv_o2s", "bc1QaebMxZc", "bkrR0CgxwZY", "7ZZX2uLo3Xg",
+    "5nQq9kvIRvU", "kHR-0PZI9t8", "L5wPVj3QyWM", "jzOQzCRa2cU", "a-P8qfhNq64",
+    "yD7Xz8043x4", "_S5FvU2JxP0", "WPUcPDeDkZc", "dXT55zGpPEo", "bOviFZgJn9E",
+    "wy4X7UOWRXI", "tOw1wC72wVw", "PCY82Arqsgs", "RdEzQlecBPA", "U_4vRd2Uef8",
+    "m4Uv92LMeKU", "5g-8xkdCNyM", "SXG3N059ywY", "i2eiJJWBIhU", "B2oHJKQdHkM",
+    "U8PH96BPpQM", "A6Nxxk9xCP8", "ojYMzvmJMck", "wq7D4wNXafA", "NjoayfiJBO8",
+    "fNlcOsxxm10", "UEnPOCgUyQQ", "eLNQH92beRA", "FpPZp0bq2-o", "VL16K9t3Prs",
+    "tHDNx_WE9gg", "W7whR4L4P6U", "XC0lvic0ARE", "rg3v1tSsNgw", "l3e-3MLxf6I",
+    "FYepzthtpM0", "Am63abcoWw8", "G5AcWhaJzCY", "SrFzR6AcC2E", "W5kt7wvVpoo",
+    "9J8OJiV1k7s", "5jMtROX6p6o", "CW_Bhzw_IqI", "qH7mffgS8gk", "mhpulQZMR-s",
+    "_ex8PPpl-u4", "4ZcKBBo5DF0", "Ysvg83eY-50", "bvTwKWncHME", "xCBBk7z8muc",
+    "TQMojC1f774", "Nzn_-VfBSeQ", "dCzq63g7wtM", "UGdUBSbc1Y8", "D0iu8VpTUTo",
+    "r55f_RDjiwc", "sEEfRa7VNX8", "KY5LUduAj0E", "az51FK_eKG4", "XQtELQyvioU",
+    "Mm2I-3eqfTQ", "dICksPYlIIk", "yS60HSMvyno", "vejxiCbio_k", "rodef9FQDF0",
+    "-Q4OD-YuJQ4", "q0ZRAzbuheY", "6ed9pegAW5s", "JVFHAIYqfa8", "il01yJvKx0s",
+    "QfSzMDESNgM", "Oa5MrW26FCs", "11yKCctu7AI", "MUDhbrFR2yU", "KVljyMCcuPM",
+    "kSJsF3Zl_Iw", "kVMgYTeVk9Y", "edjp8iylfPI", "xx9E-drxprs", "ZzrOLkDK1kM",
+    "JhvrJ7y9foE", "l_rrBHR5iUs", "ZpEWGLMD-BY", "24WFVmFsIeU", "ze97B94nrVY",
+    "tOswgrDp404", "iZD9a6PWmaw", "MM-enoUnz2w", "baA5GDFTINw"
   ];
 
   // ランダムな動画IDを選択する状態を追加
@@ -331,7 +314,7 @@ const Anniversary10th = () => {
             </div>
           </div>
           {/* オーバーレイ - 透明度を調整 */}
-          <div className="absolute inset-0 bg-black/85 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
         </div>
 
         {/* メインコンテンツ */}
