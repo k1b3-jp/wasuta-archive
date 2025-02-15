@@ -311,7 +311,7 @@ const Anniversary10th = () => {
         {/* 背景レイヤー */}
         <div className="fixed inset-0 overflow-hidden bg-black">
           <div className="absolute inset-0 w-full h-full">
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
               {gridVideoIds.map((row, rowIndex) => (
                 row.map((videoId, colIndex) => (
                   <div
@@ -322,10 +322,12 @@ const Anniversary10th = () => {
                       <iframe
                         src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        className="absolute w-[120%] h-[120%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                        className="absolute w-[200%] h-[200%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                         style={{
                           pointerEvents: 'none',
                           objectFit: 'cover',
+                          minWidth: '200%',
+                          minHeight: '200%',
                         }}
                         title={`わーすた Background Video ${rowIndex}-${colIndex}`}
                       />
