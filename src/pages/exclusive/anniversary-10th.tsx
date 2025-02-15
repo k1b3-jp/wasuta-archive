@@ -2,12 +2,12 @@ import DefaultLayout from "@/app/layout";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
-import { DialogContent } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import BaseButton from "@/components/ui/BaseButton";
 
 interface Image {
   id: string;
@@ -374,7 +374,10 @@ const Anniversary10th = () => {
                     "animate-modal-in bg-white p-0",
                     "w-[80%] lg:w-[40%]",
                     "max-w-[1200px]",
-                    "mx-auto"
+                    "mx-auto",
+                    "[&>button]:w-8 [&>button]:h-8",
+                    "[&>button]:hover:bg-gray-100",
+                    "[&>button]:flex [&>button]:items-center [&>button]:justify-center"
                   )}
                 >
                   {selectedImage && (
@@ -420,28 +423,9 @@ const Anniversary10th = () => {
                             href={`/events/${selectedImage.id}`}
                             rel="noopener noreferrer"
                             target="_blank"
-                            className={cn(
-                              "inline-flex items-center justify-center",
-                              "px-6 py-2 rounded",
-                              "bg-black text-white",
-                              "hover:bg-gray-800 transition-colors",
-                              "text-sm font-medium"
-                            )}
+                            className="inline-flex items-center justify-center"
                           >
-                            イベント詳細を見る
-                            <svg
-                              className="w-4 h-4 ml-2"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                              />
-                            </svg>
+                            <BaseButton label="イベント詳細を見る" />
                           </Link>
                         </div>
                       </div>
