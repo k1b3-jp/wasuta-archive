@@ -393,7 +393,8 @@ const Anniversary10th = () => {
 
               <div
                 className={cn(
-                  "grid gap-2 relative overflow-hidden -mt-14 pt-14",
+                  "grid gap-16",
+                  "relative overflow-hidden -mt-14 pt-14",
                   isMobile
                     ? "grid-cols-1"
                     : [
