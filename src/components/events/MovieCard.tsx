@@ -7,14 +7,14 @@ import { getEventsByYoutubeLink } from "@/lib/supabase/getEventsByYoutubeLink";
 
 export function extractYouTubeVideoId(url: string): string | null {
 	const matched =
-		/^https?:\/\/(www\.|m\.)?youtube\.com\/watch\?(.*&)?v=(?<videoId>[^&]+)/.exec(
+		/^https?:\/\/(www\.|m\.)?youtube\.com\/watch\?(.*&)?v=([^&]+)/.exec(
 			url,
 		) ??
-		/^https?:\/\/youtu\.be\/(?<videoId>[^?]+)/.exec(url) ??
-		/^https?:\/\/(www\.|m\.)?youtube\.com\/embed\/(?<videoId>[^?]+)/.exec(url);
+		/^https?:\/\/youtu\.be\/([^?]+)/.exec(url) ??
+		/^https?:\/\/(www\.|m\.)?youtube\.com\/embed\/([^?]+)/.exec(url);
 
-	if (matched?.groups?.videoId) {
-		return matched.groups.videoId;
+	if (matched?.[3]) {
+		return matched[3];
 	}
 	return null;
 }
