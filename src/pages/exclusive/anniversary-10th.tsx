@@ -286,7 +286,7 @@ const Anniversary10th = () => {
   // ローディング画面を簡略化
   if (isLoading) {
     return (
-      <DefaultLayout hideHeader hideBottomNav>
+      <DefaultLayout>
         <div className="fixed inset-0 bg-white z-50 flex items-center justify-center loading-screen">
           <div className="text-center animate-fade-in">
             <div className="inline-flex items-center justify-center gap-3 mb-6">
@@ -325,7 +325,7 @@ const Anniversary10th = () => {
           ],
         }}
       />
-      <DefaultLayout hideHeader hideBottomNav>
+      <DefaultLayout>
         {/* 背景レイヤー */}
         <div className="fixed inset-0 overflow-hidden bg-black">
           <div className="absolute inset-0 w-full h-full">
