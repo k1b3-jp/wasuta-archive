@@ -1,3 +1,4 @@
+"use client"
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import {
 	faCalendar,
@@ -12,10 +13,9 @@ import { usePathname } from "next/navigation";
 const BottomBar = () => {
 	const pathname = usePathname();
 	const linkStyle = (path: string | null) =>
-		`inline-flex flex-col items-center justify-center gap-1 group ${
-			pathname === path
-				? "text-deep-green"
-				: "hover:text-deep-green text-deep-gray"
+		`inline-flex flex-col items-center justify-center gap-1 group ${pathname === path
+			? "text-deep-green"
+			: "hover:text-deep-green text-deep-gray"
 		}`;
 
 	return (
