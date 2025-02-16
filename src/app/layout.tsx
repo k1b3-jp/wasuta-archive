@@ -16,37 +16,57 @@ config.autoAddCss = false;
 
 const noto = Noto_Sans_JP({ subsets: ["latin"] });
 
-interface DefaultLayoutProps {
+export default function RootLayout({
+	children,
+}: {
 	children: React.ReactNode;
-	hideHeader?: boolean;
-	hideBottomNav?: boolean;
-}
-
-const DefaultLayout = ({ children, hideHeader, hideBottomNav }: DefaultLayoutProps) => {
+}) {
 	return (
-		<div className="min-h-screen">
-			{!hideHeader && <NavBar />}
-			<main className="flex-grow">
-				<div className="container mx-auto">{children}</div>
-			</main>
-			{!hideBottomNav && <BottomBar />}
-			<Footer />
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="light"
+		<>
+			<DefaultSeo
+				titleTemplate="%s | わーすたアーカイブ"
+				description="わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。"
+				openGraph={{
+					type: "website",
+					description:
+						"わーすたアーカイブはわーすたの動画がイベント毎に見つかるサイトです。タグで過去のライブを探したり、年表表示で歴史を振り返ることができます。",
+					site_name: "わーすたアーカイブ",
+					url: "https://www.wasuta-archive.com/",
+				}}
+				twitter={{
+					handle: "tws_kotaro",
+					site: "tws_kotaro",
+					cardType: "summary_large_image",
+				}}
 			/>
-			<Analytics />
-			<SpeedInsights />
-		</div>
+			<div
+				style={{
+					margin: 0,
+				}}
+				className={`${noto.className} flex flex-col min-h-screen`}
+				id="top"
+			>
+				<NavBar />
+				<main className="flex-grow">
+					<div className="container mx-auto">{children}</div>
+				</main>
+				<BottomBar />
+				<Footer />
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="light"
+				/>
+				<Analytics />
+				<SpeedInsights />
+			</div>
+		</>
 	);
-};
-
-export default DefaultLayout;
+}
