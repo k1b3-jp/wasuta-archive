@@ -25,6 +25,12 @@ interface EventImage extends Image {
   rawDate: string;
 }
 
+// 型定義を追加
+interface VideoItem {
+  id: string;
+  url: string;
+}
+
 const Anniversary10th = () => {
   const [events, setEvents] = useState<any[]>([]);
   const [images, setImages] = useState<EventImage[]>([]);
@@ -246,8 +252,8 @@ const Anniversary10th = () => {
     setSelectedVideoIds(shuffled.slice(0, 20));
   }, []);
 
-  // 複数の動画を表示するための状態
-  const [gridVideoIds, setGridVideoIds] = useState<string[][]>([]);
+  // gridVideoIdsの型を修正
+  const [gridVideoIds, setGridVideoIds] = useState<VideoItem[][]>([]);
 
   // 動画の開始位置をランダムに生成する関数
   const generateRandomStart = useCallback(() => {
