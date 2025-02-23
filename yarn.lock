@@ -1676,7 +1676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^6.5.1":
+"@fortawesome/fontawesome-svg-core@npm:^6.7.2":
   version: 6.7.2
   resolution: "@fortawesome/fontawesome-svg-core@npm:6.7.2"
   dependencies:
@@ -4845,7 +4845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^22.13.5":
   version: 22.13.5
   resolution: "@types/node@npm:22.13.5"
   dependencies:
@@ -4860,15 +4860,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/211250b264ca3967d4cce41921b8a4cd704d920152f723f95c18dc7b70771c43472c69a6adc1be1a8364007cfa6ae17408424b3b0bc1d55b5f29bab4a6741336
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^20":
-  version: 20.17.19
-  resolution: "@types/node@npm:20.17.19"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/930e554eadeb0c2848f9225007ef66ea9c7fe987c80e2f2c1a9f316b297036d4054bbc5459b67051cf32cd360a022344c2998dcb1ec7579109f631b6d5f21bf8
   languageName: node
   linkType: hard
 
@@ -5024,7 +5015,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/analytics@npm:^1.1.1":
+"@vercel/analytics@npm:^1.5.0":
   version: 1.5.0
   resolution: "@vercel/analytics@npm:1.5.0"
   peerDependencies:
@@ -5065,7 +5056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/speed-insights@npm:^1.0.10":
+"@vercel/speed-insights@npm:^1.2.0":
   version: 1.2.0
   resolution: "@vercel/speed-insights@npm:1.2.0"
   peerDependencies:
@@ -6546,7 +6537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.1.0, clsx@npm:^2.1.1":
+"clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
@@ -10650,7 +10641,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-seo@npm:^6.5.0":
+"next-seo@npm:^6.6.0":
   version: 6.6.0
   resolution: "next-seo@npm:6.6.0"
   peerDependencies:
@@ -12256,15 +12247,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-toastify@npm:^10.0.3":
-  version: 10.0.6
-  resolution: "react-toastify@npm:10.0.6"
+"react-toastify@npm:^11.0.3":
+  version: 11.0.3
+  resolution: "react-toastify@npm:11.0.3"
   dependencies:
-    clsx: "npm:^2.1.0"
+    clsx: "npm:^2.1.1"
   peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  checksum: 10c0/4042b716d008295d0feab32488d1e88ec655a1b7a9176fa7d253c70387578a8a0c04aca0ff86d20e1722f3b4baadae8970f50f462940d67a90453c307dd350a9
+    react: ^18 || ^19
+    react-dom: ^18 || ^19
+  checksum: 10c0/23b989c6080bc5bf0eb0c1f7ed17bd53d067d9beb33baf93c520119cd69cf75c9f2d1ee524dfe6c8a2a5d326029772b576de00e018b379d03a0e37630b83adea
   languageName: node
   linkType: hard
 
@@ -14108,13 +14099,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
-  languageName: node
-  linkType: hard
-
 "undici-types@npm:~6.20.0":
   version: 6.20.0
   resolution: "undici-types@npm:6.20.0"
@@ -14422,7 +14406,7 @@ __metadata:
   resolution: "wasuta-archive@workspace:."
   dependencies:
     "@biomejs/biome": "npm:1.5.3"
-    "@fortawesome/fontawesome-svg-core": "npm:^6.5.1"
+    "@fortawesome/fontawesome-svg-core": "npm:^6.7.2"
     "@fortawesome/free-brands-svg-icons": "npm:^6.5.1"
     "@fortawesome/free-regular-svg-icons": "npm:^6.5.1"
     "@fortawesome/free-solid-svg-icons": "npm:^6.5.1"
@@ -14445,25 +14429,25 @@ __metadata:
     "@supabase/auth-ui-shared": "npm:^0.1.8"
     "@supabase/supabase-js": "npm:^2.39.1"
     "@svgr/webpack": "npm:^8.1.0"
-    "@types/node": "npm:^20"
+    "@types/node": "npm:^22.13.5"
     "@types/react": "npm:^19.0.10"
     "@types/react-dom": "npm:^19.0.4"
-    "@vercel/analytics": "npm:^1.1.1"
+    "@vercel/analytics": "npm:^1.5.0"
     "@vercel/og": "npm:^0.6.2"
-    "@vercel/speed-insights": "npm:^1.0.10"
+    "@vercel/speed-insights": "npm:^1.2.0"
     autoprefixer: "npm:^10.0.1"
     browser-image-compression: "npm:^2.0.2"
     clsx: "npm:^2.1.1"
     html-react-parser: "npm:^5.1.8"
     lucide-react: "npm:^0.475.0"
     next: "npm:14.0.4"
-    next-seo: "npm:^6.5.0"
+    next-seo: "npm:^6.6.0"
     next-sitemap: "npm:^4.2.3"
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
     react-share: "npm:^5.1.0"
-    react-toastify: "npm:^10.0.3"
+    react-toastify: "npm:^11.0.3"
     sass: "npm:^1.69.6"
     storybook: "npm:^7.6.6"
     string-width: "npm:^7.1.0"
