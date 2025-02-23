@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+.yarn/**            
+.yarn/releases/*    
+.yarn/plugins/**/*  
+.pnp.*              
+
 
 # testing
 /coverage
