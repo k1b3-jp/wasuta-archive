@@ -80,13 +80,16 @@ const HistoryItem: React.FC<EventCardProps> = ({
 		<>
 			<div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
 				<div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-white text-slate-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-					<FontAwesomeIcon icon={src} className={`text-2xl ${textColor}`} /> {/* Use the textColor variable */}
+					<FontAwesomeIcon icon={src} className={`text-2xl ${textColor}`} />{" "}
+					{/* Use the textColor variable */}
 				</div>
 
 				<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
 					<div className="md:flex items-center justify-between md:space-x-2 mb-1">
 						<div className="font-bold text-slate-900">{title}</div>
-						<div className="font-caveat font-medium ${textColor}"> {/* Use the textColor variable */}
+						<div className="font-caveat font-medium ${textColor}">
+							{" "}
+							{/* Use the textColor variable */}
 							{formattedDate}
 						</div>
 					</div>
