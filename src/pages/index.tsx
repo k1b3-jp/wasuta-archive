@@ -149,12 +149,11 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 						<div className="bg-gradient-to-r from-[#f2a2c8] via-[#fbcc7e] to-[#7ec8d9] border p-4 bg-[url('/bg-10th.png')] bg-cover bg-center bg-no-repeat">
 							<Link href="/exclusive/anniversary-10th">
 								<div className="title">
-									<div className="text-white">
-										- 特集 -
-									</div>
+									<div className="text-white">- 特集 -</div>
 									<h1 className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
 										<span className="block">
-											わーすた10周年記念<br />
+											わーすた10周年記念
+											<br />
 											特設ページ
 										</span>
 									</h1>
