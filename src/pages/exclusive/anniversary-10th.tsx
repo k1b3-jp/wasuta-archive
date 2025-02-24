@@ -18,6 +18,11 @@ interface Image {
 }
 
 interface EventImage extends Image {
+	id: string;
+	url: string;
+	alt: string;
+	width: number;
+	height: number;
 	title: string;
 	date: string;
 	venue: string;
@@ -111,8 +116,8 @@ const Anniversary10th = () => {
 					id: event.event_id.toString(),
 					url: event.image_url,
 					alt: event.title || event.event_name || 'Event photo',
-					width: 800,
-					height: event.is_portrait ? 800 : 600,
+					width: 1600,
+					height: 1200,
 					title: event.title || event.event_name,
 					date: new Date(event.date).toLocaleDateString("ja-JP", {
 						year: "numeric",
@@ -532,8 +537,6 @@ const Anniversary10th = () => {
 											? `translateY(${-scrollPosition}px)`
 											: "none",
 									transition: "transform 0.5s ease-out",
-									height:
-										images.length > 0 ? `${100 * images.length * 2}px` : "auto",
 									maxWidth: "100%",
 									margin: "0 auto",
 									padding: "0 1px",
@@ -545,7 +548,7 @@ const Anniversary10th = () => {
 										key={`${image.id}-${image.url}`}
 										className={cn(
 											"group relative cursor-pointer overflow-hidden bg-gallery-card transition-transform duration-300",
-											"w-full",
+											"w-full aspect-[4/3]",
 										)}
 										onClick={() => setSelectedImage(image)}
 										onKeyDown={(e) => {
@@ -556,7 +559,7 @@ const Anniversary10th = () => {
 									>
 										<div className="relative h-full w-full">
 											<img
-												src={`${image.url}?auto=format&fit=crop&w=1600&h=800&q=80`}
+												src={`${image.url}?auto=format&fit=crop&w=1600&h=1200&q=80`}
 												alt={image.alt}
 												loading="lazy"
 												onError={(e) => {
@@ -607,11 +610,13 @@ const Anniversary10th = () => {
 									{selectedImage && (
 										<>
 											<div className="event-head bg-light-gray p-4">
-												<img
-													src={selectedImage.url}
-													alt={selectedImage.alt}
-													className="mx-auto object-contain max-h-[40vh]"
-												/>
+												<div className="aspect-[4/3] relative overflow-hidden">
+													<img
+														src={selectedImage.url}
+														alt={selectedImage.alt}
+														className="w-full h-full object-contain"
+													/>
+												</div>
 											</div>
 											<div className="event-detail p-6">
 												<h1 className="text-font-color font-bold text-xl mb-4">
