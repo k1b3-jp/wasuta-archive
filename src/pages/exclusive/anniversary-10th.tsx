@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import BaseButton from "@/components/ui/BaseButton";
+import { ScrollToTopButton } from "@/components/ui/ScrollToTopButton";
 
 interface Image {
 	id: string;
@@ -420,6 +421,9 @@ const Anniversary10th = () => {
 				}}
 			/>
 			<DefaultLayout hideBottomNav>
+				{/* ScrollToTopButtonを追加 */}
+				<ScrollToTopButton />
+
 				{/* 背景レイヤー */}
 				<div className="fixed inset-0 overflow-hidden bg-black">
 					<div className="absolute inset-0 w-full h-full">
