@@ -525,7 +525,6 @@ const Anniversary10th = () => {
 											"2xl:grid-cols-4",
 											"3xl:grid-cols-5",
 										].join(" "),
-									"auto-cols-[minmax(400px,_1fr)]",
 								)}
 								style={{
 									transform:
@@ -577,10 +576,10 @@ const Anniversary10th = () => {
 													"absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
 													"opacity-0 group-hover:opacity-100",
 													"transition-opacity duration-300",
-													"flex items-end p-6",
+													"flex items-end p-4",
 												)}
 											>
-												<div className="text-white text-base sm:text-lg lg:text-xl font-medium truncate w-full">
+												<div className="text-white text-base font-medium truncate w-full">
 													{image.title}
 												</div>
 											</div>
