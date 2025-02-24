@@ -18,8 +18,10 @@ const noto = Noto_Sans_JP({ subsets: ["latin"] });
 
 export default function RootLayout({
 	children,
+	hideBottomNav,
 }: {
 	children: React.ReactNode;
+	hideBottomNav?: boolean;
 }) {
 	return (
 		<>
@@ -50,7 +52,7 @@ export default function RootLayout({
 				<main className="flex-grow">
 					<div className="container mx-auto">{children}</div>
 				</main>
-				<BottomBar />
+				{!hideBottomNav && <BottomBar />}
 				<Footer />
 				<ToastContainer
 					position="top-center"
