@@ -110,7 +110,7 @@ const Anniversary10th = () => {
 				.map((event) => ({
 					id: event.event_id.toString(),
 					url: event.image_url,
-					alt: event.title || event.event_name || `Event photo`,
+					alt: event.title || event.event_name || 'Event photo',
 					width: 800,
 					height: event.is_portrait ? 800 : 600,
 					title: event.title || event.event_name,
@@ -143,6 +143,7 @@ const Anniversary10th = () => {
 	};
 
 	// ソート順変更時の処理
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!images.length) return;
 
@@ -376,11 +377,11 @@ const Anniversary10th = () => {
 				<div className="fixed inset-0 bg-white z-50 flex items-center justify-center loading-screen">
 					<div className="text-center animate-fade-in">
 						<div className="inline-flex items-center justify-center gap-3 mb-6">
-							<div className="h-[1px] w-12 bg-gray-400"></div>
+							<div className="h-[1px] w-12 bg-gray-400" />
 							<span className="text-lg font-medium text-gray-600">
 								2015 - 2025
 							</span>
-							<div className="h-[1px] w-12 bg-gray-400"></div>
+							<div className="h-[1px] w-12 bg-gray-400" />
 						</div>
 						<h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
 							わーすた10周年記念特設ページ
@@ -419,9 +420,9 @@ const Anniversary10th = () => {
 					<div className="absolute inset-0 w-full h-full">
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
 							{gridVideoIds.map((row, rowIndex) =>
-								row.map((video, colIndex) => (
+								row.map((video) => (
 									<div
-										key={`video-${rowIndex}-${colIndex}`}
+										key={video.id}
 										className="relative w-full h-full overflow-hidden"
 									>
 										<div className="absolute inset-0">
@@ -435,7 +436,7 @@ const Anniversary10th = () => {
 													minWidth: "200%",
 													minHeight: "200%",
 												}}
-												title={`わーすた Background Video ${rowIndex}-${colIndex}`}
+												title={`わーすた Background Video ${rowIndex}-${video.id}`}
 												loading="lazy"
 												frameBorder="0"
 											/>
@@ -455,11 +456,11 @@ const Anniversary10th = () => {
 						<div className="mx-auto px-4 sm:px-8 lg:px-12">
 							<div className="text-center mb-16 opacity-0 animate-fade-in">
 								<div className="inline-flex items-center justify-center gap-3 mb-6">
-									<div className="h-[1px] w-12 bg-gray-400"></div>
+									<div className="h-[1px] w-12 bg-gray-400" />
 									<span className="text-lg font-medium text-gray-600">
 										2015 - 2025
 									</span>
-									<div className="h-[1px] w-12 bg-gray-400"></div>
+									<div className="h-[1px] w-12 bg-gray-400" />
 								</div>
 								<h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
 									わーすたの歩み
@@ -472,13 +473,14 @@ const Anniversary10th = () => {
 							{/* ソートボタンを固定表示 */}
 							<div className="fixed top-6 right-6 z-20">
 								<button
+									type="button"
 									onClick={() => setSortByDate(!sortByDate)}
 									className={cn(
-										"flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors shadow-lg", // shadow-smからshadow-lgに変更
+										"flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors shadow-lg",
 										sortByDate
 											? "bg-black text-white"
 											: "bg-white text-gray-700 hover:bg-gray-50",
-										"backdrop-blur-sm", // 背景のブラー効果を追加
+										"backdrop-blur-sm",
 									)}
 								>
 									<svg
@@ -487,7 +489,9 @@ const Anniversary10th = () => {
 										stroke="currentColor"
 										viewBox="0 0 24 24"
 										xmlns="http://www.w3.org/2000/svg"
+										aria-labelledby="sortIconTitle"
 									>
+										<title id="sortIconTitle">ソートアイコン</title>
 										{sortByDate ? (
 											<path
 												strokeLinecap="round"
@@ -515,12 +519,12 @@ const Anniversary10th = () => {
 									isMobile
 										? "grid-cols-2"
 										: [
-												"grid-cols-3",
-												"lg:grid-cols-3",
-												"xl:grid-cols-3",
-												"2xl:grid-cols-4",
-												"3xl:grid-cols-5",
-										  ].join(" "),
+											"grid-cols-3",
+											"lg:grid-cols-3",
+											"xl:grid-cols-3",
+											"2xl:grid-cols-4",
+											"3xl:grid-cols-5",
+										].join(" "),
 									"auto-cols-[minmax(400px,_1fr)]",
 								)}
 								style={{
@@ -536,58 +540,53 @@ const Anniversary10th = () => {
 									padding: "0 1px",
 								}}
 							>
-								{duplicatedImages.map((image, index) => {
-									const offset =
-										(scrollPosition + index * 45) * (Math.PI / 180);
-									const scale = 1 + Math.sin(offset) * 0.05;
-									const translateY = Math.sin(offset) * 10;
-
-									return (
-										<div
-											key={`${image.id}-${index}`}
-											className={cn(
-												"group relative cursor-pointer overflow-hidden bg-gallery-card transition-transform duration-300",
-												"w-full",
-											)}
-											onClick={() => setSelectedImage(image)}
-											style={{
-												transform: `scale(${scale}) translateY(${translateY}px)`,
-												transition: "transform 0.5s ease-out",
-											}}
-										>
-											<div className="relative h-full w-full">
-												<img
-													src={`${image.url}?auto=format&fit=crop&w=1600&h=800&q=80`}
-													alt={image.alt}
-													loading="lazy"
-													onError={(e) => {
-														console.error(
-															`画像の読み込みに失敗しました: ${image.url}`,
-														);
-														e.currentTarget.style.display = "none";
-													}}
-													className={cn(
-														"h-full w-full object-cover",
-														"transition-transform duration-300",
-														"group-hover:scale-110",
-													)}
-												/>
-												<div
-													className={cn(
-														"absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
-														"opacity-0 group-hover:opacity-100",
-														"transition-opacity duration-300",
-														"flex items-end p-6",
-													)}
-												>
-													<div className="text-white text-base sm:text-lg lg:text-xl font-medium truncate w-full">
-														{image.title}
-													</div>
+								{duplicatedImages.map((image) => (
+									<button
+										type="button"
+										key={`${image.id}-${image.url}`}
+										className={cn(
+											"group relative cursor-pointer overflow-hidden bg-gallery-card transition-transform duration-300",
+											"w-full",
+										)}
+										onClick={() => setSelectedImage(image)}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' || e.key === ' ') {
+												setSelectedImage(image);
+											}
+										}}
+									>
+										<div className="relative h-full w-full">
+											<img
+												src={`${image.url}?auto=format&fit=crop&w=1600&h=800&q=80`}
+												alt={image.alt}
+												loading="lazy"
+												onError={(e) => {
+													console.error(
+														`画像の読み込みに失敗しました: ${image.url}`,
+													);
+													e.currentTarget.style.display = "none";
+												}}
+												className={cn(
+													"h-full w-full object-cover",
+													"transition-transform duration-300",
+													"group-hover:scale-110",
+												)}
+											/>
+											<div
+												className={cn(
+													"absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
+													"opacity-0 group-hover:opacity-100",
+													"transition-opacity duration-300",
+													"flex items-end p-6",
+												)}
+											>
+												<div className="text-white text-base sm:text-lg lg:text-xl font-medium truncate w-full">
+													{image.title}
 												</div>
 											</div>
 										</div>
-									);
-								})}
+									</button>
+								))}
 							</div>
 
 							<Dialog
@@ -626,7 +625,9 @@ const Anniversary10th = () => {
 															fill="none"
 															stroke="currentColor"
 															viewBox="0 0 24 24"
+															aria-labelledby="calendarIconTitle"
 														>
+															<title id="calendarIconTitle">カレンダーアイコン</title>
 															<path
 																strokeLinecap="round"
 																strokeLinejoin="round"
@@ -644,7 +645,9 @@ const Anniversary10th = () => {
 															fill="none"
 															stroke="currentColor"
 															viewBox="0 0 24 24"
+															aria-labelledby="locationIconTitle"
 														>
+															<title id="locationIconTitle">場所アイコン</title>
 															<path
 																strokeLinecap="round"
 																strokeLinejoin="round"
