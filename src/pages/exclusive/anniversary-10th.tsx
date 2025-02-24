@@ -414,7 +414,7 @@ const Anniversary10th = () => {
 					],
 				}}
 			/>
-			<DefaultLayout>
+			<DefaultLayout hideBottomNav>
 				{/* 背景レイヤー */}
 				<div className="fixed inset-0 overflow-hidden bg-black">
 					<div className="absolute inset-0 w-full h-full">
