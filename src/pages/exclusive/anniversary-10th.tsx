@@ -207,7 +207,7 @@ const Anniversary10th = () => {
 				const totalHeight = images.length * imageHeight;
 				return newPosition >= totalHeight ? 0 : newPosition;
 			});
-		}, 50);
+		}, 75);
 
 		return () => clearInterval(interval);
 	}, [images, selectedImage]);
@@ -223,7 +223,7 @@ const Anniversary10th = () => {
 				const totalHeight = backgroundImages.length * imageHeight;
 				return newPosition >= totalHeight ? 0 : newPosition;
 			});
-		}, 50);
+		}, 75);
 
 		return () => clearInterval(interval);
 	}, [backgroundImages, selectedImage]);
