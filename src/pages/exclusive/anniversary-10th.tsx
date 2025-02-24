@@ -201,11 +201,13 @@ const Anniversary10th = () => {
 
 		const interval = setInterval(() => {
 			setScrollPosition((prev) => {
-				const newPosition = prev + 1;
-				const totalHeight = images.length > 0 ? 100 * images.length : 0;
+				const newPosition = prev + 2;
+				// スクロール位置が画像の高さを超えたら0に戻す
+				const imageHeight = 300; // 1枚の画像の高さ（px）
+				const totalHeight = images.length * imageHeight;
 				return newPosition >= totalHeight ? 0 : newPosition;
 			});
-		}, 50);
+		}, 25);
 
 		return () => clearInterval(interval);
 	}, [images, selectedImage]);
@@ -216,12 +218,12 @@ const Anniversary10th = () => {
 
 		const interval = setInterval(() => {
 			setBgScrollPosition((prev) => {
-				const newPosition = prev + 0.5; // メインコンテンツより遅い速度
-				const totalHeight =
-					backgroundImages.length > 0 ? 100 * backgroundImages.length : 0;
+				const newPosition = prev + 1;
+				const imageHeight = 300; // 1枚の画像の高さ（px）
+				const totalHeight = backgroundImages.length * imageHeight;
 				return newPosition >= totalHeight ? 0 : newPosition;
 			});
-		}, 50);
+		}, 25);
 
 		return () => clearInterval(interval);
 	}, [backgroundImages, selectedImage]);
@@ -536,10 +538,9 @@ const Anniversary10th = () => {
 										].join(" "),
 								)}
 								style={{
-									transform:
-										images.length > 0 && !selectedImage
-											? `translateY(${-scrollPosition}px)`
-											: "none",
+									transform: images.length > 0 && !selectedImage
+										? `translateY(-${scrollPosition}px)`
+										: "none",
 									transition: "transform 0.5s ease-out",
 									maxWidth: "100%",
 									margin: "0 auto",
