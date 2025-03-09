@@ -87,7 +87,7 @@ const HistoryItem: React.FC<EventCardProps> = ({
 				<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
 					<div className="md:flex items-center justify-between md:space-x-2 mb-1">
 						<div className="font-bold text-slate-900">{title}</div>
-						<div className="font-caveat font-medium ${textColor}">
+						<div className={`font-caveat font-medium ${textColor}`}>
 							{" "}
 							{/* Use the textColor variable */}
 							{formattedDate}
