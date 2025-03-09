@@ -162,7 +162,12 @@ const Anniversary10th = () => {
 	const isMobile = useIsMobile();
 
 	// duplicatedImagesの生成を最新のimagesに基づいて行うように修正
-	const duplicatedImages = useMemo(() => [...images, ...images], [images]);
+	const duplicatedImages = useMemo(() =>
+		[...images, ...images].map((image, index) => ({
+			...image,
+			uniqueKey: `${image.id}-${index}` // インデックスを含めてユニークなキーを生成
+		})),
+		[images]);
 
 	// スクロールの状態管理を追加
 	const [isScrollPaused, setIsScrollPaused] = useState(false);
@@ -442,6 +447,7 @@ const Anniversary10th = () => {
 												title={`わーすた Background Video ${rowIndex}-${video.id}`}
 												loading="lazy"
 												frameBorder="0"
+												data-cookieconsent="ignore"
 											/>
 										</div>
 									</div>
@@ -500,7 +506,7 @@ const Anniversary10th = () => {
 								{duplicatedImages.map((image) => (
 									<button
 										type="button"
-										key={`${image.id}-${image.url}`}
+										key={image.uniqueKey}
 										className={cn(
 											"group relative cursor-pointer overflow-hidden bg-gallery-card transition-transform duration-300",
 											"w-full aspect-[4/3]",
