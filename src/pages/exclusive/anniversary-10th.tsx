@@ -197,7 +197,7 @@ const Anniversary10th = () => {
 				}
 				return newPosition;
 			});
-		}, 75);
+		}, 100);
 
 		return () => clearInterval(interval);
 	}, [images, selectedImage, isScrollPaused]);
