@@ -19,7 +19,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import SwiperCore, { Navigation, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import Link from "next/link";
 
 interface HomeProps {
@@ -146,27 +146,22 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 						</div>
 					</section>
 					<section className="bg-white px-5 pb-4">
-						<div className="bg-gradient-to-r from-blue-200 to-cyan-200 border p-4">
-							<Link href="/exclusive/summer-love-tour-2024">
+						<div className="border p-4 bg-[url('/bg-10th.png')] bg-cover bg-center bg-no-repeat">
+							<Link href="/exclusive/anniversary-10th">
 								<div className="title">
-									<div className="text-white">
-										- 特集 -
-									</div>
+									<div className="text-white">- 特集 -</div>
 									<h1 className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
 										<span className="block">
-											わーすた
-											<span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-teal-500">
-												夏恋
-											</span>
-											ツアー<br />
-											2024
+											デビュー10周年記念
+											<br />
+											特設ページ
 										</span>
 									</h1>
 								</div>
 							</Link>
 						</div>
 					</section>
-					<section className="flex flex-col bg-light-gray bg-100vw">
+					<section className="flex flex-col bg-gradient-to-r from-[#f2a2c8]/10 to-[#7ec8d9]/10 bg-100vw">
 						<div className="container mx-auto p-6">
 							<h3 className="text-xl font-bold text-font-color mb-6">
 								カテゴリ

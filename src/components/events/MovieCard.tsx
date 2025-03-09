@@ -7,14 +7,12 @@ import { getEventsByYoutubeLink } from "@/lib/supabase/getEventsByYoutubeLink";
 
 export function extractYouTubeVideoId(url: string): string | null {
 	const matched =
-		/^https?:\/\/(www\.|m\.)?youtube\.com\/watch\?(.*&)?v=(?<videoId>[^&]+)/.exec(
-			url,
-		) ??
-		/^https?:\/\/youtu\.be\/(?<videoId>[^?]+)/.exec(url) ??
-		/^https?:\/\/(www\.|m\.)?youtube\.com\/embed\/(?<videoId>[^?]+)/.exec(url);
+		/^https?:\/\/(www\.|m\.)?youtube\.com\/watch\?(.*&)?v=([^&]+)/.exec(url) ??
+		/^https?:\/\/youtu\.be\/([^?]+)/.exec(url) ??
+		/^https?:\/\/(www\.|m\.)?youtube\.com\/embed\/([^?]+)/.exec(url);
 
-	if (matched?.groups?.videoId) {
-		return matched.groups.videoId;
+	if (matched) {
+		return matched[3] || matched[1];
 	}
 	return null;
 }
@@ -49,9 +47,20 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 	return (
 		<div>
 			<div className="mb-2">
-				{videoId ? <iframe width="340" height="190" src={`https://www.youtube.com/embed/${videoId}`} loading="lazy" title="YouTube video player" allowFullScreen /> : <p>Invalid URL</p>}
+				{videoId ? (
+					<iframe
+						width="340"
+						height="190"
+						src={`https://www.youtube.com/embed/${videoId}`}
+						loading="lazy"
+						title="YouTube video player"
+						allowFullScreen
+					/>
+				) : (
+					<p>Invalid URL</p>
+				)}
 			</div>
-			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2">{eventName}</div>
+			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2 max-w-[340px]">{eventName}</div>
 			<div className="min-h-[28px]">
 				{youtubeTags?.map(
 					(tag: { id: React.Key | null | undefined; label: string }) => (
