@@ -25,3 +25,20 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.loading-screen {
+  transition: opacity 0.8s ease-out;
+}
+
+.loading-screen.animate-fade-out {
+  animation: fadeOut 0.8s ease-out forwards;
+}
