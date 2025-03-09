@@ -1,6 +1,6 @@
 import DefaultLayout from "@/app/layout";
 import { NextSeo } from "next-seo";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -40,10 +40,7 @@ interface VideoItem {
 const Anniversary10th = () => {
 	const [events, setEvents] = useState<any[]>([]);
 	const [images, setImages] = useState<EventImage[]>([]);
-	const [sortByDate, setSortByDate] = useState(false);
-	const [latestPastEventId, setLatestPastEventId] = useState<number | null>(
-		null,
-	);
+	const [latestPastEventId, setLatestPastEventId] = useState<number | null>(null);
 	const today = new Date().toISOString().split("T")[0];
 	const [isLoading, setIsLoading] = useState(true);
 	const [backgroundImages, setBackgroundImages] = useState<EventImage[]>([]);
@@ -101,8 +98,8 @@ const Anniversary10th = () => {
 		});
 	}, [events.length, totalVideos]);
 
-	// イベントデータの取得
-	const fetchEvents = async () => {
+	// イベントデータの取得関数を修正
+	const fetchEvents = useCallback(async () => {
 		try {
 			const eventsData = await getEvents({
 				sortBy: "date",
@@ -134,99 +131,96 @@ const Anniversary10th = () => {
 			setBackgroundImages(shuffleArray([...imageData]));
 
 			// データ読み込み完了後、フェードアウト
-			setTimeout(() => {
-				const loadingElement = document.querySelector(".loading-screen");
-				loadingElement?.classList.add("animate-fade-out");
-
+			if (isLoading) {
 				setTimeout(() => {
-					setIsLoading(false);
-				}, 800);
-			}, 1000);
+					const loadingElement = document.querySelector(".loading-screen");
+					loadingElement?.classList.add("animate-fade-out");
+
+					setTimeout(() => {
+						setIsLoading(false);
+					}, 800);
+				}, 1000);
+			}
 		} catch (err) {
 			console.error(err);
-			setIsLoading(false); // エラー時もローディングを終了
+			setIsLoading(false);
 		}
-	};
+	}, [isLoading]);
 
-	// ソート順変更時の処理
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// 初回読み込み時のイベント取得
 	useEffect(() => {
-		if (!images.length) return;
-
-		let sortedImages: EventImage[];
-		if (sortByDate) {
-			sortedImages = [...images].sort(
-				(a, b) => new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime(),
-			);
-		} else {
-			// 新しいシャッフルされた配列を作成
-			sortedImages = shuffleArray([...images]);
-		}
-
-		setImages(sortedImages);
-		// スクロール位置をリセット
-		setScrollPosition(0);
-		setBgScrollPosition(0);
-
-		// スクロール位置を最上部に移動
-		window.scrollTo({
-			top: 0,
-			behavior: "smooth",
-		});
-	}, [sortByDate]);
+		fetchEvents();
+	}, [fetchEvents]);
 
 	// 配列をシャッフルする関数を修正
 	const shuffleArray = <T,>(array: T[]): T[] => {
 		return [...array].sort(() => Math.random() - 0.5);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		fetchEvents();
-	}, []);
-
 	const [selectedImage, setSelectedImage] = useState<EventImage | null>(null);
 	const [scrollPosition, setScrollPosition] = useState(0);
 	const isMobile = useIsMobile();
 
-	// Create a duplicated array of images for seamless looping
-	const duplicatedImages = [...images, ...images];
+	// duplicatedImagesの生成を最新のimagesに基づいて行うように修正
+	const duplicatedImages = useMemo(() => [...images, ...images], [images]);
 
-	// スクロールアニメーションの処理
+	// スクロールの状態管理を追加
+	const [isScrollPaused, setIsScrollPaused] = useState(false);
+
+	// スクロールアニメーションの処理を修正
 	useEffect(() => {
-		// Dialogが開いているときはアニメーションを停止
-		if (selectedImage) {
+		// Dialog が開いているときまたは一時停止中はアニメーションを停止
+		if (selectedImage || isScrollPaused) {
 			return;
 		}
 
 		const interval = setInterval(() => {
 			setScrollPosition((prev) => {
 				const newPosition = prev + 2;
-				// スクロール位置が画像の高さを超えたら0に戻す
-				const imageHeight = 300; // 1枚の画像の高さ（px）
+				const imageHeight = 300;
 				const totalHeight = images.length * imageHeight;
-				return newPosition >= totalHeight ? 0 : newPosition;
+
+				// スクロール位置が画像の高さを超えたら、
+				// 一時的にスクロールを停止してリセット
+				if (newPosition >= totalHeight) {
+					setIsScrollPaused(true);
+					setTimeout(() => {
+						setScrollPosition(0);
+						setIsScrollPaused(false);
+					}, 1000);
+					return prev;
+				}
+				return newPosition;
 			});
 		}, 75);
 
 		return () => clearInterval(interval);
-	}, [images, selectedImage]);
+	}, [images, selectedImage, isScrollPaused]);
 
-	// 背景用のスクロールアニメーション
+	// 背景用のスクロールアニメーションも同様に修正
 	useEffect(() => {
-		if (selectedImage) return;
+		if (selectedImage || isScrollPaused) return;
 
 		const interval = setInterval(() => {
 			setBgScrollPosition((prev) => {
 				const newPosition = prev + 1;
-				const imageHeight = 300; // 1枚の画像の高さ（px）
+				const imageHeight = 300;
 				const totalHeight = backgroundImages.length * imageHeight;
-				return newPosition >= totalHeight ? 0 : newPosition;
+
+				if (newPosition >= totalHeight) {
+					setIsScrollPaused(true);
+					setTimeout(() => {
+						setBgScrollPosition(0);
+						setIsScrollPaused(false);
+					}, 1000);
+					return prev;
+				}
+				return newPosition;
 			});
 		}, 75);
 
 		return () => clearInterval(interval);
-	}, [backgroundImages, selectedImage]);
+	}, [backgroundImages, selectedImage, isScrollPaused]);
 
 	// 動画IDのリストを追加
 	const videoIds = [
@@ -376,8 +370,6 @@ const Anniversary10th = () => {
 		setGridVideoIds(grid);
 	}, [totalVideos, generateVideoUrl]);
 
-	// imagesの定義を削除（useState で管理するため）
-
 	// ローディング画面を簡略化
 	if (isLoading) {
 		return (
@@ -479,48 +471,6 @@ const Anniversary10th = () => {
 								<p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
 									10年間の思い出と感動を、写真とともに振り返ります
 								</p>
-							</div>
-
-							{/* ソートボタンを固定表示 */}
-							<div className="fixed top-6 right-6 z-20">
-								<button
-									type="button"
-									onClick={() => setSortByDate(!sortByDate)}
-									className={cn(
-										"flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors shadow-lg",
-										sortByDate
-											? "bg-black text-white"
-											: "bg-white text-gray-700 hover:bg-gray-50",
-										"backdrop-blur-sm",
-									)}
-								>
-									<svg
-										className="h-4 w-4"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-										aria-labelledby="sortIconTitle"
-									>
-										<title id="sortIconTitle">ソートアイコン</title>
-										{sortByDate ? (
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-											/>
-										) : (
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-											/>
-										)}
-									</svg>
-									{sortByDate ? "日付順" : "ランダム"}
-								</button>
 							</div>
 
 							<div
