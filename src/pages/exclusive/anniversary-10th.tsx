@@ -2,7 +2,7 @@ import DefaultLayout from "@/app/layout";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
 import { ArrowDown, Loader2 } from "lucide-react";
@@ -594,88 +594,95 @@ const Anniversary10th = () => {
 								>
 									{selectedImage && (
 										<>
-											<div className="event-head bg-light-gray p-4">
-												<div className="aspect-[4/3] relative overflow-hidden">
-													<img
-														src={selectedImage.url}
-														alt={selectedImage.alt}
-														className="w-full h-full object-contain"
-													/>
-												</div>
-											</div>
-											<div className="event-detail p-6">
-												<h1 className="text-font-color font-bold text-xl mb-4">
-													{selectedImage.alt}
-												</h1>
-												<div className="flex flex-row gap-2 items-center mb-4">
-													<div className="bg-light-gray py-2 px-3 rounded">
-														<svg
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-															aria-labelledby="calendarIconTitle"
-														>
-															<title id="calendarIconTitle">カレンダーアイコン</title>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+											<DialogTitle className="sr-only">
+												{selectedImage.title || 'イベント詳細'}
+											</DialogTitle>
+											<DialogDescription asChild>
+												<div>
+													<div className="event-head bg-light-gray p-4">
+														<div className="aspect-[4/3] relative overflow-hidden">
+															<img
+																src={selectedImage.url}
+																alt={selectedImage.alt}
+																className="w-full h-full object-contain"
 															/>
-														</svg>
+														</div>
 													</div>
-													<p>{selectedImage.date}</p>
-												</div>
-												<div className="flex flex-row gap-2 items-center mb-6">
-													<div className="bg-light-gray py-2 px-3 rounded">
-														<svg
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-															aria-labelledby="locationIconTitle"
-														>
-															<title id="locationIconTitle">場所アイコン</title>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-															/>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-															/>
-														</svg>
-													</div>
-													<p>{selectedImage.venue}</p>
-												</div>
-												{selectedImage.description && (
-													<div className="flex flex-col gap-2 mb-6">
-														<h2 className="text-l font-bold">
-															イベントについて
-														</h2>
-														<p className="whitespace-pre-wrap">
-															{selectedImage.description}
-														</p>
-													</div>
-												)}
+													<div className="event-detail p-6">
+														<h1 className="text-font-color font-bold text-xl mb-4">
+															{selectedImage.alt}
+														</h1>
+														<div className="flex flex-row gap-2 items-center mb-4">
+															<div className="bg-light-gray py-2 px-3 rounded">
+																<svg
+																	className="w-5 h-5"
+																	fill="none"
+																	stroke="currentColor"
+																	viewBox="0 0 24 24"
+																	aria-labelledby="calendarIconTitle"
+																>
+																	<title id="calendarIconTitle">カレンダーアイコン</title>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+																	/>
+																</svg>
+															</div>
+															<p>{selectedImage.date}</p>
+														</div>
+														<div className="flex flex-row gap-2 items-center mb-6">
+															<div className="bg-light-gray py-2 px-3 rounded">
+																<svg
+																	className="w-5 h-5"
+																	fill="none"
+																	stroke="currentColor"
+																	viewBox="0 0 24 24"
+																	aria-labelledby="locationIconTitle"
+																>
+																	<title id="locationIconTitle">場所アイコン</title>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+																	/>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+																	/>
+																</svg>
+															</div>
+															<p>{selectedImage.venue}</p>
+														</div>
+														{selectedImage.description && (
+															<div className="flex flex-col gap-2 mb-6">
+																<h2 className="text-l font-bold">
+																	イベントについて
+																</h2>
+																<p className="whitespace-pre-wrap">
+																	{selectedImage.description}
+																</p>
+															</div>
+														)}
 
-												{/* 遷移ボタンを追加 */}
-												<div className="mt-6 text-center">
-													<Link
-														href={`/events/${selectedImage.id}`}
-														rel="noopener noreferrer"
-														target="_blank"
-														className="inline-flex items-center justify-center"
-													>
-														<BaseButton label="イベント詳細を見る" />
-													</Link>
+														{/* 遷移ボタンを追加 */}
+														<div className="mt-6 text-center">
+															<Link
+																href={`/events/${selectedImage.id}`}
+																rel="noopener noreferrer"
+																target="_blank"
+																className="inline-flex items-center justify-center"
+															>
+																<BaseButton label="イベント詳細を見る" />
+															</Link>
+														</div>
+													</div>
 												</div>
-											</div>
+											</DialogDescription>
 										</>
 									)}
 								</DialogContent>
