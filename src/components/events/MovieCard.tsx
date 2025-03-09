@@ -11,8 +11,8 @@ export function extractYouTubeVideoId(url: string): string | null {
 		/^https?:\/\/youtu\.be\/([^?]+)/.exec(url) ??
 		/^https?:\/\/(www\.|m\.)?youtube\.com\/embed\/([^?]+)/.exec(url);
 
-	if (matched?.[3]) {
-		return matched[3];
+	if (matched) {
+		return matched[3] || matched[1];
 	}
 	return null;
 }
