@@ -458,7 +458,7 @@ const Anniversary10th = () => {
 				<main className="relative z-10 bg-transparent pb-10 bg-100vw">
 					<div className="min-h-screen bg-gallery-bg px-4 sm:px-6 lg:px-8">
 						{/* メッセージセクションを追加 - z-indexを20に設定して最前面に表示 */}
-						<div className="relative z-20 bg-100vw h-screen mb-24 bg-white zen-kurenaido-regular">
+						<div className="relative z-20 bg-100vw h-90vh bg-white zen-kurenaido-regular">
 							<div className="py-16">
 								<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 									<h2 className="text-3xl font-bold text-gray-900 mb-6">
@@ -490,13 +490,15 @@ const Anniversary10th = () => {
 										わーしっぷより
 									</div>
 								</div>
-								<div className="flex justify-center mt-10">
-									<ArrowDown className="w-6 h-6 animate-bounce" />
-								</div>
-								<p className="text-center mt-14 md:mt-24 text-xl font-bold text-gray-900">
-									忘れたくない記憶を、写真とともに。
-								</p>
 							</div>
+						</div>
+						<div className="relative bg-100vw z-20 pb-24 bg-gradient-to-b from-white via-white to-transparent zen-kurenaido-regular">
+							<div className="flex justify-center">
+								<ArrowDown className="w-6 h-6 animate-bounce" />
+							</div>
+							<p className="text-center py-14 md:py-18 text-xl font-bold text-gray-900">
+								忘れたくない記憶を、写真とともに。
+							</p>
 						</div>
 
 						{/* 写真スライドセクション - z-indexを10に設定 */}
