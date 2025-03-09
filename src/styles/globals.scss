@@ -4,6 +4,8 @@
 
 @import "variables.scss";
 
+@import url("https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap");
+
 body {
   color: $font-color;
   background-color: #fff;
@@ -12,6 +14,18 @@ body {
 .bg-100vw {
   margin-right: calc(50% - 50vw);
   margin-left: calc(50% - 50vw);
+}
+
+.zen-kurenaido-regular {
+  font-family: "Zen Kurenaido", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.zen-kurenaido-bold {
+  font-family: "Zen Kurenaido", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 .grid-base {
@@ -66,4 +80,77 @@ ol {
 .swiper-button-prev:after,
 .swiper-button-next:after {
   font-size: 1rem !important;
+}
+
+.clock-wrapper {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clock {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  position: relative;
+  background: white;
+}
+
+.clock-face {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  background: #333;
+  border-radius: 2px;
+}
+
+.hour-hand {
+  width: 2px;
+  height: 30%;
+  animation: rewind-hour 2s linear infinite;
+}
+
+.minute-hand {
+  width: 2px;
+  height: 40%;
+  animation: rewind-minute 0.5s linear infinite;
+}
+
+.center-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #333;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rewind-hour {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes rewind-minute {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }

@@ -5,7 +5,7 @@ import { getEvents } from "@/lib/supabase/getEvents";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { ArrowDown, Loader2 } from "lucide-react";
 import Link from "next/link";
 import BaseButton from "@/components/ui/BaseButton";
 import { ScrollToTopButton } from "@/components/ui/ScrollToTopButton";
@@ -375,27 +375,22 @@ const Anniversary10th = () => {
 		setGridVideoIds(grid);
 	}, [totalVideos, generateVideoUrl]);
 
-	// ローディング画面を簡略化
+	// ローディング画面を修正
 	if (isLoading) {
 		return (
 			<DefaultLayout>
 				<div className="fixed inset-0 bg-white z-50 flex items-center justify-center loading-screen">
-					<div className="text-center animate-fade-in">
+					<div className="text-center">
 						<div className="inline-flex items-center justify-center gap-3 mb-6">
-							<div className="h-[1px] w-12 bg-gray-400" />
-							<span className="text-lg font-medium text-gray-600">
-								2015 - 2025
-							</span>
-							<div className="h-[1px] w-12 bg-gray-400" />
-						</div>
-						<h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-							わーすた10周年記念特設ページ
-						</h1>
-						<p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base mb-8">
-							10年間の思い出と感動を、写真とともに。
-						</p>
-						<div className="flex justify-center">
-							<Loader2 className="w-6 h-6 animate-spin text-gray-600" />
+							<div className="clock-wrapper">
+								<div className="clock">
+									<div className="clock-face">
+										<div className="hand hour-hand" />
+										<div className="hand minute-hand" />
+										<div className="center-dot" />
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -460,25 +455,52 @@ const Anniversary10th = () => {
 				</div>
 
 				{/* メインコンテンツ */}
-				<main className="relative z-10 bg-transparent pb-10 pl-4 bg-100vw">
-					<div className="min-h-screen bg-gallery-bg px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
-						<div className="mx-auto px-4 sm:px-8 lg:px-12">
-							<div className="text-center mb-16 opacity-0 animate-fade-in">
-								<div className="inline-flex items-center justify-center gap-3 mb-6">
-									<div className="h-[1px] w-12 bg-gray-400" />
-									<span className="text-lg font-medium text-gray-600">
-										2015 - 2025
-									</span>
-									<div className="h-[1px] w-12 bg-gray-400" />
+				<main className="relative z-10 bg-transparent pb-10 bg-100vw">
+					<div className="min-h-screen bg-gallery-bg px-4 sm:px-6 lg:px-8">
+						{/* メッセージセクションを追加 - z-indexを20に設定して最前面に表示 */}
+						<div className="relative z-20 bg-100vw h-screen mb-24 bg-white zen-kurenaido-regular">
+							<div className="py-16">
+								<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+									<h2 className="text-3xl font-bold text-gray-900 mb-6">
+										わーすたちゃんへ
+									</h2>
+									<p className="text-sm md:text-md text-gray-700 leading-relaxed mb-8 font-handwriting">
+										10周年、おめでとう。<br />
+										<br />
+										人は忘れる生き物です。<br />
+										昨日食べたものも、自分で決めたパスワードも。<br />
+										初めてみんなを好きになった日のことだって、<br />
+										忘れてしまう瞬間があるかもしれません。<br />
+										<br />
+										だけど、みんなと過ごしたこの10年の中には、<br />
+										絶対に忘れたくない記憶がたくさんあります。<br />
+										<br />
+										次に会える日を心待ちにしながら過ごす時間も、<br />
+										大切で愛おしい日々です。<br />
+										会いたい気持ちは尽きないけれど、<br />
+										それ以上に、みんなが幸せなことが何より大切です。<br />
+										<br />
+										ずっと笑顔でいられる道を、<br />
+										みんなが選べますように。<br />
+										これからもずっと応援しています。<br />
+										<br />
+										わーすたに出逢えてよかった。<br />
+									</p>
+									<div className="text-right italic text-gray-600 font-handwriting">
+										わーしっぷより
+									</div>
 								</div>
-								<h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-									わーすたの歩み
-								</h1>
-								<p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-									10年間の思い出と感動を、写真とともに振り返ります
+								<div className="flex justify-center mt-10">
+									<ArrowDown className="w-6 h-6 animate-bounce" />
+								</div>
+								<p className="text-center mt-14 md:mt-24 text-xl font-bold text-gray-900">
+									忘れたくない記憶を、写真とともに。
 								</p>
 							</div>
+						</div>
 
+						{/* 写真スライドセクション - z-indexを10に設定 */}
+						<div className="relative z-10 mx-auto px-4 sm:px-8 lg:px-12">
 							<div
 								className={cn(
 									"grid gap-8 md:gap-16",
