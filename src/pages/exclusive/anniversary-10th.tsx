@@ -47,11 +47,12 @@ const Anniversary10th = () => {
 	const [bgScrollPosition, setBgScrollPosition] = useState(0);
 	const [videoLoadCount, setVideoLoadCount] = useState(0);
 
-	// 画面サイズに応じて必要な動画数を計算する関数
+	// モバイルデバイスでの動画数を削減
 	const calculateTotalVideos = useCallback(() => {
-		if (typeof window === "undefined") return 4; // SSR時のデフォルト値
-		if (window.innerWidth >= 1024) return 9; // lg
-		return 4; // sm, md
+		if (typeof window === "undefined") return 2; // SSRのデフォルト値を2に変更
+		if (window.innerWidth >= 1024) return 9; // デスクトップ
+		if (window.innerWidth >= 768) return 4; // タブレット
+		return 2; // モバイル - 2つだけに制限
 	}, []);
 
 	const [totalVideos, setTotalVideos] = useState(calculateTotalVideos());
@@ -353,7 +354,8 @@ const Anniversary10th = () => {
 	const generateVideoUrl = useCallback(
 		(videoId: string) => {
 			const startTime = generateRandomStart();
-			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1`;
+			const quality = window.innerWidth >= 1024 ? 'hd720' : 'medium'; // モバイルでは品質を下げる
+			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1&vq=${quality}`;
 		},
 		[generateRandomStart],
 	);
@@ -432,7 +434,7 @@ const Anniversary10th = () => {
 											<iframe
 												src={video.url}
 												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-												className="absolute w-[200%] h-[200%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+												className="absolute w-[200%] h-[210%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
 												style={{
 													pointerEvents: "none",
 													objectFit: "cover",
@@ -450,8 +452,8 @@ const Anniversary10th = () => {
 							)}
 						</div>
 					</div>
-					{/* オーバーレイ - 透明度を調整 */}
-					<div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+					{/* オーバーレイの透明度を上げてブラウザの負荷を軽減 */}
+					<div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
 				</div>
 
 				{/* メインコンテンツ */}
