@@ -1,23 +1,26 @@
 import { cn } from "@/lib/utils";
 import { ArrowUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // スクロール位置に応じてボタンの表示/非表示を切り替え
-  useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+  // トグル可視性関数
+  const toggleVisibility = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      setIsVisible(window.scrollY > 300);
+    }
+  }, []); // useCallbackで関数を最適化
 
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
+  // スクロールイベントリスナー
+  useEffect(() => {
+    window.addEventListener('scroll', toggleVisibility);
+
+    // 初期状態をチェック
+    toggleVisibility();
+
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, [toggleVisibility]); // 依存配列に追加
 
   // トップにスクロール
   const scrollToTop = () => {
