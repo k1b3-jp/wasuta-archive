@@ -44,8 +44,113 @@ const Anniversary10th = () => {
 	const today = new Date().toISOString().split("T")[0];
 	const [isLoading, setIsLoading] = useState(true);
 	const [backgroundImages, setBackgroundImages] = useState<EventImage[]>([]);
-	const [bgScrollPosition, setBgScrollPosition] = useState(0);
 	const [videoLoadCount, setVideoLoadCount] = useState(0);
+
+	// 動画IDのリストを追加
+	const videoIds = [
+		"a3uKb1FknAU",
+		"N-h_lgAWsiE",
+		"5H4EfDri4OQ",
+		"Itgm6jNIdTI",
+		"89BE6NYaI1s",
+		"vb_X5nr1-Qc",
+		"B6szoHv_o2s",
+		"bc1QaebMxZc",
+		"bkrR0CgxwZY",
+		"7ZZX2uLo3Xg",
+		"5nQq9kvIRvU",
+		"kHR-0PZI9t8",
+		"L5wPVj3QyWM",
+		"jzOQzCRa2cU",
+		"a-P8qfhNq64",
+		"yD7Xz8043x4",
+		"_S5FvU2JxP0",
+		"WPUcPDeDkZc",
+		"dXT55zGpPEo",
+		"bOviFZgJn9E",
+		"wy4X7UOWRXI",
+		"tOw1wC72wVw",
+		"PCY82Arqsgs",
+		"RdEzQlecBPA",
+		"U_4vRd2Uef8",
+		"m4Uv92LMeKU",
+		"5g-8xkdCNyM",
+		"SXG3N059ywY",
+		"i2eiJJWBIhU",
+		"B2oHJKQdHkM",
+		"U8PH96BPpQM",
+		"A6Nxxk9xCP8",
+		"ojYMzvmJMck",
+		"wq7D4wNXafA",
+		"NjoayfiJBO8",
+		"fNlcOsxxm10",
+		"UEnPOCgUyQQ",
+		"eLNQH92beRA",
+		"FpPZp0bq2-o",
+		"VL16K9t3Prs",
+		"tHDNx_WE9gg",
+		"W7whR4L4P6U",
+		"XC0lvic0ARE",
+		"rg3v1tSsNgw",
+		"l3e-3MLxf6I",
+		"FYepzthtpM0",
+		"Am63abcoWw8",
+		"G5AcWhaJzCY",
+		"SrFzR6AcC2E",
+		"W5kt7wvVpoo",
+		"9J8OJiV1k7s",
+		"5jMtROX6p6o",
+		"CW_Bhzw_IqI",
+		"qH7mffgS8gk",
+		"mhpulQZMR-s",
+		"_ex8PPpl-u4",
+		"4ZcKBBo5DF0",
+		"Ysvg83eY-50",
+		"bvTwKWncHME",
+		"xCBBk7z8muc",
+		"TQMojC1f774",
+		"Nzn_-VfBSeQ",
+		"dCzq63g7wtM",
+		"UGdUBSbc1Y8",
+		"D0iu8VpTUTo",
+		"r55f_RDjiwc",
+		"sEEfRa7VNX8",
+		"KY5LUduAj0E",
+		"az51FK_eKG4",
+		"XQtELQyvioU",
+		"Mm2I-3eqfTQ",
+		"dICksPYlIIk",
+		"yS60HSMvyno",
+		"vejxiCbio_k",
+		"rodef9FQDF0",
+		"-Q4OD-YuJQ4",
+		"q0ZRAzbuheY",
+		"6ed9pegAW5s",
+		"JVFHAIYqfa8",
+		"il01yJvKx0s",
+		"QfSzMDESNgM",
+		"Oa5MrW26FCs",
+		"11yKCctu7AI",
+		"MUDhbrFR2yU",
+		"KVljyMCcuPM",
+		"kSJsF3Zl_Iw",
+		"kVMgYTeVk9Y",
+		"edjp8iylfPI",
+		"xx9E-drxprs",
+		"ZzrOLkDK1kM",
+		"JhvrJ7y9foE",
+		"l_rrBHR5iUs",
+		"ZpEWGLMD-BY",
+		"24WFVmFsIeU",
+		"ze97B94nrVY",
+		"tOswgrDp404",
+		"iZD9a6PWmaw",
+		"MM-enoUnz2w",
+		"baA5GDFTINw",
+	];
+
+	// ランダムな動画IDを選択する状態を追加
+	const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
 
 	// モバイルデバイスでの動画数を削減
 	const calculateTotalVideos = useCallback(() => {
@@ -158,180 +263,15 @@ const Anniversary10th = () => {
 	};
 
 	const [selectedImage, setSelectedImage] = useState<EventImage | null>(null);
-	const [scrollPosition, setScrollPosition] = useState(0);
 	const isMobile = useIsMobile();
 
 	// duplicatedImagesの生成を最新のimagesに基づいて行うように修正
 	const duplicatedImages = useMemo(() =>
-		[...images, ...images].map((image, index) => ({
+		[...images].map((image, index) => ({
 			...image,
 			uniqueKey: `${image.id}-${index}` // インデックスを含めてユニークなキーを生成
 		})),
 		[images]);
-
-	// スクロールの状態管理を追加
-	const [isScrollPaused, setIsScrollPaused] = useState(false);
-
-	// スクロールアニメーションの処理を修正
-	useEffect(() => {
-		// Dialog が開いているときまたは一時停止中はアニメーションを停止
-		if (selectedImage || isScrollPaused) {
-			return;
-		}
-
-		const interval = setInterval(() => {
-			setScrollPosition((prev) => {
-				const newPosition = prev + 2;
-				const imageHeight = 300;
-				const totalHeight = images.length * imageHeight;
-
-				// スクロール位置が画像の高さを超えたら、
-				// 一時的にスクロールを停止してリセット
-				if (newPosition >= totalHeight) {
-					setIsScrollPaused(true);
-					setTimeout(() => {
-						setScrollPosition(0);
-						setIsScrollPaused(false);
-					}, 1000);
-					return prev;
-				}
-				return newPosition;
-			});
-		}, 100);
-
-		return () => clearInterval(interval);
-	}, [images, selectedImage, isScrollPaused]);
-
-	// 背景用のスクロールアニメーションも同様に修正
-	useEffect(() => {
-		if (selectedImage || isScrollPaused) return;
-
-		const interval = setInterval(() => {
-			setBgScrollPosition((prev) => {
-				const newPosition = prev + 1;
-				const imageHeight = 300;
-				const totalHeight = backgroundImages.length * imageHeight;
-
-				if (newPosition >= totalHeight) {
-					setIsScrollPaused(true);
-					setTimeout(() => {
-						setBgScrollPosition(0);
-						setIsScrollPaused(false);
-					}, 1000);
-					return prev;
-				}
-				return newPosition;
-			});
-		}, 75);
-
-		return () => clearInterval(interval);
-	}, [backgroundImages, selectedImage, isScrollPaused]);
-
-	// 動画IDのリストを追加
-	const videoIds = [
-		"a3uKb1FknAU",
-		"N-h_lgAWsiE",
-		"5H4EfDri4OQ",
-		"Itgm6jNIdTI",
-		"89BE6NYaI1s",
-		"vb_X5nr1-Qc",
-		"B6szoHv_o2s",
-		"bc1QaebMxZc",
-		"bkrR0CgxwZY",
-		"7ZZX2uLo3Xg",
-		"5nQq9kvIRvU",
-		"kHR-0PZI9t8",
-		"L5wPVj3QyWM",
-		"jzOQzCRa2cU",
-		"a-P8qfhNq64",
-		"yD7Xz8043x4",
-		"_S5FvU2JxP0",
-		"WPUcPDeDkZc",
-		"dXT55zGpPEo",
-		"bOviFZgJn9E",
-		"wy4X7UOWRXI",
-		"tOw1wC72wVw",
-		"PCY82Arqsgs",
-		"RdEzQlecBPA",
-		"U_4vRd2Uef8",
-		"m4Uv92LMeKU",
-		"5g-8xkdCNyM",
-		"SXG3N059ywY",
-		"i2eiJJWBIhU",
-		"B2oHJKQdHkM",
-		"U8PH96BPpQM",
-		"A6Nxxk9xCP8",
-		"ojYMzvmJMck",
-		"wq7D4wNXafA",
-		"NjoayfiJBO8",
-		"fNlcOsxxm10",
-		"UEnPOCgUyQQ",
-		"eLNQH92beRA",
-		"FpPZp0bq2-o",
-		"VL16K9t3Prs",
-		"tHDNx_WE9gg",
-		"W7whR4L4P6U",
-		"XC0lvic0ARE",
-		"rg3v1tSsNgw",
-		"l3e-3MLxf6I",
-		"FYepzthtpM0",
-		"Am63abcoWw8",
-		"G5AcWhaJzCY",
-		"SrFzR6AcC2E",
-		"W5kt7wvVpoo",
-		"9J8OJiV1k7s",
-		"5jMtROX6p6o",
-		"CW_Bhzw_IqI",
-		"qH7mffgS8gk",
-		"mhpulQZMR-s",
-		"_ex8PPpl-u4",
-		"4ZcKBBo5DF0",
-		"Ysvg83eY-50",
-		"bvTwKWncHME",
-		"xCBBk7z8muc",
-		"TQMojC1f774",
-		"Nzn_-VfBSeQ",
-		"dCzq63g7wtM",
-		"UGdUBSbc1Y8",
-		"D0iu8VpTUTo",
-		"r55f_RDjiwc",
-		"sEEfRa7VNX8",
-		"KY5LUduAj0E",
-		"az51FK_eKG4",
-		"XQtELQyvioU",
-		"Mm2I-3eqfTQ",
-		"dICksPYlIIk",
-		"yS60HSMvyno",
-		"vejxiCbio_k",
-		"rodef9FQDF0",
-		"-Q4OD-YuJQ4",
-		"q0ZRAzbuheY",
-		"6ed9pegAW5s",
-		"JVFHAIYqfa8",
-		"il01yJvKx0s",
-		"QfSzMDESNgM",
-		"Oa5MrW26FCs",
-		"11yKCctu7AI",
-		"MUDhbrFR2yU",
-		"KVljyMCcuPM",
-		"kSJsF3Zl_Iw",
-		"kVMgYTeVk9Y",
-		"edjp8iylfPI",
-		"xx9E-drxprs",
-		"ZzrOLkDK1kM",
-		"JhvrJ7y9foE",
-		"l_rrBHR5iUs",
-		"ZpEWGLMD-BY",
-		"24WFVmFsIeU",
-		"ze97B94nrVY",
-		"tOswgrDp404",
-		"iZD9a6PWmaw",
-		"MM-enoUnz2w",
-		"baA5GDFTINw",
-	];
-
-	// ランダムな動画IDを選択する状態を追加
-	const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
 
 	// コンポーネントマウント時にランダムな動画を選択
 	useEffect(() => {
@@ -341,7 +281,7 @@ const Anniversary10th = () => {
 		setSelectedVideoIds(shuffled.slice(0, 20));
 	}, []);
 
-	// gridVideoIdsの型を修正
+	// gridVideoIdsの状態を復元
 	const [gridVideoIds, setGridVideoIds] = useState<VideoItem[][]>([]);
 
 	// 動画の開始位置をランダムに生成する関数
@@ -363,7 +303,7 @@ const Anniversary10th = () => {
 	useEffect(() => {
 		const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
 		const selected = shuffled.slice(0, totalVideos);
-		const grid = [];
+		const grid: VideoItem[][] = [];
 		const cols = totalVideos === 9 ? 3 : 2;
 		for (let i = 0; i < selected.length; i += cols) {
 			grid.push(
@@ -519,10 +459,6 @@ const Anniversary10th = () => {
 										].join(" "),
 								)}
 								style={{
-									transform: images.length > 0 && !selectedImage
-										? `translateY(-${scrollPosition}px)`
-										: "none",
-									transition: "transform 0.5s ease-out",
 									maxWidth: "100%",
 									margin: "0 auto",
 									padding: "0 1px",
