@@ -34,7 +34,7 @@ interface EventImage extends Image {
 // YouTubeのWindow拡張インターフェース
 interface YouTubeWindow extends Window {
 	YT?: any;
-	onYouTubeIframeAPIReady?: () => void;
+	onYouTubeIframeAPIReady?: (() => void) | undefined;
 }
 
 // 型定義を追加
@@ -206,7 +206,7 @@ const Anniversary10th = () => {
 		return () => {
 			// コンポーネントのアンマウント時にコールバックをクリア
 			if (win.onYouTubeIframeAPIReady === setVideoLoadCount) {
-				win.onYouTubeIframeAPIReady = null;
+				win.onYouTubeIframeAPIReady = undefined;
 			}
 		};
 	}, []);
