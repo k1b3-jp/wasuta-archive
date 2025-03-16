@@ -51,7 +51,6 @@ const Anniversary10th = () => {
 	const calculateTotalVideos = useCallback(() => {
 		if (typeof window === "undefined") return 2; // SSRのデフォルト値を2に変更
 		if (window.innerWidth >= 1024) return 9; // デスクトップ
-		if (window.innerWidth >= 768) return 4; // タブレット
 		return 2; // モバイル - 2つだけに制限
 	}, []);
 
@@ -115,8 +114,8 @@ const Anniversary10th = () => {
 					id: event.event_id.toString(),
 					url: event.image_url,
 					alt: event.title || event.event_name || 'Event photo',
-					width: 1600,
-					height: 1200,
+					width: 800,
+					height: 600,
 					title: event.title || event.event_name,
 					date: new Date(event.date).toLocaleDateString("ja-JP", {
 						year: "numeric",
@@ -423,7 +422,7 @@ const Anniversary10th = () => {
 				{/* 背景レイヤー */}
 				<div className="fixed inset-0 overflow-hidden bg-black">
 					<div className="absolute inset-0 w-full h-full">
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
+						<div className="grid grid-cols-1 lg:grid-cols-3 h-screen w-screen">
 							{gridVideoIds.map((row, rowIndex) =>
 								row.map((video) => (
 									<div
