@@ -31,6 +31,12 @@ interface EventImage extends Image {
 	rawDate: string;
 }
 
+// YouTubeのWindow拡張インターフェース
+interface YouTubeWindow extends Window {
+	YT?: any;
+	onYouTubeIframeAPIReady?: () => void;
+}
+
 // 型定義を追加
 interface VideoItem {
 	id: string;
@@ -173,14 +179,17 @@ const Anniversary10th = () => {
 
 	// YouTube IFrame APIの読み込み
 	useEffect(() => {
+		// window型を拡張したインターフェースを使用
+		const win = window as YouTubeWindow;
+
 		// APIがすでに読み込まれている場合は処理をスキップ
-		if (window.YT) {
+		if (win.YT) {
 			setVideoLoadCount((prev) => prev + 1);
 			return;
 		}
 
 		// グローバルコールバックが既に設定されていないことを確認
-		if (!(window as any).onYouTubeIframeAPIReady) {
+		if (!win.onYouTubeIframeAPIReady) {
 			// APIスクリプトの読み込み
 			const tag = document.createElement("script");
 			tag.src = "https://www.youtube.com/iframe_api";
@@ -188,7 +197,7 @@ const Anniversary10th = () => {
 			firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
 			// APIの準備完了時のコールバック
-			(window as any).onYouTubeIframeAPIReady = () => {
+			win.onYouTubeIframeAPIReady = () => {
 				setVideoLoadCount((prev) => prev + 1);
 			};
 		}
@@ -196,8 +205,8 @@ const Anniversary10th = () => {
 		// クリーンアップ関数
 		return () => {
 			// コンポーネントのアンマウント時にコールバックをクリア
-			if ((window as any).onYouTubeIframeAPIReady === setVideoLoadCount) {
-				(window as any).onYouTubeIframeAPIReady = null;
+			if (win.onYouTubeIframeAPIReady === setVideoLoadCount) {
+				win.onYouTubeIframeAPIReady = null;
 			}
 		};
 	}, []);
@@ -311,7 +320,8 @@ const Anniversary10th = () => {
 		(videoId: string) => {
 			const startTime = generateRandomStart();
 			const quality = window.innerWidth >= 1024 ? 'medium' : 'small'; // 品質を下げる
-			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1&vq=${quality}`;
+			// プライバシー強化設定を追加
+			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1&vq=${quality}&cookie_policy=none`;
 		},
 		[generateRandomStart],
 	);
