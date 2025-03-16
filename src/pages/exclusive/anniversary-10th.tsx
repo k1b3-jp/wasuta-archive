@@ -410,8 +410,6 @@ const Anniversary10th = () => {
 										<br />
 										人は忘れる生き物です。<br />
 										昨日食べたものも、自分で決めたパスワードも。<br />
-										初めてみんなを好きになった日のことだって、<br />
-										忘れてしまう瞬間があるかもしれません。<br />
 										<br />
 										だけど、みんなと過ごしたこの10年の中には、<br />
 										絶対に忘れたくない記憶がたくさんあります。<br />
@@ -433,7 +431,7 @@ const Anniversary10th = () => {
 								</div>
 							</div>
 						</div>
-						<div className="relative bg-100vw z-20 pb-24 bg-gradient-to-b from-white via-white to-transparent zen-kurenaido-regular">
+						<div className="relative bg-100vw z-20 pb-36 bg-gradient-to-b from-white via-white to-transparent zen-kurenaido-regular">
 							<div className="flex justify-center">
 								<ArrowDown className="w-6 h-6 animate-bounce" />
 							</div>
@@ -501,10 +499,10 @@ const Anniversary10th = () => {
 													"absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
 													"opacity-0 group-hover:opacity-100",
 													"transition-opacity duration-300",
-													"flex items-end p-4",
+													"flex items-end p-2 md:p-4",
 												)}
 											>
-												<div className="text-white text-base font-medium truncate w-full">
+												<div className="text-white text-sm md:text-base font-medium truncate w-full">
 													{image.title}
 												</div>
 											</div>
