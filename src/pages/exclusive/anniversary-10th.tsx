@@ -173,15 +173,32 @@ const Anniversary10th = () => {
 
 	// YouTube IFrame APIの読み込み
 	useEffect(() => {
-		// APIスクリプトの読み込み
-		const tag = document.createElement("script");
-		tag.src = "https://www.youtube.com/iframe_api";
-		const firstScriptTag = document.getElementsByTagName("script")[0];
-		firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-		// APIの準備完了時のコールバック
-		(window as any).onYouTubeIframeAPIReady = () => {
+		// APIがすでに読み込まれている場合は処理をスキップ
+		if (window.YT) {
 			setVideoLoadCount((prev) => prev + 1);
+			return;
+		}
+
+		// グローバルコールバックが既に設定されていないことを確認
+		if (!(window as any).onYouTubeIframeAPIReady) {
+			// APIスクリプトの読み込み
+			const tag = document.createElement("script");
+			tag.src = "https://www.youtube.com/iframe_api";
+			const firstScriptTag = document.getElementsByTagName("script")[0];
+			firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+			// APIの準備完了時のコールバック
+			(window as any).onYouTubeIframeAPIReady = () => {
+				setVideoLoadCount((prev) => prev + 1);
+			};
+		}
+
+		// クリーンアップ関数
+		return () => {
+			// コンポーネントのアンマウント時にコールバックをクリア
+			if ((window as any).onYouTubeIframeAPIReady === setVideoLoadCount) {
+				(window as any).onYouTubeIframeAPIReady = null;
+			}
 		};
 	}, []);
 
@@ -293,7 +310,7 @@ const Anniversary10th = () => {
 	const generateVideoUrl = useCallback(
 		(videoId: string) => {
 			const startTime = generateRandomStart();
-			const quality = window.innerWidth >= 1024 ? 'hd720' : 'medium'; // モバイルでは品質を下げる
+			const quality = window.innerWidth >= 1024 ? 'medium' : 'small'; // 品質を下げる
 			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1&vq=${quality}`;
 		},
 		[generateRandomStart],
@@ -301,10 +318,13 @@ const Anniversary10th = () => {
 
 	// グリッド用の動画配列を生成
 	useEffect(() => {
+		// 動画の数を制限する（デスクトップでも最大6つまで）
+		const actualTotalVideos = Math.min(totalVideos, 6);
+
 		const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
-		const selected = shuffled.slice(0, totalVideos);
+		const selected = shuffled.slice(0, actualTotalVideos);
 		const grid: VideoItem[][] = [];
-		const cols = totalVideos === 9 ? 3 : 2;
+		const cols = actualTotalVideos > 4 ? 3 : 2;
 		for (let i = 0; i < selected.length; i += cols) {
 			grid.push(
 				selected.slice(i, i + cols).map((id) => ({
@@ -364,9 +384,9 @@ const Anniversary10th = () => {
 					<div className="absolute inset-0 w-full h-full">
 						<div className="grid grid-cols-1 lg:grid-cols-3 h-screen w-screen">
 							{gridVideoIds.map((row, rowIndex) =>
-								row.map((video) => (
+								row.map((video, colIndex) => (
 									<div
-										key={video.id}
+										key={`${video.id}-${rowIndex}-${colIndex}`}
 										className="relative w-full h-full overflow-hidden"
 									>
 										<div className="absolute inset-0">
@@ -380,10 +400,11 @@ const Anniversary10th = () => {
 													minWidth: "200%",
 													minHeight: "200%",
 												}}
-												title={`わーすた Background Video ${rowIndex}-${video.id}`}
+												title={`わーすた Background Video ${rowIndex}-${colIndex}`}
 												loading="lazy"
 												frameBorder="0"
 												data-cookieconsent="ignore"
+												onLoad={handleVideoReady}
 											/>
 										</div>
 									</div>
@@ -391,8 +412,8 @@ const Anniversary10th = () => {
 							)}
 						</div>
 					</div>
-					{/* オーバーレイの透明度を上げてブラウザの負荷を軽減 */}
-					<div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
+					{/* オーバーレイの透明度をより上げて負荷を軽減 */}
+					<div className="absolute inset-0 bg-black/80 backdrop-blur-[2px]" />
 				</div>
 
 				{/* メインコンテンツ */}
