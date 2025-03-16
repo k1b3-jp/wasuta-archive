@@ -2,7 +2,7 @@ import DefaultLayout from "@/app/layout";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
 import { ArrowDown, Loader2 } from "lucide-react";
@@ -31,6 +31,12 @@ interface EventImage extends Image {
 	rawDate: string;
 }
 
+// YouTubeのWindow拡張インターフェース
+interface YouTubeWindow extends Window {
+	YT?: any;
+	onYouTubeIframeAPIReady?: (() => void) | undefined;
+}
+
 // 型定義を追加
 interface VideoItem {
 	id: string;
@@ -44,188 +50,7 @@ const Anniversary10th = () => {
 	const today = new Date().toISOString().split("T")[0];
 	const [isLoading, setIsLoading] = useState(true);
 	const [backgroundImages, setBackgroundImages] = useState<EventImage[]>([]);
-	const [bgScrollPosition, setBgScrollPosition] = useState(0);
 	const [videoLoadCount, setVideoLoadCount] = useState(0);
-
-	// 画面サイズに応じて必要な動画数を計算する関数
-	const calculateTotalVideos = useCallback(() => {
-		if (typeof window === "undefined") return 4; // SSR時のデフォルト値
-		if (window.innerWidth >= 1024) return 9; // lg
-		return 4; // sm, md
-	}, []);
-
-	const [totalVideos, setTotalVideos] = useState(calculateTotalVideos());
-
-	// 画面サイズ変更時に動画数を更新
-	useEffect(() => {
-		const handleResize = () => {
-			setTotalVideos(calculateTotalVideos());
-		};
-
-		window.addEventListener("resize", handleResize);
-		return () => window.removeEventListener("resize", handleResize);
-	}, [calculateTotalVideos]);
-
-	// YouTube IFrame APIの読み込み
-	useEffect(() => {
-		// APIスクリプトの読み込み
-		const tag = document.createElement("script");
-		tag.src = "https://www.youtube.com/iframe_api";
-		const firstScriptTag = document.getElementsByTagName("script")[0];
-		firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-		// APIの準備完了時のコールバック
-		(window as any).onYouTubeIframeAPIReady = () => {
-			setVideoLoadCount((prev) => prev + 1);
-		};
-	}, []);
-
-	// 動画の読み込み状態を監視する関数
-	const handleVideoReady = useCallback(() => {
-		setVideoLoadCount((prev) => {
-			const newCount = prev + 1;
-			if (newCount >= totalVideos && events.length > 0) {
-				setTimeout(() => {
-					const loadingElement = document.querySelector(".loading-screen");
-					loadingElement?.classList.add("animate-fade-out");
-
-					setTimeout(() => {
-						setIsLoading(false);
-					}, 800);
-				}, 1000);
-			}
-			return newCount;
-		});
-	}, [events.length, totalVideos]);
-
-	// イベントデータの取得関数を修正
-	const fetchEvents = useCallback(async () => {
-		try {
-			const eventsData = await getEvents({
-				sortBy: "date",
-				ascending: true,
-			});
-			setEvents(eventsData);
-
-			// イベントデータから画像データを生成
-			const imageData: EventImage[] = eventsData
-				.filter((event) => event.image_url)
-				.map((event) => ({
-					id: event.event_id.toString(),
-					url: event.image_url,
-					alt: event.title || event.event_name || 'Event photo',
-					width: 1600,
-					height: 1200,
-					title: event.title || event.event_name,
-					date: new Date(event.date).toLocaleDateString("ja-JP", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-					}),
-					rawDate: event.date,
-					venue: event.location || "未設定",
-					description: event.description,
-				}));
-
-			setImages(shuffleArray([...imageData]));
-			setBackgroundImages(shuffleArray([...imageData]));
-
-			// データ読み込み完了後、フェードアウト
-			if (isLoading) {
-				setTimeout(() => {
-					const loadingElement = document.querySelector(".loading-screen");
-					loadingElement?.classList.add("animate-fade-out");
-
-					setTimeout(() => {
-						setIsLoading(false);
-					}, 800);
-				}, 1000);
-			}
-		} catch (err) {
-			console.error(err);
-			setIsLoading(false);
-		}
-	}, [isLoading]);
-
-	// 初回読み込み時のイベント取得
-	useEffect(() => {
-		fetchEvents();
-	}, [fetchEvents]);
-
-	// 配列をシャッフルする関数を修正
-	const shuffleArray = <T,>(array: T[]): T[] => {
-		return [...array].sort(() => Math.random() - 0.5);
-	};
-
-	const [selectedImage, setSelectedImage] = useState<EventImage | null>(null);
-	const [scrollPosition, setScrollPosition] = useState(0);
-	const isMobile = useIsMobile();
-
-	// duplicatedImagesの生成を最新のimagesに基づいて行うように修正
-	const duplicatedImages = useMemo(() =>
-		[...images, ...images].map((image, index) => ({
-			...image,
-			uniqueKey: `${image.id}-${index}` // インデックスを含めてユニークなキーを生成
-		})),
-		[images]);
-
-	// スクロールの状態管理を追加
-	const [isScrollPaused, setIsScrollPaused] = useState(false);
-
-	// スクロールアニメーションの処理を修正
-	useEffect(() => {
-		// Dialog が開いているときまたは一時停止中はアニメーションを停止
-		if (selectedImage || isScrollPaused) {
-			return;
-		}
-
-		const interval = setInterval(() => {
-			setScrollPosition((prev) => {
-				const newPosition = prev + 2;
-				const imageHeight = 300;
-				const totalHeight = images.length * imageHeight;
-
-				// スクロール位置が画像の高さを超えたら、
-				// 一時的にスクロールを停止してリセット
-				if (newPosition >= totalHeight) {
-					setIsScrollPaused(true);
-					setTimeout(() => {
-						setScrollPosition(0);
-						setIsScrollPaused(false);
-					}, 1000);
-					return prev;
-				}
-				return newPosition;
-			});
-		}, 100);
-
-		return () => clearInterval(interval);
-	}, [images, selectedImage, isScrollPaused]);
-
-	// 背景用のスクロールアニメーションも同様に修正
-	useEffect(() => {
-		if (selectedImage || isScrollPaused) return;
-
-		const interval = setInterval(() => {
-			setBgScrollPosition((prev) => {
-				const newPosition = prev + 1;
-				const imageHeight = 300;
-				const totalHeight = backgroundImages.length * imageHeight;
-
-				if (newPosition >= totalHeight) {
-					setIsScrollPaused(true);
-					setTimeout(() => {
-						setBgScrollPosition(0);
-						setIsScrollPaused(false);
-					}, 1000);
-					return prev;
-				}
-				return newPosition;
-			});
-		}, 75);
-
-		return () => clearInterval(interval);
-	}, [backgroundImages, selectedImage, isScrollPaused]);
 
 	// 動画IDのリストを追加
 	const videoIds = [
@@ -333,6 +158,147 @@ const Anniversary10th = () => {
 	// ランダムな動画IDを選択する状態を追加
 	const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
 
+	// モバイルデバイスでの動画数を削減
+	const calculateTotalVideos = useCallback(() => {
+		if (typeof window === "undefined") return 2; // SSRのデフォルト値を2に変更
+		if (window.innerWidth >= 1024) return 9; // デスクトップ
+		return 2; // モバイル - 2つだけに制限
+	}, []);
+
+	const [totalVideos, setTotalVideos] = useState(calculateTotalVideos());
+
+	// 画面サイズ変更時に動画数を更新
+	useEffect(() => {
+		const handleResize = () => {
+			setTotalVideos(calculateTotalVideos());
+		};
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, [calculateTotalVideos]);
+
+	// YouTube IFrame APIの読み込み
+	useEffect(() => {
+		// window型を拡張したインターフェースを使用
+		const win = window as YouTubeWindow;
+
+		// APIがすでに読み込まれている場合は処理をスキップ
+		if (win.YT) {
+			setVideoLoadCount((prev) => prev + 1);
+			return;
+		}
+
+		// グローバルコールバックが既に設定されていないことを確認
+		if (!win.onYouTubeIframeAPIReady) {
+			// APIスクリプトの読み込み
+			const tag = document.createElement("script");
+			tag.src = "https://www.youtube.com/iframe_api";
+			const firstScriptTag = document.getElementsByTagName("script")[0];
+			firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+			// APIの準備完了時のコールバック
+			win.onYouTubeIframeAPIReady = () => {
+				setVideoLoadCount((prev) => prev + 1);
+			};
+		}
+
+		// クリーンアップ関数
+		return () => {
+			// コンポーネントのアンマウント時にコールバックをクリア
+			if (win.onYouTubeIframeAPIReady === setVideoLoadCount) {
+				win.onYouTubeIframeAPIReady = undefined;
+			}
+		};
+	}, []);
+
+	// 動画の読み込み状態を監視する関数
+	const handleVideoReady = useCallback(() => {
+		setVideoLoadCount((prev) => {
+			const newCount = prev + 1;
+			if (newCount >= totalVideos && events.length > 0) {
+				setTimeout(() => {
+					const loadingElement = document.querySelector(".loading-screen");
+					loadingElement?.classList.add("animate-fade-out");
+
+					setTimeout(() => {
+						setIsLoading(false);
+					}, 800);
+				}, 1000);
+			}
+			return newCount;
+		});
+	}, [events.length, totalVideos]);
+
+	// イベントデータの取得関数を修正
+	const fetchEvents = useCallback(async () => {
+		try {
+			const eventsData = await getEvents({
+				sortBy: "date",
+				ascending: true,
+			});
+			setEvents(eventsData);
+
+			// イベントデータから画像データを生成
+			const imageData: EventImage[] = eventsData
+				.filter((event) => event.image_url)
+				.map((event) => ({
+					id: event.event_id.toString(),
+					url: event.image_url,
+					alt: event.title || event.event_name || 'Event photo',
+					width: 800,
+					height: 600,
+					title: event.title || event.event_name,
+					date: new Date(event.date).toLocaleDateString("ja-JP", {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+					}),
+					rawDate: event.date,
+					venue: event.location || "未設定",
+					description: event.description,
+				}));
+
+			setImages(shuffleArray([...imageData]));
+			setBackgroundImages(shuffleArray([...imageData]));
+
+			// データ読み込み完了後、フェードアウト
+			if (isLoading) {
+				setTimeout(() => {
+					const loadingElement = document.querySelector(".loading-screen");
+					loadingElement?.classList.add("animate-fade-out");
+
+					setTimeout(() => {
+						setIsLoading(false);
+					}, 800);
+				}, 1000);
+			}
+		} catch (err) {
+			console.error(err);
+			setIsLoading(false);
+		}
+	}, [isLoading]);
+
+	// 初回読み込み時のイベント取得
+	useEffect(() => {
+		fetchEvents();
+	}, [fetchEvents]);
+
+	// 配列をシャッフルする関数を修正
+	const shuffleArray = <T,>(array: T[]): T[] => {
+		return [...array].sort(() => Math.random() - 0.5);
+	};
+
+	const [selectedImage, setSelectedImage] = useState<EventImage | null>(null);
+	const isMobile = useIsMobile();
+
+	// duplicatedImagesの生成を最新のimagesに基づいて行うように修正
+	const duplicatedImages = useMemo(() =>
+		[...images].map((image, index) => ({
+			...image,
+			uniqueKey: `${image.id}-${index}` // インデックスを含めてユニークなキーを生成
+		})),
+		[images]);
+
 	// コンポーネントマウント時にランダムな動画を選択
 	useEffect(() => {
 		// 動画IDをシャッフル
@@ -341,7 +307,7 @@ const Anniversary10th = () => {
 		setSelectedVideoIds(shuffled.slice(0, 20));
 	}, []);
 
-	// gridVideoIdsの型を修正
+	// gridVideoIdsの状態を復元
 	const [gridVideoIds, setGridVideoIds] = useState<VideoItem[][]>([]);
 
 	// 動画の開始位置をランダムに生成する関数
@@ -353,17 +319,22 @@ const Anniversary10th = () => {
 	const generateVideoUrl = useCallback(
 		(videoId: string) => {
 			const startTime = generateRandomStart();
-			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1`;
+			const quality = window.innerWidth >= 1024 ? 'medium' : 'small'; // 品質を下げる
+			// プライバシー強化設定を追加
+			return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&mute=1&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&start=${startTime}&enablejsapi=1&vq=${quality}&cookie_policy=none`;
 		},
 		[generateRandomStart],
 	);
 
 	// グリッド用の動画配列を生成
 	useEffect(() => {
+		// 動画の数を制限する（デスクトップでも最大6つまで）
+		const actualTotalVideos = Math.min(totalVideos, 6);
+
 		const shuffled = [...videoIds].sort(() => Math.random() - 0.5);
-		const selected = shuffled.slice(0, totalVideos);
-		const grid = [];
-		const cols = totalVideos === 9 ? 3 : 2;
+		const selected = shuffled.slice(0, actualTotalVideos);
+		const grid: VideoItem[][] = [];
+		const cols = actualTotalVideos > 4 ? 3 : 2;
 		for (let i = 0; i < selected.length; i += cols) {
 			grid.push(
 				selected.slice(i, i + cols).map((id) => ({
@@ -421,28 +392,29 @@ const Anniversary10th = () => {
 				{/* 背景レイヤー */}
 				<div className="fixed inset-0 overflow-hidden bg-black">
 					<div className="absolute inset-0 w-full h-full">
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen w-screen">
+						<div className="grid grid-cols-1 lg:grid-cols-3 h-screen w-screen">
 							{gridVideoIds.map((row, rowIndex) =>
-								row.map((video) => (
+								row.map((video, colIndex) => (
 									<div
-										key={video.id}
+										key={`${video.id}-${rowIndex}-${colIndex}`}
 										className="relative w-full h-full overflow-hidden"
 									>
 										<div className="absolute inset-0">
 											<iframe
 												src={video.url}
 												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-												className="absolute w-[200%] h-[200%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+												className="absolute w-[200%] h-[210%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
 												style={{
 													pointerEvents: "none",
 													objectFit: "cover",
 													minWidth: "200%",
 													minHeight: "200%",
 												}}
-												title={`わーすた Background Video ${rowIndex}-${video.id}`}
+												title={`わーすた Background Video ${rowIndex}-${colIndex}`}
 												loading="lazy"
 												frameBorder="0"
 												data-cookieconsent="ignore"
+												onLoad={handleVideoReady}
 											/>
 										</div>
 									</div>
@@ -450,8 +422,8 @@ const Anniversary10th = () => {
 							)}
 						</div>
 					</div>
-					{/* オーバーレイ - 透明度を調整 */}
-					<div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+					{/* オーバーレイの透明度をより上げて負荷を軽減 */}
+					<div className="absolute inset-0 bg-black/80 backdrop-blur-[2px]" />
 				</div>
 
 				{/* メインコンテンツ */}
@@ -469,8 +441,6 @@ const Anniversary10th = () => {
 										<br />
 										人は忘れる生き物です。<br />
 										昨日食べたものも、自分で決めたパスワードも。<br />
-										初めてみんなを好きになった日のことだって、<br />
-										忘れてしまう瞬間があるかもしれません。<br />
 										<br />
 										だけど、みんなと過ごしたこの10年の中には、<br />
 										絶対に忘れたくない記憶がたくさんあります。<br />
@@ -492,7 +462,7 @@ const Anniversary10th = () => {
 								</div>
 							</div>
 						</div>
-						<div className="relative bg-100vw z-20 pb-24 bg-gradient-to-b from-white via-white to-transparent zen-kurenaido-regular">
+						<div className="relative bg-100vw z-20 pb-36 bg-gradient-to-b from-white via-white to-transparent zen-kurenaido-regular">
 							<div className="flex justify-center">
 								<ArrowDown className="w-6 h-6 animate-bounce" />
 							</div>
@@ -518,10 +488,6 @@ const Anniversary10th = () => {
 										].join(" "),
 								)}
 								style={{
-									transform: images.length > 0 && !selectedImage
-										? `translateY(-${scrollPosition}px)`
-										: "none",
-									transition: "transform 0.5s ease-out",
 									maxWidth: "100%",
 									margin: "0 auto",
 									padding: "0 1px",
@@ -564,10 +530,10 @@ const Anniversary10th = () => {
 													"absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
 													"opacity-0 group-hover:opacity-100",
 													"transition-opacity duration-300",
-													"flex items-end p-4",
+													"flex items-end p-2 md:p-4",
 												)}
 											>
-												<div className="text-white text-base font-medium truncate w-full">
+												<div className="text-white text-sm md:text-base font-medium truncate w-full">
 													{image.title}
 												</div>
 											</div>
@@ -594,88 +560,95 @@ const Anniversary10th = () => {
 								>
 									{selectedImage && (
 										<>
-											<div className="event-head bg-light-gray p-4">
-												<div className="aspect-[4/3] relative overflow-hidden">
-													<img
-														src={selectedImage.url}
-														alt={selectedImage.alt}
-														className="w-full h-full object-contain"
-													/>
-												</div>
-											</div>
-											<div className="event-detail p-6">
-												<h1 className="text-font-color font-bold text-xl mb-4">
-													{selectedImage.alt}
-												</h1>
-												<div className="flex flex-row gap-2 items-center mb-4">
-													<div className="bg-light-gray py-2 px-3 rounded">
-														<svg
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-															aria-labelledby="calendarIconTitle"
-														>
-															<title id="calendarIconTitle">カレンダーアイコン</title>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+											<DialogTitle className="sr-only">
+												{selectedImage.title || 'イベント詳細'}
+											</DialogTitle>
+											<DialogDescription asChild>
+												<div>
+													<div className="event-head bg-light-gray p-4">
+														<div className="aspect-[4/3] relative overflow-hidden">
+															<img
+																src={selectedImage.url}
+																alt={selectedImage.alt}
+																className="w-full h-full object-contain"
 															/>
-														</svg>
+														</div>
 													</div>
-													<p>{selectedImage.date}</p>
-												</div>
-												<div className="flex flex-row gap-2 items-center mb-6">
-													<div className="bg-light-gray py-2 px-3 rounded">
-														<svg
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-															aria-labelledby="locationIconTitle"
-														>
-															<title id="locationIconTitle">場所アイコン</title>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-															/>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-															/>
-														</svg>
-													</div>
-													<p>{selectedImage.venue}</p>
-												</div>
-												{selectedImage.description && (
-													<div className="flex flex-col gap-2 mb-6">
-														<h2 className="text-l font-bold">
-															イベントについて
-														</h2>
-														<p className="whitespace-pre-wrap">
-															{selectedImage.description}
-														</p>
-													</div>
-												)}
+													<div className="event-detail p-6">
+														<h1 className="text-font-color font-bold text-xl mb-4">
+															{selectedImage.alt}
+														</h1>
+														<div className="flex flex-row gap-2 items-center mb-4">
+															<div className="bg-light-gray py-2 px-3 rounded">
+																<svg
+																	className="w-5 h-5"
+																	fill="none"
+																	stroke="currentColor"
+																	viewBox="0 0 24 24"
+																	aria-labelledby="calendarIconTitle"
+																>
+																	<title id="calendarIconTitle">カレンダーアイコン</title>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+																	/>
+																</svg>
+															</div>
+															<p>{selectedImage.date}</p>
+														</div>
+														<div className="flex flex-row gap-2 items-center mb-6">
+															<div className="bg-light-gray py-2 px-3 rounded">
+																<svg
+																	className="w-5 h-5"
+																	fill="none"
+																	stroke="currentColor"
+																	viewBox="0 0 24 24"
+																	aria-labelledby="locationIconTitle"
+																>
+																	<title id="locationIconTitle">場所アイコン</title>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+																	/>
+																	<path
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth={2}
+																		d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+																	/>
+																</svg>
+															</div>
+															<p>{selectedImage.venue}</p>
+														</div>
+														{selectedImage.description && (
+															<div className="flex flex-col gap-2 mb-6">
+																<h2 className="text-l font-bold">
+																	イベントについて
+																</h2>
+																<p className="whitespace-pre-wrap">
+																	{selectedImage.description}
+																</p>
+															</div>
+														)}
 
-												{/* 遷移ボタンを追加 */}
-												<div className="mt-6 text-center">
-													<Link
-														href={`/events/${selectedImage.id}`}
-														rel="noopener noreferrer"
-														target="_blank"
-														className="inline-flex items-center justify-center"
-													>
-														<BaseButton label="イベント詳細を見る" />
-													</Link>
+														{/* 遷移ボタンを追加 */}
+														<div className="mt-6 text-center">
+															<Link
+																href={`/events/${selectedImage.id}`}
+																rel="noopener noreferrer"
+																target="_blank"
+																className="inline-flex items-center justify-center"
+															>
+																<BaseButton label="イベント詳細を見る" />
+															</Link>
+														</div>
+													</div>
 												</div>
-											</div>
+											</DialogDescription>
 										</>
 									)}
 								</DialogContent>
