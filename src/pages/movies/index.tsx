@@ -29,11 +29,13 @@ const MoviesContent = () => {
 	}, []);
 
 	const fetchAllTags = async () => {
-		const tags = await getYoutubeTags(null);
-		if (tags && Array.isArray(tags)) {
-			startTransition(() => {
+		try {
+			const tags = await getYoutubeTags(null);
+			if (tags && Array.isArray(tags)) {
 				setAllTags(tags);
-			});
+			}
+		} catch (error) {
+			console.error('タグの取得に失敗しました:', error);
 		}
 	};
 

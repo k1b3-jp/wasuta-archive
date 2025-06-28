@@ -11,29 +11,8 @@ interface EventData {
 const createEvent = async (data: EventData, tags: number[]) => {
   const { eventName, date, location, imageUrl, description } = data;
 
-  let insertedEventId: number | null = null;
-
   try {
-    // 1. タグIDの有効性をチェック（オプション：存在しないタグIDを事前に検出）
-    if (tags.length > 0) {
-      const { data: existingTags, error: tagCheckError } = await supabase
-        .from("event_tag_names")
-        .select("tag_id")
-        .in("tag_id", tags);
-
-      if (tagCheckError) throw tagCheckError;
-
-      const existingTagIds = existingTags.map((tag) => tag.tag_id);
-      const invalidTags = tags.filter(
-        (tagId) => !existingTagIds.includes(tagId)
-      );
-
-      if (invalidTags.length > 0) {
-        throw new Error(`Invalid tag IDs: ${invalidTags.join(", ")}`);
-      }
-    }
-
-    // 2. イベントを挿入
+    // 1. イベントを挿入
     const { data: insertedData, error: eventInsertError } = await supabase
       .from("events")
       .insert([
@@ -49,9 +28,9 @@ const createEvent = async (data: EventData, tags: number[]) => {
 
     if (eventInsertError) throw eventInsertError;
 
-    insertedEventId = insertedData[0].event_id;
+    const insertedEventId = insertedData[0].event_id;
 
-    // 3. イベントタグを挿入
+    // 2. イベントタグを挿入（外部キー制約によりタグの存在チェック済み）
     if (tags.length > 0) {
       const eventTagData = tags.map((tagId) => ({
         event_id: insertedEventId,
@@ -63,9 +42,26 @@ const createEvent = async (data: EventData, tags: number[]) => {
         .insert(eventTagData);
 
       if (tagError) {
-        // タグ挿入に失敗した場合、挿入したイベントを削除（補償処理）
-        await supabase.from("events").delete().eq("event_id", insertedEventId);
+        // タグ挿入に失敗した場合、イベントも削除してデータの整合性を保つ
+        // 外部キー制約エラーの場合、適切なエラーメッセージを返す
+        try {
+          await supabase
+            .from("events")
+            .delete()
+            .eq("event_id", insertedEventId);
+        } catch (deleteError) {
+          console.error(
+            "Failed to cleanup event after tag insertion failure:",
+            deleteError
+          );
+          // 削除に失敗した場合でも、元のタグエラーを投げる
+        }
 
+        // タグが存在しない場合の分かりやすいエラーメッセージ
+        if (tagError.code === "23503") {
+          // 外部キー制約違反
+          throw new Error("指定されたタグIDが存在しません。");
+        }
         throw tagError;
       }
     }
@@ -73,16 +69,6 @@ const createEvent = async (data: EventData, tags: number[]) => {
     return insertedData;
   } catch (error) {
     console.error("Error in createEvent:", error);
-
-    // 予期しないエラーが発生した場合も、挿入したイベントがあればクリーンアップ
-    if (insertedEventId) {
-      try {
-        await supabase.from("events").delete().eq("event_id", insertedEventId);
-      } catch (cleanupError) {
-        console.error("Error cleaning up inserted event:", cleanupError);
-      }
-    }
-
     throw error;
   }
 };
