@@ -1,4 +1,5 @@
 import { supabase } from "../supabaseClient";
+import type { TagType } from "@/types/tag";
 
 // キャッシュの型定義
 interface CacheItem<T> {
@@ -22,7 +23,7 @@ const isExpired = (item: CacheItem<any>): boolean => {
   return Date.now() - item.timestamp > item.ttl;
 };
 
-const getFromCache = <T>(key: string): T | null => {
+const getFromCache = (key: string): TagType[] | null => {
   const item = cache.get(key);
   if (!item || isExpired(item)) {
     cache.delete(key);
@@ -31,7 +32,11 @@ const getFromCache = <T>(key: string): T | null => {
   return item.data;
 };
 
-const setCache = <T>(key: string, data: T, ttl: number = DEFAULT_TTL): void => {
+const setCache = (
+  key: string,
+  data: TagType[],
+  ttl: number = DEFAULT_TTL
+): void => {
   cache.set(key, {
     data,
     timestamp: Date.now(),
@@ -39,7 +44,9 @@ const setCache = <T>(key: string, data: T, ttl: number = DEFAULT_TTL): void => {
   });
 };
 
-export const getYoutubeTags = async (youtubeLinkId: number | null = null) => {
+export const getYoutubeTags = async (
+  youtubeLinkId: number | null = null
+): Promise<TagType[]> => {
   const cacheKey = getCacheKey(youtubeLinkId);
 
   // キャッシュから取得を試行
