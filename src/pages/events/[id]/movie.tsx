@@ -3,6 +3,7 @@ import MovieCard from "@/components/events/MovieCard";
 import BaseButton from "@/components/ui/BaseButton";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Tag from "@/components/ui/Tag";
+import { useAuth } from "@/contexts/AuthContext";
 import { deleteYoutubeLink } from "@/lib/supabase/deleteYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
@@ -12,9 +13,9 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { supabase } from "@/lib/supabaseClient";
 
 const EventMovieList = () => {
+	const { isAdmin } = useAuth();
 	const router = useRouter();
 	const { id } = router?.query ?? {};
 
@@ -23,22 +24,6 @@ const EventMovieList = () => {
 	const [allTags, setAllTags] = useState<TagType[]>([]);
 	const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-
-	const [isAdmin, setIsAdmin] = useState(false);
-	const isSuperAdmin = async () => {
-		try {
-			const { data } = await supabase.auth.getUser();
-			const userEmail = data?.user?.email;
-			if (userEmail === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL) {
-				setIsAdmin(true);
-			} else {
-				setIsAdmin(false);
-			}
-		} catch (error) {
-			console.error("Error fetching user data:", error);
-			setIsAdmin(false);
-		}
-	};
 
 	type ParamsType = {
 		eventId: number;
@@ -67,12 +52,11 @@ const EventMovieList = () => {
 
 	useEffect(() => {
 		fetchAllTags();
-		isSuperAdmin();
 
 		if (id !== undefined) {
 			fetchMovies();
 		}
-	}, [id, fetchMovies, isSuperAdmin]);
+	}, [id, fetchMovies]);
 
 	const deleteMovie = async (youtubeLinkId: number) => {
 		try {

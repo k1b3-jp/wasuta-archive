@@ -1,34 +1,22 @@
 "use client";
-import supabase from "@/lib/supabaseClient";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import Logo from "../../../public/logo.svg";
 import BaseButton from "../ui/BaseButton";
 
 const NavBar = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { isLoggedIn, signOut } = useAuth();
 	const router = useRouter();
 
-	const getCurrentUser = async () => {
-		const { data } = await supabase.auth.getSession();
-		if (data.session !== null) {
-			const {
-				data: { user },
-			} = await supabase.auth.getUser();
-			setIsLoggedIn(true);
+	const handleLogout = async () => {
+		try {
+			await signOut();
+			// ログアウトを反映させるためにリロードさせる
+			router.refresh();
+		} catch (error) {
+			console.error("Logout error:", error);
 		}
-	};
-
-	useEffect(() => {
-		getCurrentUser();
-	}, [getCurrentUser]);
-
-	const Logout = async () => {
-		const { error } = await supabase.auth.signOut();
-		if (error) throw new Error(error.message);
-		// ログアウトを反映させるためにリロードさせる
-		router.refresh();
 	};
 
 	return (
@@ -43,7 +31,7 @@ const NavBar = () => {
 				<div className="bg-white inline-flex flex-row ml-auto w-auto items-center">
 					<div className="inline-flex w-auto px-3 py-4 rounded items-center justify-center">
 						{isLoggedIn ? (
-							<BaseButton onClick={() => Logout()} label="Logout" />
+							<BaseButton onClick={() => handleLogout()} label="Logout" />
 						) : (
 							<BaseButton link={"/login"} label={"Login/SignUp"} />
 						)}
