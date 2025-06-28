@@ -345,8 +345,8 @@ const EditEvent = () => {
 										<Tag
 											key={tag.id}
 											label={tag.label}
-											selected={selectedTags.includes(Number.parseInt(tag.id))}
-											onSelect={() => handleTagSelect(Number.parseInt(tag.id))}
+											selected={selectedTags.includes(tag.id)}
+											onSelect={() => handleTagSelect(tag.id)}
 										/>
 									))}
 								</div>

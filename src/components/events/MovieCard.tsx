@@ -30,18 +30,49 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 	const [eventName, setEventName] = useState<string | null>(null);
 
 	useEffect(() => {
-		fetchYoutubeTags();
-		fetchEventName();
-	}, []);
+		// idが有効な場合のみデータを取得
+		if (id && Number.isInteger(id) && id > 0) {
+			fetchYoutubeTags();
+			fetchEventName();
+		}
+	}, [id]);
 
 	const fetchYoutubeTags = async () => {
-		const tags = await getYoutubeTags(id);
-		setYoutubeTags(tags);
+		try {
+			// idが有効な数値かチェック
+			if (!Number.isInteger(id) || id <= 0) {
+				console.warn('Invalid YouTube link ID for tags:', id);
+				setYoutubeTags([]);
+				return;
+			}
+
+			const tags = await getYoutubeTags(id);
+			setYoutubeTags(tags);
+		} catch (error) {
+			console.error('Error fetching YouTube tags:', error);
+			setYoutubeTags([]);
+		}
 	};
 
 	const fetchEventName = async () => {
-		const data: any = await getEventsByYoutubeLink(id);
-		setEventName(data[0].events.event_name);
+		try {
+			// idが有効な数値かチェック
+			if (!Number.isInteger(id) || id <= 0) {
+				console.warn('Invalid YouTube link ID:', id);
+				setEventName(null);
+				return;
+			}
+
+			const data: any = await getEventsByYoutubeLink(id);
+			if (data && data.length > 0 && data[0].events) {
+				setEventName(data[0].events.event_name);
+			} else {
+				setEventName(null);
+			}
+		} catch (error) {
+			console.error('Error fetching event name:', error);
+			setEventName(null);
+		}
 	};
 
 	return (

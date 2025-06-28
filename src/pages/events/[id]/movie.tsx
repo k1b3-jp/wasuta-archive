@@ -42,7 +42,7 @@ const EventMovieList = () => {
 
 	type ParamsType = {
 		eventId: number;
-		tags?: string[];
+		tags?: number[];
 	};
 
 	const fetchMovies = useCallback(
@@ -86,7 +86,7 @@ const EventMovieList = () => {
 
 	const fetchAllTags = async () => {
 		try {
-			const tags = await getYoutubeTags();
+			const tags = await getYoutubeTags(null);
 			if (tags) {
 				setAllTags(tags);
 			}

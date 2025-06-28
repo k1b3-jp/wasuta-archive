@@ -133,15 +133,14 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 	const [url, setUrl] = useState("");
 
 	const ogImage = useMemo(() => {
-		return `https://www.wasuta-archive.com/api/og?title=${
-			event.event_name
-		}&image=${event.image_url || defaultImageUrl}`;
+		return `https://www.wasuta-archive.com/api/og?title=${event.event_name
+			}&image=${event.image_url || defaultImageUrl}`;
 	}, [event.event_name, event.image_url]);
 
 	const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
 	const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
 	const fetchAllYoutubeTags = async () => {
-		const tags = await getYoutubeTags();
+		const tags = await getYoutubeTags(null);
 		if (tags) {
 			setAllYoutubeTags(tags);
 		}
