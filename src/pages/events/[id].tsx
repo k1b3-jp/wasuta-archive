@@ -2,6 +2,7 @@ import DefaultLayout from "@/app/layout";
 import MovieCard from "@/components/events/MovieCard";
 import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
+import { useAuth } from "@/contexts/AuthContext";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
@@ -13,7 +14,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArticleJsonLd, NextSeo } from "next-seo";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
@@ -120,32 +121,25 @@ const formatDescription = (description: string): string => {
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
+	const { isLoggedIn } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const validateAccess = async () => {
-		const { data } = await supabase.auth.getSession();
-		if (data.session !== null) {
-			setIsLoggedIn(true);
-		}
-	};
 
 	const id = event?.event_id;
 	const [url, setUrl] = useState("");
 
 	const ogImage = useMemo(() => {
-		return `https://www.wasuta-archive.com/api/og?title=${
-			event.event_name
-		}&image=${event.image_url || defaultImageUrl}`;
+		return `https://www.wasuta-archive.com/api/og?title=${event.event_name
+			}&image=${event.image_url || defaultImageUrl}`;
 	}, [event.event_name, event.image_url]);
 
 	const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
 	const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
-	const fetchAllYoutubeTags = async () => {
-		const tags = await getYoutubeTags();
+	const fetchAllYoutubeTags = useCallback(async () => {
+		const tags = await getYoutubeTags(null);
 		if (tags) {
 			setAllYoutubeTags(tags);
 		}
-	};
+	}, []);
 	const handleYoutubeTagSelect = (tag: TagType) => {
 		if (selectedYoutubeTags.some((t) => t.id === tag.id)) {
 			setSelectedYoutubeTags(
@@ -165,9 +159,8 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		if (toastParams === "success") {
 			toast.success("保存しました🌏");
 		}
-		validateAccess();
 		fetchAllYoutubeTags();
-	}, [toastParams, fetchAllYoutubeTags, validateAccess]);
+	}, [toastParams, fetchAllYoutubeTags]);
 
 	// YouTubeリンクの追加処理
 	const handleSubmit = async (e: { preventDefault: () => void }) => {

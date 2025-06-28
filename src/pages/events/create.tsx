@@ -3,6 +3,7 @@ import BaseButton from "@/components/ui/BaseButton";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import MiniTag from "@/components/ui/MiniTag";
 import Tag from "@/components/ui/Tag";
+import { useAuth } from "@/contexts/AuthContext";
 import createEvent from "@/lib/supabase/createEvent";
 import { getEventTags } from "@/lib/supabase/getEventTags";
 import { uploadStorage } from "@/lib/supabase/uploadStorage";
@@ -14,7 +15,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const CreateEvent = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { isLoggedIn, loading: authLoading } = useAuth();
 	const [eventName, setEventName] = useState("");
 	const [date, setDate] = useState("");
 	const [location, setLocation] = useState("");
@@ -28,21 +29,17 @@ const CreateEvent = () => {
 	const [path, setPathName] = useState<string | undefined>();
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const validateAccess = async () => {
-		const { data } = await supabase.auth.getSession();
-		if (data.session !== null) {
-			setIsLoggedIn(true);
-		} else {
-			router.push(`/login?toast=login`);
-		}
-	};
-
 	useEffect(() => {
 		//エラーをリセットする
 		setErrorMessage("");
-		validateAccess();
-		fetchAllTags();
-	}, []);
+		if (!authLoading) {
+			if (!isLoggedIn) {
+				router.push(`/login?toast=login`);
+			} else {
+				fetchAllTags();
+			}
+		}
+	}, [isLoggedIn, authLoading]);
 
 	const fetchAllTags = async () => {
 		const tags = await getEventTags();

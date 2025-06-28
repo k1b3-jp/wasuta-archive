@@ -4,6 +4,7 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import MiniTag from "@/components/ui/MiniTag";
 import Tag from "@/components/ui/Tag";
+import { useAuth } from "@/contexts/AuthContext";
 import { deleteEvent } from "@/lib/supabase/deleteEvent";
 import { deleteStorage } from "@/lib/supabase/deleteStorage";
 import { getEventTags } from "@/lib/supabase/getEventTags";
@@ -20,7 +21,7 @@ import { toast } from "react-toastify";
 const defaultImageUrl = "/event-placeholder.png";
 
 const EditEvent = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { isLoggedIn, isAdmin, loading: authLoading } = useAuth();
 	const [eventName, setEventName] = useState("");
 	const [date, setDate] = useState("");
 	const [location, setLocation] = useState("");
@@ -36,33 +37,16 @@ const EditEvent = () => {
 	const params = useParams();
 	const id = params?.id;
 
-	const validateAccess = async () => {
-		const { data } = await supabase.auth.getSession();
-		if (data.session !== null) {
-			setIsLoggedIn(true);
-		} else {
-			router.push("/login?toast=login");
-		}
-	};
-
-	const [isAdmin, setIsAdmin] = useState(false);
-	const isSuperAdmin = async () => {
-		const { data } = await supabase.auth.getUser();
-		const userEmail = data?.user?.email;
-
-		if (userEmail === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL) {
-			setIsAdmin(true);
-		} else {
-			setIsAdmin(false);
-		}
-	};
-
 	useEffect(() => {
 		setErrorMessage("");
-		validateAccess();
-		fetchEventAndTags();
-		isSuperAdmin();
-	}, [id]);
+		if (!authLoading) {
+			if (!isLoggedIn) {
+				router.push("/login?toast=login");
+			} else {
+				fetchEventAndTags();
+			}
+		}
+	}, [id, isLoggedIn, authLoading]);
 
 	const fetchEventAndTags = async () => {
 		if (id) {
@@ -345,8 +329,8 @@ const EditEvent = () => {
 										<Tag
 											key={tag.id}
 											label={tag.label}
-											selected={selectedTags.includes(Number.parseInt(tag.id))}
-											onSelect={() => handleTagSelect(Number.parseInt(tag.id))}
+											selected={selectedTags.includes(tag.id)}
+											onSelect={() => handleTagSelect(tag.id)}
 										/>
 									))}
 								</div>

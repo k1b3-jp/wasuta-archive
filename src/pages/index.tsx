@@ -36,7 +36,7 @@ export async function getServerSideProps() {
 	try {
 		featuredEvents = await getEvents({
 			limit: 6,
-			tags: ["1", "4"],
+			tags: [1, 4],
 			byToday: true,
 		});
 	} catch (error) {
