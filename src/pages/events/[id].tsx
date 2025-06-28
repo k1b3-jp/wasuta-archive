@@ -14,7 +14,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArticleJsonLd, NextSeo } from "next-seo";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
@@ -134,12 +134,12 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 
 	const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
 	const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
-	const fetchAllYoutubeTags = async () => {
+	const fetchAllYoutubeTags = useCallback(async () => {
 		const tags = await getYoutubeTags(null);
 		if (tags) {
 			setAllYoutubeTags(tags);
 		}
-	};
+	}, []);
 	const handleYoutubeTagSelect = (tag: TagType) => {
 		if (selectedYoutubeTags.some((t) => t.id === tag.id)) {
 			setSelectedYoutubeTags(
