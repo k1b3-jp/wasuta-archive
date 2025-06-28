@@ -56,10 +56,8 @@ const MoviesContent = () => {
 		const start = limit * page;
 		const end = start + limit - 1;
 
-		startTransition(() => {
-			setLoading(true);
-			setError("");
-		});
+		setLoading(true);
+		setError("");
 
 		try {
 			const selectedTagIds = selectedTags.map((tag) => tag.id);
@@ -70,14 +68,10 @@ const MoviesContent = () => {
 			});
 			return moviesData;
 		} catch (err) {
-			startTransition(() => {
-				setError("イベントの取得中にエラーが発生しました");
-			});
+			setError("イベントの取得中にエラーが発生しました");
 			console.error(err);
 		} finally {
-			startTransition(() => {
-				setLoading(false);
-			});
+			setLoading(false);
 		}
 	};
 
@@ -94,9 +88,10 @@ const MoviesContent = () => {
 		mutate,
 	} = useSWRInfinite<any>(getKey, fetchMovies);
 
-	const handleSearch = () => {
-		startTransition(() => {
-			setSize(1).then(() => mutate());
+	const handleSearch = async () => {
+		startTransition(async () => {
+			await setSize(1);
+			await mutate();
 		});
 	};
 
