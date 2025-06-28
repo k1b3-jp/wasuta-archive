@@ -2,6 +2,7 @@ import DefaultLayout from "@/app/layout";
 import MovieCard from "@/components/events/MovieCard";
 import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
+import { useAuth } from "@/contexts/AuthContext";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
@@ -120,14 +121,8 @@ const formatDescription = (description: string): string => {
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
+	const { isLoggedIn } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const validateAccess = async () => {
-		const { data } = await supabase.auth.getSession();
-		if (data.session !== null) {
-			setIsLoggedIn(true);
-		}
-	};
 
 	const id = event?.event_id;
 	const [url, setUrl] = useState("");
@@ -164,9 +159,8 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		if (toastParams === "success") {
 			toast.success("保存しました🌏");
 		}
-		validateAccess();
 		fetchAllYoutubeTags();
-	}, [toastParams, fetchAllYoutubeTags, validateAccess]);
+	}, [toastParams, fetchAllYoutubeTags]);
 
 	// YouTubeリンクの追加処理
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
