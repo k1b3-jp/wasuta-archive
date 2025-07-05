@@ -14,13 +14,13 @@ const EventCard: React.FC<EventCardProps> = ({
 	id,
 }) => {
 	return (
-		<div className="max-w-xs bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
+		<div className="bg-white rounded-xl shadow-md overflow-hidden max-w-sm relative">
 			<Link href={`/events/${id}`} rel="noopener noreferrer" target="_blank">
 				<div className="overflow-hidden">
 					<img
 						src={imageUrl || defaultImageUrl}
 						alt={title}
-						width={320}
+						width={340}
 						height={208}
 						className="hover:scale-110 transition-all duration-500 w-full h-52 object-cover"
 					/>
