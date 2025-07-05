@@ -80,8 +80,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 			<div className="mb-2">
 				{videoId ? (
 					<iframe
-						width="340"
-						height="190"
+						width="320"
+						height="200"
 						src={`https://www.youtube.com/embed/${videoId}`}
 						loading="lazy"
 						title="YouTube video player"
