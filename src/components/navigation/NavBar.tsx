@@ -21,8 +21,6 @@ const NavBar = () => {
 
 	return (
 		<header className="shadow-lg top-0 z-50">
-			<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4850378479891783"
-				crossOrigin="anonymous"></script>
 			<nav className="flex items-center flex-wrap text-font-color font-bold text-center bg-white">
 				<Link
 					href="/"
