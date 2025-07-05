@@ -2,6 +2,7 @@ import DefaultLayout from "@/app/layout";
 import MovieCard from "@/components/events/MovieCard";
 import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
+import Ad from "@/components/ui/Ad";
 import { useAuth } from "@/contexts/AuthContext";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
@@ -264,11 +265,15 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 								</TwitterShareButton>
 							</div>
 							<div className="text-center">
-								<BaseButton
-									link={`/events/${id}/edit`}
-									label="イベント情報を編集"
-									white
-								/>
+								{isLoggedIn ? (
+									<BaseButton
+										link={`/events/${id}/edit`}
+										label="イベント情報を編集"
+										white
+									/>
+								) : (
+									<Ad adMaxId="d5c8fcaa256290a8f536809b4ea4b6d1" />
+								)}
 							</div>
 						</div>
 						<div className="event-movie bg-100vw">
