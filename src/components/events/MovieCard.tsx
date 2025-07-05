@@ -91,7 +91,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 					<p>Invalid URL</p>
 				)}
 			</div>
-			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2 max-w-[340px]">{eventName}</div>
+			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2 max-w-[320px]">{eventName}</div>
 			<div className="min-h-[28px]">
 				{youtubeTags?.map(
 					(tag: { id: React.Key | null | undefined; label: string }) => (
