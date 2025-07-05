@@ -21,6 +21,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import Link from "next/link";
+import Ad from "@/components/ui/Ad";
 
 interface HomeProps {
 	featuredEvents: Event[];
@@ -146,20 +147,7 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 						</div>
 					</section>
 					<section className="bg-white px-5 pb-4">
-						<div className="border p-4 bg-[url('/bg-10th.png')] bg-cover bg-center bg-no-repeat">
-							<Link href="/exclusive/anniversary-10th">
-								<div className="title">
-									<div className="text-white">- 特集 -</div>
-									<h1 className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
-										<span className="block">
-											デビュー10周年記念
-											<br />
-											特設ページ
-										</span>
-									</h1>
-								</div>
-							</Link>
-						</div>
+						<Ad adMaxId="64bb21244d4a4a811bdc9950be293b25" />
 					</section>
 					<section className="flex flex-col bg-gradient-to-r from-[#f2a2c8]/10 to-[#7ec8d9]/10 bg-100vw">
 						<div className="container mx-auto p-6">
