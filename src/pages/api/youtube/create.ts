@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 function validateUrl(url: string) {
-  const youtubeRegex = /^(https?:\/\/)?((www\.|m\.)?youtube\.com\/watch\?.*v=([^&]+).*|youtu\.be\/([^?]+)(\?.*)?)$/;
+  const youtubeRegex =
+    /^(https?:\/\/)?((www\.|m\.)?youtube\.com\/watch\?.*v=([^&]+).*|youtu\.be\/([^?]+)(\?.*)?)$/;
   return youtubeRegex.test(url);
 }
 
@@ -25,25 +26,43 @@ function cleanYouTubeUrl(url: string) {
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") return res.status(405).end();
 
   const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : undefined;
+  const token = authHeader?.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : undefined;
+  if (!token) return res.status(401).json({ error: "unauthorized" });
+  if (
+    !supabaseUrl ||
+    supabaseUrl === "undefined" ||
+    !supabaseAnonKey ||
+    supabaseAnonKey === "undefined"
+  ) {
+    console.error(
+      "Supabase environment variables are missing: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    );
+    return res.status(500).json({
+      error:
+        "Server misconfiguration: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    });
+  }
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     global: { headers: token ? { Authorization: `Bearer ${token}` } : {} },
   });
 
-  const { data: roleRows, error: roleError } = await supabase
-    .from("user_roles")
-    .select("user_id, role")
-    .eq("role", "admin")
-    .limit(1);
-  if (roleError) return res.status(500).json({ error: roleError.message });
-  if (!roleRows || roleRows.length === 0) return res.status(403).json({ error: "forbidden" });
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError) return res.status(500).json({ error: userError.message });
+  const currentUserId = userData?.user?.id;
+  if (!currentUserId) return res.status(401).json({ error: "unauthorized" });
 
   let { url, tags, eventId } = req.body ?? {};
-  if (!url || !eventId) return res.status(400).json({ error: "missing required fields" });
+  if (!url || !eventId)
+    return res.status(400).json({ error: "missing required fields" });
   if (!validateUrl(url)) return res.status(400).json({ error: "invalid url" });
   url = cleanYouTubeUrl(url);
 
@@ -55,18 +74,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (linkError) return res.status(500).json({ error: linkError.message });
 
     const youtube_link_id = linkData?.[0]?.youtube_link_id;
-    if (!youtube_link_id) return res.status(500).json({ error: "insert returned no id" });
+    if (!youtube_link_id)
+      return res.status(500).json({ error: "insert returned no id" });
 
     if (Array.isArray(tags) && tags.length > 0) {
-      const youtubeTagData = tags.map((tagId: number) => ({ youtube_link_id, tag_id: tagId }));
-      const { error: tagError } = await supabase.from("youtube_tags").insert(youtubeTagData);
-      if (tagError) return res.status(500).json({ error: tagError.message });
+      const youtubeTagData = tags.map((tagId: number) => ({
+        youtube_link_id,
+        tag_id: tagId,
+      }));
+      const { error: tagError } = await supabase
+        .from("youtube_tags")
+        .insert(youtubeTagData);
+      if (tagError) {
+        await supabase
+          .from("youtube_links")
+          .delete()
+          .eq("youtube_link_id", youtube_link_id);
+        return res.status(500).json({ error: tagError.message });
+      }
     }
 
     const { error: eventLinkError } = await supabase
       .from("event_youtube_links")
       .insert([{ event_id: Number(eventId), youtube_link_id }]);
-    if (eventLinkError) return res.status(500).json({ error: eventLinkError.message });
+    if (eventLinkError) {
+      await supabase
+        .from("youtube_tags")
+        .delete()
+        .eq("youtube_link_id", youtube_link_id);
+      await supabase
+        .from("youtube_links")
+        .delete()
+        .eq("youtube_link_id", youtube_link_id);
+      return res.status(500).json({ error: eventLinkError.message });
+    }
 
     return res.status(200).json({ ok: true });
   } catch (e: any) {
