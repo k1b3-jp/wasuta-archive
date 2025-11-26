@@ -13,7 +13,7 @@ const NavBar = () => {
 	const handleLogout = async () => {
 		try {
             await signOut();
-            router.replace(pathname);
+            router.replace(pathname ?? "/");
             router.refresh();
 		} catch (error) {
 			console.error("Logout error:", error);
