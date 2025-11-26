@@ -8,16 +8,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const BottomBar = () => {
-	const pathname = usePathname();
-	const linkStyle = (path: string | null) =>
-		`inline-flex flex-col items-center justify-center gap-1 group ${
-			pathname === path
-				? "text-deep-green"
-				: "hover:text-deep-green text-deep-gray"
-		}`;
+    const router = useRouter();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+    const pathname = mounted ? router.asPath : null;
+    const linkStyle = (path: string | null) =>
+        `inline-flex flex-col items-center justify-center gap-1 group ${
+            mounted && pathname === path
+                ? "text-deep-green"
+                : "hover:text-deep-green text-deep-gray"
+        }`;
 
 	return (
 		<div className="fixed w-full bg-white bottom-0 text-deep-gray font-light py-4 border-t">

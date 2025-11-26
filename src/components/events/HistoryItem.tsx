@@ -94,10 +94,10 @@ const HistoryItem: React.FC<EventCardProps> = ({
 						</div>
 					</div>
 					<div className="text-slate-500 mb-2">{location}</div>
-					<Popover className="flex justify-end">
-						<Popover.Button>
-							<BaseButton label="詳しく" />
-						</Popover.Button>
+                    <Popover className="flex justify-end">
+                        <Popover.Button as="div">
+                            <BaseButton label="詳しく" />
+                        </Popover.Button>
 						<Transition
 							as={Fragment}
 							enter="transition ease-out duration-200"
@@ -119,10 +119,10 @@ const HistoryItem: React.FC<EventCardProps> = ({
 										/>
 									</div>
 									<div className="p-4">{description}</div>
-									<div className="flex flex-col md:flex-row p-4 gap-2">
-										<Popover.Button as="div" className="basis-1/2">
-											<BaseButton label="閉じる" white onClick={close} />
-										</Popover.Button>
+                                    <div className="flex flex-col md:flex-row p-4 gap-2">
+                                        <Popover.Button as="div" className="basis-1/2">
+                                            <BaseButton label="閉じる" white />
+                                        </Popover.Button>
 										<div className="basis-1/2">
 											<BaseButton
 												label="イベントページへ"

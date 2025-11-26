@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import EventCard from "@/components/events/EventCard";
 import BaseButton from "@/components/ui/BaseButton";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -8,7 +8,7 @@ import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
 import type { TagType } from "@/types/tag";
 import { NextSeo } from "next-seo";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWRInfinite from "swr/infinite";
@@ -22,25 +22,21 @@ const EventListPage = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>("");
 
-	const query = useSearchParams();
-	const toastParams = query?.get("toast");
-	useClearQueryParam("toast", toastParams === "eventDeleted");
+    const router = useRouter();
+    const toastParams = (router.query?.toast as string) || null;
+    useClearQueryParam("toast", toastParams === "eventDeleted");
 
-	useEffect(() => {
-		const queryTags = query?.get("tags");
-		const queryTagIds = queryTags
-			?.split(",")
-			.map((id) => Number.parseInt(id, 10));
+    useEffect(() => {
+        const queryTags = (router.query?.tags as string) || undefined;
+        const queryTagIds = queryTags
+            ?.split(",")
+            .map((id) => Number.parseInt(id, 10));
 
-		const selectTagsById = () => {
-			const selected = allTags.filter((tag) =>
-				queryTagIds?.includes(Number(tag.id)),
-			);
-			setSelectedTags(selected);
-		};
-
-		selectTagsById();
-	}, [allTags, query]);
+        const selected = allTags.filter((tag) =>
+            queryTagIds?.includes(Number(tag.id)),
+        );
+        setSelectedTags(selected);
+    }, [allTags, router.query?.tags]);
 
 	useEffect(() => {
 		handleSearch();

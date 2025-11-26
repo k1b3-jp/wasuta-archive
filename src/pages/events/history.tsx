@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
 import type { Event } from "@/types/event";
