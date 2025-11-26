@@ -20,27 +20,31 @@ export function cleanYouTubeUrl(url: string) {
 
     // 新しいURLオブジェクトを作成して、ドメインとパスを更新
     return newUrl;
-  } else {
-    // ドメインをyoutube.comに統一
-    urlObj.hostname = "www.youtube.com";
-
-    // クエリパラメータからvパラメータ以外を削除
-    const searchParams = urlObj.searchParams;
-    const videoId = searchParams.get("v");
-    searchParams.forEach((value, key) => {
-      if (key !== "v") {
-        searchParams.delete(key);
-      }
-    });
-
-    // 更新されたURLを返す
-    return urlObj.toString();
   }
+  // ドメインをyoutube.comに統一
+  urlObj.hostname = "www.youtube.com";
+
+  // クエリパラメータからvパラメータ以外を削除
+  const searchParams = urlObj.searchParams;
+  const videoId = searchParams.get("v");
+  searchParams.forEach((value, key) => {
+    if (key !== "v") {
+      searchParams.delete(key);
+    }
+  });
+
+  // 更新されたURLを返す
+  return urlObj.toString();
 }
 
-export const createYoutubeLink = async (url: string, tags: number[], eventId: number) => {
-  if (!validateUrl(url)) throw new Error("URLが正しいYoutubeのリンクではありません");
-  url = cleanYouTubeUrl(url);
+export const createYoutubeLink = async (
+  url: string,
+  tags: number[],
+  eventId: number
+) => {
+  if (!validateUrl(url))
+    throw new Error("URLが正しいYoutubeのリンクではありません");
+  const cleaned = cleanYouTubeUrl(url);
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData?.session?.access_token;
   const res = await fetch("/api/youtube/create", {
@@ -49,7 +53,7 @@ export const createYoutubeLink = async (url: string, tags: number[], eventId: nu
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify({ url, tags, eventId }),
+    body: JSON.stringify({ url: cleaned, tags, eventId }),
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({ error: "unknown" }));

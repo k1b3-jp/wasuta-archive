@@ -25,12 +25,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { eventName, date, location, imageUrl, description, tags } = req.body ?? {};
   if (!eventName || !date) return res.status(400).json({ error: "missing required fields" });
+  const name = String(eventName).trim();
+  if (name.length === 0 || name.length > 200) return res.status(400).json({ error: "invalid eventName" });
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) return res.status(400).json({ error: "invalid date" });
+  if (imageUrl) {
+    try {
+      const u = new URL(String(imageUrl));
+      if (!/^https?:$/.test(u.protocol)) return res.status(400).json({ error: "invalid imageUrl" });
+    } catch {
+      return res.status(400).json({ error: "invalid imageUrl" });
+    }
+  }
+
+  if (Array.isArray(tags) && tags.some((t: any) => typeof t !== "number" || t <= 0)) {
+    return res.status(400).json({ error: "invalid tags" });
+  }
+
+  // simple per-user rate limiting (60s window, 30 requests)
+  const now = Date.now();
+  const windowMs = 60_000;
+  const max = 30;
+  ;(globalThis as any).__rate ||= new Map<string, { c: number; w: number }>();
+  const rm: Map<string, { c: number; w: number }> = (globalThis as any).__rate;
+  const k = `events_create:${currentUserId}`;
+  const cur = rm.get(k) || { c: 0, w: now };
+  if (now - cur.w > windowMs) { cur.c = 0; cur.w = now; }
+  cur.c += 1; rm.set(k, cur);
+  if (cur.c > max) return res.status(429).json({ error: "rate limited" });
 
   try {
     const { data: insertedData, error: eventInsertError } = await supabase
       .from("events")
       .insert([
-        { event_name: eventName, date: new Date(date), location, image_url: imageUrl, description },
+        { event_name: name, date: parsedDate, location, image_url: imageUrl, description, created_by: currentUserId },
       ])
       .select();
     if (eventInsertError) return res.status(500).json({ error: eventInsertError.message });
