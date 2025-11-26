@@ -60,6 +60,22 @@ export default async function handler(
   const currentUserId = userData?.user?.id;
   if (!currentUserId) return res.status(401).json({ error: "unauthorized" });
 
+  // simple per-user rate limiting (60s window, 60 requests)
+  const now = Date.now();
+  const windowMs = 60_000;
+  const max = 60;
+  (globalThis as any).__rate ||= new Map<string, { c: number; w: number }>();
+  const rm: Map<string, { c: number; w: number }> = (globalThis as any).__rate;
+  const k = `youtube_create:${currentUserId}`;
+  const cur = rm.get(k) || { c: 0, w: now };
+  if (now - cur.w > windowMs) {
+    cur.c = 0;
+    cur.w = now;
+  }
+  cur.c += 1;
+  rm.set(k, cur);
+  if (cur.c > max) return res.status(429).json({ error: "rate limited" });
+
   let { url, tags, eventId } = req.body ?? {};
   if (!url || !eventId)
     return res.status(400).json({ error: "missing required fields" });

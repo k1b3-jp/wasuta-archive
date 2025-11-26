@@ -25,11 +25,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { eventId, eventName, date, location, imageUrl, description, tags } = req.body ?? {};
   if (!eventId || !eventName || !date) return res.status(400).json({ error: "missing required fields" });
+  const name = String(eventName).trim();
+  if (name.length === 0 || name.length > 200) return res.status(400).json({ error: "invalid eventName" });
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) return res.status(400).json({ error: "invalid date" });
+  if (imageUrl) {
+    try {
+      const u = new URL(String(imageUrl));
+      if (!/^https?:$/.test(u.protocol)) return res.status(400).json({ error: "invalid imageUrl" });
+    } catch {
+      return res.status(400).json({ error: "invalid imageUrl" });
+    }
+  }
+
+  // simple per-user rate limiting (60s window, 60 requests)
+  const now = Date.now();
+  const windowMs = 60_000;
+  const max = 60;
+  ;(globalThis as any).__rate ||= new Map<string, { c: number; w: number }>();
+  const rm: Map<string, { c: number; w: number }> = (globalThis as any).__rate;
+  const k = `events_update:${currentUserId}`;
+  const cur = rm.get(k) || { c: 0, w: now };
+  if (now - cur.w > windowMs) { cur.c = 0; cur.w = now; }
+  cur.c += 1; rm.set(k, cur);
+  if (cur.c > max) return res.status(429).json({ error: "rate limited" });
 
   try {
     const { error: updateError } = await supabase
       .from("events")
-      .update({ event_name: eventName, date: new Date(date), location: location || "", image_url: imageUrl, description: description || "" })
+      .update({ event_name: name, date: parsedDate, location: location || "", image_url: imageUrl, description: description || "", updated_by: currentUserId })
       .eq("event_id", eventId);
     if (updateError) return res.status(500).json({ error: updateError.message });
 

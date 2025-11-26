@@ -27,6 +27,10 @@ create policy "event_youtube_links_insert_authenticated"
 drop policy if exists "events_write_admin_only" on public.events;
 drop policy if exists "events_update_admin_only" on public.events;
 
+-- Audit columns
+alter table public.events add column if not exists created_by uuid;
+alter table public.events add column if not exists updated_by uuid;
+
 create policy "events_insert_authenticated"
   on public.events
   for insert
@@ -85,3 +89,9 @@ create policy "storage_objects_delete_authenticated"
 insert into storage.buckets (id, name, public)
 values ('event_pics', 'event_pics', true)
 on conflict (id) do nothing;
+
+-- Enforce bucket constraints (MIME and size)
+update storage.buckets
+  set file_size_limit = 5242880,
+      allowed_mime_types = '{image/*}'
+where id = 'event_pics';
