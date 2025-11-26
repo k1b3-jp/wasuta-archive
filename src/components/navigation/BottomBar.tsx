@@ -17,7 +17,7 @@ const BottomBar = () => {
     useEffect(() => {
         setMounted(true);
     }, []);
-    const pathname = mounted ? router.asPath : null;
+    const pathname = mounted ? router.pathname : null;
     const linkStyle = (path: string | null) =>
         `inline-flex flex-col items-center justify-center gap-1 group ${
             mounted && pathname === path
