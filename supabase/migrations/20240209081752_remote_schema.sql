@@ -1,0 +1,2 @@
+-- Placeholder to match remote migration history (do not apply changes)
+-- This file exists to satisfy Supabase CLI version alignment.
