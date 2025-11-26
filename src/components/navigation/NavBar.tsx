@@ -1,19 +1,20 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import Logo from "../../../public/logo.svg";
 import BaseButton from "../ui/BaseButton";
 
 const NavBar = () => {
-	const { isLoggedIn, signOut } = useAuth();
-	const router = useRouter();
+    const { isLoggedIn, signOut } = useAuth();
+    const router = useRouter();
+    const pathname = usePathname();
 
 	const handleLogout = async () => {
 		try {
-			await signOut();
-			// ログアウトを反映させるためにリロードさせる
-            router.replace(router.asPath);
+            await signOut();
+            router.replace(pathname);
+            router.refresh();
 		} catch (error) {
 			console.error("Logout error:", error);
 		}
