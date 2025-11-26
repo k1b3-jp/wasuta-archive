@@ -39,7 +39,7 @@ jobs:
       - name: Push migrations
         env:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-        run: supabase db push
+        run: yes | supabase db push
 
       - name: Deploy functions (if any)
         if: ${{ hashFiles('supabase/functions/**/*.ts') != '' || hashFiles('supabase/functions/**/*.tsx') != '' || hashFiles('supabase/functions/**/*.js') != '' || hashFiles('supabase/functions/**/*.ts') != '' }}
@@ -47,4 +47,3 @@ jobs:
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: |
           supabase functions deploy --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt --debug --all || true
-
