@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";

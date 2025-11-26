@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import MovieCard from "@/components/events/MovieCard";
 import BaseButton from "@/components/ui/BaseButton";
 import Tag from "@/components/ui/Tag";
@@ -14,13 +14,12 @@ import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArticleJsonLd, NextSeo } from "next-seo";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { TwitterShareButton, XIcon } from "react-share";
+import { faSquareXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import parse from "html-react-parser";
 import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 
 // イベント詳細ページのプロパティ型定義
@@ -151,17 +150,16 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		}
 	};
 
-	const router = useRouter();
-	const query = useSearchParams();
-	const toastParams = query?.get("toast");
-	useClearQueryParam("toast", toastParams === "success");
+    const router = useRouter();
+    const toastParam = (router.query?.toast as string) || null;
+    useClearQueryParam("toast", toastParam === "success");
 
-	useEffect(() => {
-		if (toastParams === "success") {
-			toast.success("保存しました🌏");
-		}
-		fetchAllYoutubeTags();
-	}, [toastParams, fetchAllYoutubeTags]);
+    useEffect(() => {
+        if (toastParam === "success") {
+            toast.success("保存しました🌏");
+        }
+        fetchAllYoutubeTags();
+    }, [toastParam, fetchAllYoutubeTags]);
 
 	// YouTubeリンクの追加処理
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -251,19 +249,20 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 							</div>
 							<div className="flex flex-col gap-2 mb-6">
 								<h2 className="text-l font-bold">イベントについて</h2>
-								<p>{parse(formatDescription(event.description))}</p>
+								<p dangerouslySetInnerHTML={{ __html: formatDescription(event.description) }} />
 							</div>
-							<div className="flex flex-col gap-2 mb-8">
-								<h2 className="text-l font-bold">Share</h2>
-								<TwitterShareButton
-									url={`https://www.wasuta-archive.com/events/${id}`}
-									title={event.title}
-									hashtags={["わーすた", "わーすたアーカイブ"]}
-									className="w-8"
-								>
-									<XIcon size={32} round={true} />
-								</TwitterShareButton>
-							</div>
+                            <div className="flex flex-col gap-2 mb-8">
+                                <h2 className="text-l font-bold">Share</h2>
+                                <a
+                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://www.wasuta-archive.com/events/${id}`)}&text=${encodeURIComponent(event.event_name)}&hashtags=${encodeURIComponent("わーすた,わーすたアーカイブ")}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-8 inline-block"
+                                    aria-label="Share on X"
+                                >
+                                    <FontAwesomeIcon icon={faSquareXTwitter} className="text-2xl" />
+                                </a>
+                            </div>
 							<div className="text-center">
 								{isLoggedIn ? (
 									<BaseButton

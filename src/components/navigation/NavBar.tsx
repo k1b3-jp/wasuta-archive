@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Logo from "../../../public/logo.svg";
 import BaseButton from "../ui/BaseButton";
 
@@ -13,7 +13,7 @@ const NavBar = () => {
 		try {
 			await signOut();
 			// ログアウトを反映させるためにリロードさせる
-			router.refresh();
+            router.replace(router.asPath);
 		} catch (error) {
 			console.error("Logout error:", error);
 		}

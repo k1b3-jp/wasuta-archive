@@ -30,9 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [admin, setAdmin] = useState(false);
 
-  // 管理者チェック
-  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_USER_EMAIL;
   const isLoggedIn = !!user;
 
   // セッション取得
@@ -43,10 +42,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setSession(session);
       setUser(session?.user ?? null);
+      const token = session?.access_token;
+      if (token) {
+        try {
+          const res = await fetch("/api/auth/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const body = await res.json();
+          setAdmin(!!body.isAdmin);
+        } catch {
+          setAdmin(false);
+        }
+      } else {
+        setAdmin(false);
+      }
     } catch (error) {
       console.error("Error fetching session:", error);
       setSession(null);
       setUser(null);
+      setAdmin(false);
     } finally {
       setLoading(false);
     }
@@ -59,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error) throw error;
       setUser(null);
       setSession(null);
+      setAdmin(false);
     } catch (error) {
       console.error("Error signing out:", error);
       throw error;
@@ -85,10 +100,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     user,
     session,
     isLoggedIn,
-    isAdmin,
+    isAdmin: admin,
     loading,
     signOut,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}; 
+};

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface AdProps {
   adMaxId: string;
@@ -22,7 +22,8 @@ declare global {
 }
 
 const Ad = ({ adMaxId, className }: AdProps) => {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.asPath;
 
   useEffect(() => {
     // 既にスクリプトタグが存在するかチェック

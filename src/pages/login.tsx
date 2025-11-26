@@ -2,21 +2,21 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import DefaultLayout from "../app/layout";
 import supabase from "../lib/supabaseClient";
 
 export default function Google() {
-	const query = useSearchParams();
-	const toastParams = query?.get("toast");
+    const router = useRouter();
+    const toastParams = (router.query?.toast as string) || null;
 
 	useEffect(() => {
 		if (toastParams === "login") {
 			toast.error("ログインが必要です🙇‍♂️");
 		}
-	}, [toastParams]);
+    }, [toastParams]);
 
 	return (
 		<>

@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 // import MovieCard from "@/components/events/MovieCard";
 
 // MovieCardをクライアントサイドのみでレンダリング

@@ -10,67 +10,23 @@ interface EventData {
 
 const createEvent = async (data: EventData, tags: number[]) => {
   const { eventName, date, location, imageUrl, description } = data;
+  const { data: sessionData } = await supabase.auth.getSession();
+  const token = sessionData?.session?.access_token;
 
-  try {
-    // 1. イベントを挿入
-    const { data: insertedData, error: eventInsertError } = await supabase
-      .from("events")
-      .insert([
-        {
-          event_name: eventName,
-          date: new Date(date),
-          location,
-          image_url: imageUrl,
-          description,
-        },
-      ])
-      .select();
-
-    if (eventInsertError) throw eventInsertError;
-
-    const insertedEventId = insertedData[0].event_id;
-
-    // 2. イベントタグを挿入（外部キー制約によりタグの存在チェック済み）
-    if (tags.length > 0) {
-      const eventTagData = tags.map((tagId) => ({
-        event_id: insertedEventId,
-        tag_id: tagId,
-      }));
-
-      const { error: tagError } = await supabase
-        .from("event_tags")
-        .insert(eventTagData);
-
-      if (tagError) {
-        // タグ挿入に失敗した場合、イベントも削除してデータの整合性を保つ
-        // 外部キー制約エラーの場合、適切なエラーメッセージを返す
-        try {
-          await supabase
-            .from("events")
-            .delete()
-            .eq("event_id", insertedEventId);
-        } catch (deleteError) {
-          console.error(
-            "Failed to cleanup event after tag insertion failure:",
-            deleteError
-          );
-          // 削除に失敗した場合でも、元のタグエラーを投げる
-        }
-
-        // タグが存在しない場合の分かりやすいエラーメッセージ
-        if (tagError.code === "23503") {
-          // 外部キー制約違反
-          throw new Error("指定されたタグIDが存在しません。");
-        }
-        throw tagError;
-      }
-    }
-
-    return insertedData;
-  } catch (error) {
-    console.error("Error in createEvent:", error);
-    throw error;
+  const res = await fetch("/api/events/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ eventName, date, location, imageUrl, description, tags }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "unknown" }));
+    throw new Error(body.error || `HTTP ${res.status}`);
   }
+  const body = await res.json();
+  return body.data;
 };
 
 export default createEvent;

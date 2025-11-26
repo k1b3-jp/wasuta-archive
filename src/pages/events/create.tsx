@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import BaseButton from "@/components/ui/BaseButton";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import MiniTag from "@/components/ui/MiniTag";
@@ -10,7 +10,7 @@ import { uploadStorage } from "@/lib/supabase/uploadStorage";
 import { supabase } from "@/lib/supabaseClient";
 import { TagType } from "@/types/tag";
 import { NextSeo } from "next-seo";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
