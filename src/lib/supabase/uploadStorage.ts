@@ -23,7 +23,7 @@ export const uploadStorage = async ({
     maxWidthOrHeight: 1920, // 最大幅または高さ（ピクセル）
   });
 
-  const pathName = `/${uuidv4()}`; // パス名の設定
+  const pathName = `${uuidv4()}`; // パス名の設定（先頭スラッシュ無し）
   const { data, error } = await supabase.storage
     .from(bucketName)
     .upload(pathName, compressedFile, {

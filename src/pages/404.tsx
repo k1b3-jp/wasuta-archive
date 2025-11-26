@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 
@@ -33,12 +33,12 @@ export default function Custom404() {
 						一時的にアクセスできない状況にあるか、移動もしくは削除された可能性があります。
 					</p>
 					<div className="lg:w-4/5 mx-auto">
-						<Player
-							autoplay
-							loop
-							src="https://lottie.host/81084f1d-3d95-40eb-93e8-d3abd149aa84/i6r6HoLdlM.json"
-							style={{ height: "100%", width: "100%" }}
-						></Player>
+                        <Player
+                            autoplay
+                            loop
+                            src="https://lottie.host/81084f1d-3d95-40eb-93e8-d3abd149aa84/i6r6HoLdlM.json"
+                            style={{ height: "100%", width: "100%" }}
+                        />
 					</div>
 				</div>
 			</DefaultLayout>

@@ -4743,7 +4743,8 @@ INSERT INTO "public"."youtube_tags" ("youtube_link_id", "tag_id") VALUES
 --
 
 INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_at", "public", "avif_autodetection", "file_size_limit", "allowed_mime_types", "owner_id") VALUES
-	('event_pics', 'event_pics', NULL, '2024-02-09 08:15:26.368848+00', '2024-02-09 08:15:26.368848+00', true, false, 5242880, '{image/*}', NULL);
+    ('event_pics', 'event_pics', NULL, '2024-02-09 08:15:26.368848+00', '2024-02-09 08:15:26.368848+00', true, false, 5242880, '{image/*}', NULL)
+ON CONFLICT (id) DO NOTHING;
 
 
 --

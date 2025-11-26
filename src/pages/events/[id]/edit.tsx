@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import BaseButton from "@/components/ui/BaseButton";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -14,7 +14,7 @@ import { uploadStorage } from "@/lib/supabase/uploadStorage";
 import { supabase } from "@/lib/supabaseClient";
 import type { TagType } from "@/types/tag";
 import { NextSeo } from "next-seo";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -33,9 +33,8 @@ const EditEvent = () => {
 	const [allTags, setAllTags] = useState<TagType[]>([]);
 	const [selectedTags, setSelectedTags] = useState<number[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-	const router = useRouter();
-	const params = useParams();
-	const id = params?.id;
+    const router = useRouter();
+    const id = router.query?.id;
 
 	useEffect(() => {
 		setErrorMessage("");
@@ -61,10 +60,10 @@ const EditEvent = () => {
 			setDescription(event[0].description);
 
 			// イベントに紐づくタグを取得
-			const { data: eventTags } = await supabase
-				.from("event_tags")
-				.select("tag_id")
-				.eq("event_id", id);
+            const { data: eventTags } = await supabase
+                .from("event_tags")
+                .select("tag_id")
+                .eq("event_id", id as any);
 			if (eventTags) {
 				const tagIds = eventTags.map((tag) => tag.tag_id);
 				setSelectedTags(tagIds);
@@ -185,7 +184,7 @@ const EditEvent = () => {
 					{
 						...eventData,
 					},
-					id?.toString() ?? "",
+                    (id as string) ?? "",
 					selectedTags,
 				);
 

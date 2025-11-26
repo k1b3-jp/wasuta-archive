@@ -1,4 +1,4 @@
-import DefaultLayout from "@/app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import EventCard from "@/components/events/EventCard";
 import MovieCard from "@/components/events/MovieCard";
 import TopFeaturedEventCard from "@/components/events/TopFeaturedEventCard";
