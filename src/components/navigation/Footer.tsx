@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
 							© 2024 k1b3-jp. All Rights Reserved.
 						</span>
 						<div className="flex mt-4 sm:justify-center sm:mt-0">
-							<Link href="https://twitter.com/tws_kotaro">
+							<Link href="https://x.com/wasuta_archive">
 								<FontAwesomeIcon icon={faSquareXTwitter} className="text-2xl" />
 							</Link>
 						</div>
