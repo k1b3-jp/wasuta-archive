@@ -62,6 +62,7 @@ const Anniversary11th = () => {
 	const [allEvents, setAllEvents] = useState<any[]>([]);
 	const [venues, setVenues] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const isLoadingRef = React.useRef(true);
 	const [videoLoadCount, setVideoLoadCount] = useState(0);
 
 	const [stats, setStats] = useState<Stats>({ events: 0, movies: 0, days: 0 });
@@ -189,18 +190,22 @@ const Anniversary11th = () => {
 			// 11周年はシャッフルせず時系列で表示（年表の役割を兼ねる）
 			setImages([...imageData]);
 
-			if (isLoading) {
+			if (isLoadingRef.current) {
 				setTimeout(() => {
 					const loadingElement = document.querySelector(".loading-screen");
 					loadingElement?.classList.add("animate-fade-out");
-					setTimeout(() => setIsLoading(false), 800);
+					setTimeout(() => {
+						setIsLoading(false);
+						isLoadingRef.current = false;
+					}, 800);
 				}, 1000);
 			}
 		} catch (err) {
 			console.error(err);
 			setIsLoading(false);
+			isLoadingRef.current = false;
 		}
-	}, [isLoading]);
+	}, [fetchRandomMovie]);
 
 	useEffect(() => {
 		fetchData();
