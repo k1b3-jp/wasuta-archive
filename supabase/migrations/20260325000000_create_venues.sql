@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS public.venues;
-
-CREATE TABLE public.venues (
+CREATE TABLE IF NOT EXISTS public.venues (
   id text PRIMARY KEY,
   name text NOT NULL,
   keywords text[] NOT NULL,
@@ -10,7 +8,16 @@ CREATE TABLE public.venues (
 
 ALTER TABLE public.venues ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Enable read access for all users" ON public.venues FOR SELECT USING (true);
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'venues'
+      AND policyname = 'Enable read access for all users'
+  ) THEN
+    CREATE POLICY "Enable read access for all users" ON public.venues FOR SELECT USING (true);
+  END IF;
+END $$;
 
 INSERT INTO public.venues (id, name, keywords, lat, lng) VALUES
 ('paris', 'Paris, France', ARRAY['フランス', 'Paris', 'JAPAN EXPO'], 48.8566, 2.3522),
@@ -72,4 +79,5 @@ INSERT INTO public.venues (id, name, keywords, lat, lng) VALUES
 ('shizuoka', '静岡 (Shizuoka)', ARRAY['静岡', 'ROXY'], 34.9756, 138.3828),
 ('ishikawa', '石川 (Ishikawa)', ARRAY['金沢', '本多の森', 'Eight Hall', 'AZ', 'GOLD CREEK'], 36.5613, 136.6562),
 ('gunma', '群馬 (Gunma)', ARRAY['群馬', '共愛学園前橋国際大学'], 36.3911, 139.0608),
-('ibaraki', '茨城 (Ibaraki)', ARRAY['茨城', 'つくば', '土浦', 'よう・そろー'], 36.3418, 140.4468);
+('ibaraki', '茨城 (Ibaraki)', ARRAY['茨城', 'つくば', '土浦', 'よう・そろー'], 36.3418, 140.4468)
+ON CONFLICT (id) DO NOTHING;
