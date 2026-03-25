@@ -97,7 +97,7 @@ export default function WorldMapClient({ events, venues = [] }: { events: EventD
     });
 
     return Array.from(locMap.values()).filter(loc => loc.count > 0);
-  }, [events]);
+  }, [events, venues]);
 
   return (
     <div className="relative w-full aspect-[4/3] md:aspect-[2/1] min-h-[400px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group bg-[#0e0e0e]">
