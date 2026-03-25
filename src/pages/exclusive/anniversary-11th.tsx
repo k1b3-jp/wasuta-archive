@@ -113,15 +113,17 @@ const Anniversary11th = () => {
 			setVideoLoadCount((prev) => prev + 1);
 			return;
 		}
+		const ytReadyHandler = () => setVideoLoadCount((prev) => prev + 1);
+
 		if (!win.onYouTubeIframeAPIReady) {
 			const tag = document.createElement("script");
 			tag.src = "https://www.youtube.com/iframe_api";
 			const firstScriptTag = document.getElementsByTagName("script")[0];
 			firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-			win.onYouTubeIframeAPIReady = () => setVideoLoadCount((prev) => prev + 1);
+			win.onYouTubeIframeAPIReady = ytReadyHandler;
 		}
 		return () => {
-			if (win.onYouTubeIframeAPIReady === setVideoLoadCount) {
+			if (win.onYouTubeIframeAPIReady === ytReadyHandler) {
 				win.onYouTubeIframeAPIReady = undefined;
 			}
 		};
