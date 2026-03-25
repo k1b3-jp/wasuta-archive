@@ -10,6 +10,11 @@ async function run() {
   const { data: events } = await supabase.from('events').select('location');
   const { data: venues } = await supabase.from('venues').select('*');
   
+  if (!events || !venues) {
+    console.error('Failed to retrieve events or venues data. They might be null.');
+    return;
+  }
+
   const unmatched = [];
   events.forEach(e => {
     if (!e.location) return;
