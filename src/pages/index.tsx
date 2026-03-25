@@ -146,6 +146,30 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 							</Swiper>
 						</div>
 					</section>
+					{/* 11周年アニバーサリー特設バナー */}
+					<section className="w-full my-4">
+						<div className="container mx-auto px-4 md:px-0">
+							<Link href="/exclusive/anniversary-11th" className="block relative overflow-hidden rounded-xl md:rounded-2xl shadow-md hover:shadow-lg border border-white/20 group transition-all duration-300 hover:-translate-y-1">
+								<div className="bg-gradient-to-br from-[#f2a2c8] via-[#c6a2f2] to-[#7ec8d9] w-full p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 relative">
+									<div className="text-white text-center md:text-left z-10 flex-1">
+										<div className="inline-block bg-white/20 backdrop-blur-md rounded px-2 py-0.5 mb-1.5 text-[10px] font-bold tracking-widest border border-white/30">SPECIAL PRESENT</div>
+										<h2 className="text-lg md:text-xl font-extrabold mb-1 tracking-wider drop-shadow-sm flex items-center justify-center md:justify-start gap-2">
+											わーすた結成11周年記念🎯 <span className="hidden md:inline text-sm font-handwriting opacity-90 font-medium">4018日の軌跡を辿る。特設ページ公開中！</span>
+										</h2>
+										<p className="md:hidden text-xs font-bold opacity-90 drop-shadow mt-1 font-handwriting tracking-wide">
+											4018日の軌跡を辿る。特設ページ公開中！
+										</p>
+									</div>
+									<div className="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-full font-bold text-xs border border-white/50 shadow-[0_0_10px_rgba(255,255,255,0.1)] group-hover:bg-white group-hover:text-pink-500 transition-colors whitespace-nowrap z-10">
+										特設ページへ
+									</div>
+									
+									{/* 装飾用背景エフェクト */}
+									<div className="absolute right-0 top-0 w-48 h-48 bg-white/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+								</div>
+							</Link>
+						</div>
+					</section>
 					<section className="bg-white px-5 pb-4">
 						<Ad adMaxId="64bb21244d4a4a811bdc9950be293b25" />
 					</section>
