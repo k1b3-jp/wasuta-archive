@@ -1,20 +1,18 @@
-"use client";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Logo from "../../../public/logo.svg";
 import BaseButton from "../ui/BaseButton";
 
 const NavBar = () => {
     const { isLoggedIn, signOut } = useAuth();
     const router = useRouter();
-    const pathname = usePathname();
+    const pathname = router.pathname;
 
 	const handleLogout = async () => {
 		try {
             await signOut();
             router.replace(pathname ?? "/");
-            router.refresh();
 		} catch (error) {
 			console.error("Logout error:", error);
 		}

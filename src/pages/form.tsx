@@ -1,5 +1,5 @@
 import { NextSeo } from "next-seo";
-import DefaultLayout from "../app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 
 export default function Form() {
 	return (

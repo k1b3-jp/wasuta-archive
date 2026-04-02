@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import DefaultLayout from "../app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import supabase from "../lib/supabaseClient";
 
 export default function Google() {

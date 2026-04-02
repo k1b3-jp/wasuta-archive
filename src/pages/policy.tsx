@@ -1,6 +1,6 @@
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import DefaultLayout from "../app/layout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 
 export default function Policy() {
 	return (
