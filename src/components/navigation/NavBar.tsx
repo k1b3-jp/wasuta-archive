@@ -7,7 +7,7 @@ import BaseButton from "../ui/BaseButton";
 const NavBar = () => {
     const { isLoggedIn, signOut } = useAuth();
     const router = useRouter();
-    const pathname = router.pathname;
+    const pathname = router.asPath;
 
 	const handleLogout = async () => {
 		try {
