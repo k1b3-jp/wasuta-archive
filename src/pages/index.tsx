@@ -21,7 +21,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import Link from "next/link";
-import Ad from "@/components/ui/Ad";
 
 interface HomeProps {
 	featuredEvents: Event[];
@@ -169,9 +168,6 @@ const HomePage: React.FC<HomeProps> = ({ featuredEvents, events, movies }) => {
 								</div>
 							</Link>
 						</div>
-					</section>
-					<section className="bg-white px-5 pb-4">
-						<Ad adMaxId="64bb21244d4a4a811bdc9950be293b25" />
 					</section>
 					<section className="flex flex-col bg-gradient-to-r from-[#f2a2c8]/10 to-[#7ec8d9]/10 bg-100vw">
 						<div className="container mx-auto p-6">
