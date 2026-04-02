@@ -1,4 +1,3 @@
-"use client";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import {
 	faCalendar,

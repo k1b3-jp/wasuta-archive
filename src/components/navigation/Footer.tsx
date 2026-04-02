@@ -3,14 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import type React from "react";
 import Logo from "../../../public/logo.svg";
-import Ad from "../ui/Ad";
 
 const Footer: React.FC = () => {
 	return (
 		<>
-			<div className="px-4">
-				<Ad adMaxId="80bd33695ab4b1a16b3bbdd6782682fb" />
-			</div>
 			<footer className="mt-4 mb-[73px] bg-light-black shadow text-light-gray">
 				<div className="w-full max-w-screen-lg mx-auto p-4 md:py-8">
 					<div className="sm:flex sm:items-center sm:justify-between">
