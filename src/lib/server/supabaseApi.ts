@@ -49,6 +49,11 @@ export function createAuthenticatedClient(
 
 	return createClient(config.url, config.anonKey, {
 		global: { headers: { Authorization: `Bearer ${token}` } },
+		auth: {
+			autoRefreshToken: false,
+			detectSessionInUrl: false,
+			persistSession: false,
+		},
 	});
 }
 

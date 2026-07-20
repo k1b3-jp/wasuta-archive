@@ -21,9 +21,9 @@ function cleanYouTubeUrl(url: string) {
 	}
 	urlObj.hostname = "www.youtube.com";
 	const searchParams = urlObj.searchParams;
-	searchParams.forEach((_value, key) => {
+	for (const key of Array.from(searchParams.keys())) {
 		if (key !== "v") searchParams.delete(key);
-	});
+	}
 	return urlObj.toString();
 }
 

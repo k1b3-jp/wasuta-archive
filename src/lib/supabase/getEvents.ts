@@ -17,16 +17,15 @@ interface GetEventsOptions {
 }
 
 export async function getEvents(options?: GetEventsOptions) {
-	let query = supabase.from("events").select("*");
-
-	if (options?.tags && options.tags.length > 0) {
-		query.select(`
+	let query =
+		options?.tags && options.tags.length > 0
+			? supabase.from("events").select(`
       *,
       event_tags!inner(*,
         event_tag_names(name)
       )
-    `);
-	}
+    `)
+			: supabase.from("events").select("*");
 
 	// イベントIDでフィルタリング
 	if (options?.eventId) {
@@ -64,8 +63,8 @@ export async function getEvents(options?: GetEventsOptions) {
 	}
 
 	// ページネーションのためのオプションを適用します
-	const start = options?.start || 0;
-	const end = options?.end || 9;
+	const start = options?.start ?? 0;
+	const end = options?.end ?? 9;
 	if (options?.pagination) {
 		query = query.range(start, end);
 	}
