@@ -1,5 +1,5 @@
-import { NextSeo } from "next-seo";
 import DefaultLayout from "@/components/layout/DefaultLayout";
+import { NextSeo } from "next-seo";
 
 export default function Form() {
 	return (
@@ -20,6 +20,7 @@ export default function Form() {
 			<DefaultLayout>
 				<div className="mx-auto">
 					<iframe
+						title="わーすたアーカイブ お問い合わせフォーム"
 						src="https://docs.google.com/forms/d/e/1FAIpQLSe4IIT5kS5RmAIesiVc-yKAXDujSdI05lHi18SQbajStxuAQA/viewform?embedded=true"
 						width="100%"
 						height="980"
