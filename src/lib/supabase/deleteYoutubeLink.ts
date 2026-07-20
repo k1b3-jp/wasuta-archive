@@ -1,20 +1,10 @@
-import { supabase } from "../supabaseClient";
+import { authenticatedPost } from "@/lib/api/authenticatedRequest";
 
-export const deleteYoutubeLink = async (youtubeLinkId: number, eventId: number) => {
-  const { data: sessionData } = await supabase.auth.getSession();
-  const token = sessionData?.session?.access_token;
-  const res = await fetch("/api/youtube/delete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify({ youtubeLinkId, eventId }),
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ error: "unknown" }));
-    throw new Error(body.error || `HTTP ${res.status}`);
-  }
+export const deleteYoutubeLink = async (
+	youtubeLinkId: number,
+	eventId: number,
+) => {
+	await authenticatedPost("/api/youtube/delete", { youtubeLinkId, eventId });
 };
 
 export default deleteYoutubeLink;
