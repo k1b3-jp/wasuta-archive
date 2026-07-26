@@ -12319,14 +12319,14 @@ __metadata:
   linkType: hard
 
 "react-toastify@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "react-toastify@npm:11.0.3"
+  version: 11.1.0
+  resolution: "react-toastify@npm:11.1.0"
   dependencies:
     clsx: "npm:^2.1.1"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10c0/23b989c6080bc5bf0eb0c1f7ed17bd53d067d9beb33baf93c520119cd69cf75c9f2d1ee524dfe6c8a2a5d326029772b576de00e018b379d03a0e37630b83adea
+  checksum: 10c0/b621b8272bb9287ec19914b773d91c2f7741eedba253f2986150716d30c82ff069ba9780a7ab4cbb511175b3aeb6e35f003aef3f04742d77df79fb8f4c1c3c98
   languageName: node
   linkType: hard
 
