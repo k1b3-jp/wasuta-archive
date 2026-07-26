@@ -41,7 +41,7 @@
     "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-leaflet": "^4.2.1",
+    "react-leaflet": "^5.0.0",
     "react-share": "^5.1.0",
     "react-toastify": "^11.0.3",
     "sass": "^1.69.6",
