@@ -14407,10 +14407,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^11.1.1":
-  version: 11.2.10
-  resolution: "swiper@npm:11.2.10"
-  checksum: 10c0/b7e3a7c79d92ccc62af77744edc376c9aefc771a0abd50c4adf07b5e3450b5da9ca7f84f5809e275ff65e1bc9d4500d930628e84a76fc7f2db403291c69b7fac
+"swiper@npm:^14.0.0":
+  version: 14.0.6
+  resolution: "swiper@npm:14.0.6"
+  checksum: 10c0/5dff4ec99218e6049f367725aa3b30f007a0c12739887618a742d7bbc138fe7a8b2917cc36a13d45d4ea2eaaf5afdbda10d5d4176e6975c4e1d026b9260f3022
   languageName: node
   linkType: hard
 
@@ -15329,7 +15329,7 @@ __metadata:
     sass: "npm:^1.69.6"
     storybook: "npm:^7.6.6"
     string-width: "npm:^7.1.0"
-    swiper: "npm:^11.1.1"
+    swiper: "npm:^14.0.0"
     swr: "npm:^2.2.4"
     tailwind-merge: "npm:^3.0.2"
     tailwindcss: "npm:^3.3.0"
