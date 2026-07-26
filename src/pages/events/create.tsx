@@ -9,7 +9,7 @@ import { getEventTags } from "@/lib/supabase/getEventTags";
 import { uploadStorage } from "@/lib/supabase/uploadStorage";
 import { supabase } from "@/lib/supabaseClient";
 import { TagType } from "@/types/tag";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

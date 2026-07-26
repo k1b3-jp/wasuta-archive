@@ -9,7 +9,7 @@ import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
 import type { Movie } from "@/types/movie";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";

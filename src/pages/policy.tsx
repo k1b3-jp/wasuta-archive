@@ -1,4 +1,4 @@
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import Link from "next/link";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 

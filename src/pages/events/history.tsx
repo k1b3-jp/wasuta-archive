@@ -3,7 +3,7 @@ import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
 import type { Event } from "@/types/event";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import HistoryItem from "@/components/events/HistoryItem";

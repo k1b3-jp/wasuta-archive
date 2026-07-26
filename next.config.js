@@ -1,10 +1,12 @@
-const { default: next } = require("next");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    useTypeScriptCli: true,
+  },
   webpack: (config, options) => {
     // SVGファイルのためのルールを追加
     config.module.rules.push({
@@ -15,7 +17,12 @@ const nextConfig = {
     return config; // この関数では設定を直接返します
   },
   images: {
-    domains: ["127.0.0.1"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
+    ],
     disableStaticImages: true,
   },
   env: {

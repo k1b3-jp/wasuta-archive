@@ -1,12 +1,17 @@
-import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import supabase from "../lib/supabaseClient";
+
+const Auth = dynamic(
+	() => import("@supabase/auth-ui-react").then((module) => module.Auth),
+	{ ssr: false },
+);
 
 export default function Google() {
     const router = useRouter();

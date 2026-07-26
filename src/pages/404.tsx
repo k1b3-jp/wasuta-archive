@@ -1,5 +1,5 @@
 import DefaultLayout from "@/components/layout/DefaultLayout";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import dynamic from "next/dynamic";
 
 const Player = dynamic(

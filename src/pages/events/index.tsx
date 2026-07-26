@@ -7,7 +7,7 @@ import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";

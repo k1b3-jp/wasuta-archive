@@ -1,5 +1,4 @@
-import { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import MovieCard from "./MovieCard";
 
 export default {
@@ -10,7 +9,7 @@ export default {
 	},
 } as Meta;
 
-const Template: Story<typeof MovieCard> = (args) => <MovieCard {...args} />;
+const Template: StoryFn<typeof MovieCard> = (args) => <MovieCard {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

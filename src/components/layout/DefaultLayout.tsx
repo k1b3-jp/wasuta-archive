@@ -1,12 +1,13 @@
 import BottomBar from "@/components/navigation/BottomBar";
 import Footer from "@/components/navigation/Footer";
 import NavBar from "@/components/navigation/NavBar";
+import "@/styles/tailwind.css";
 import "@/styles/globals.scss";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { DefaultSeo } from "next-seo";
+import { DefaultSeo } from "@/components/seo";
 import { Noto_Sans_JP } from "next/font/google";
 import type React from "react";
 import { ToastContainer } from "react-toastify";

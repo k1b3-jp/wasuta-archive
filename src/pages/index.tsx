@@ -14,7 +14,7 @@ import {
 	faSun,
 	faTicket,
 } from "@fortawesome/free-solid-svg-icons";
-import { NextSeo, WebPageJsonLd } from "next-seo";
+import { NextSeo, WebPageJsonLd } from "@/components/seo";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";

@@ -1,5 +1,4 @@
-import { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import BaseButton from "./BaseButton";
 
 export default {
@@ -8,7 +7,7 @@ export default {
 	argTypes: { onClick: { action: "clicked" } },
 } as Meta;
 
-const Template: Story<typeof BaseButton> = (args) => <BaseButton {...args} />;
+const Template: StoryFn<typeof BaseButton> = (args) => <BaseButton {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
