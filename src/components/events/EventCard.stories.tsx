@@ -1,7 +1,6 @@
 // stories/EventCard.stories.tsx
 
-import { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import EventCard from "./EventCard";
 
 export default {
@@ -12,7 +11,7 @@ export default {
 	},
 } as Meta;
 
-const Template: Story<typeof EventCard> = (args) => <EventCard {...args} />;
+const Template: StoryFn<typeof EventCard> = (args) => <EventCard {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

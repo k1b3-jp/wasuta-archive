@@ -1,5 +1,5 @@
 import DefaultLayout from "@/components/layout/DefaultLayout";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";

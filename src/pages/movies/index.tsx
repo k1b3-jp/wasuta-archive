@@ -12,7 +12,7 @@ import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
 import type { Movie } from "@/types/movie";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import React, { useEffect, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";

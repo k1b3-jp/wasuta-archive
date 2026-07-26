@@ -1,5 +1,4 @@
-import { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import Tag from "./Tag";
 
 export default {
@@ -7,7 +6,7 @@ export default {
 	component: Tag,
 } as Meta;
 
-const Template: Story<typeof Tag> = (args) => <Tag {...args} />;
+const Template: StoryFn<typeof Tag> = (args) => <Tag {...args} />;
 
 export const Selected = Template.bind({});
 Selected.args = {

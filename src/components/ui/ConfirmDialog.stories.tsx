@@ -1,5 +1,5 @@
-import { Meta, Story } from "@storybook/react";
-import React, { useState } from "react";
+import type { Meta, StoryFn } from "@storybook/react";
+import { useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 
 export default {
@@ -7,7 +7,7 @@ export default {
 	component: ConfirmDialog,
 } as Meta;
 
-const Template: Story<typeof ConfirmDialog> = (args: any) => {
+const Template: StoryFn<typeof ConfirmDialog> = (args: any) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const closeDialog = () => setIsDialogOpen(false);
 	return (

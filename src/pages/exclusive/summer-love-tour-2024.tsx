@@ -1,5 +1,5 @@
 import DefaultLayout from "@/components/layout/DefaultLayout";
-import { NextSeo } from "next-seo";
+import { NextSeo } from "@/components/seo";
 import React, { useEffect, useState } from "react";
 import { getEvents } from "@/lib/supabase/getEvents";
 import EventCard from "@/components/events/EventCard";
@@ -17,8 +17,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctopusDeploy } from "@fortawesome/free-brands-svg-icons";
-import Image from "next/image";
-import { Player } from "@lottiefiles/react-lottie-player";
+import dynamic from "next/dynamic";
+
+const Player = dynamic(
+	() =>
+		import("@lottiefiles/react-lottie-player").then((module) => module.Player),
+	{ ssr: false },
+);
 
 const SummerLoveTour2024 = () => {
 	const [events, setEvents] = useState<any[]>([]);

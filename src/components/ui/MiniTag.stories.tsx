@@ -1,5 +1,4 @@
-import { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import MiniTag from "./MiniTag";
 
 export default {
@@ -7,7 +6,7 @@ export default {
 	component: MiniTag,
 } as Meta;
 
-const Template: Story<typeof MiniTag> = (args) => <MiniTag {...args} />;
+const Template: StoryFn<typeof MiniTag> = (args) => <MiniTag {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -1,53 +1,27 @@
-import type { StorybookConfig } from '@storybook/nextjs';
-import path from 'path';
+import type { StorybookConfig } from "@storybook/nextjs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-onboarding',
-    '@storybook/addon-interactions',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
-  ],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  addons: ["@storybook/addon-onboarding"],
   framework: {
-    name: '@storybook/nextjs',
+    name: "@storybook/nextjs",
     options: {},
   },
   docs: {
-    autodocs: 'tag',
+    autodocs: "tag",
   },
   webpackFinal: async (config) => {
-    // Use PostCSS loader with Tailwind CSS and Autoprefixer
-    config.module?.rules?.push({
-      test: /\.css$/,
-      use: [
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [require('tailwindcss'), require('autoprefixer')],
-            },
-          },
-        },
-      ],
-      include: path.resolve(__dirname, '../'),
-    });
-
     if (!config.resolve) {
       config.resolve = {};
     }
     if (!config.resolve.alias) {
       config.resolve.alias = {};
     }
-    config.resolve.alias['@'] = path.resolve(__dirname, '../src');
+    config.resolve.alias["@"] = path.resolve(currentDirectory, "../src");
 
     return config;
   },

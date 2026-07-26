@@ -1,5 +1,4 @@
-import type { Meta, Story } from "@storybook/react";
-import React from "react";
+import type { Meta, StoryFn } from "@storybook/react";
 import TopFeaturedEventCard from "./TopFeaturedEventCard";
 import type EventCard from "./EventCard";
 
@@ -11,7 +10,7 @@ export default {
 	},
 } as Meta;
 
-const Template: Story<typeof EventCard> = (args) => (
+const Template: StoryFn<typeof EventCard> = (args) => (
 	<TopFeaturedEventCard {...args} />
 );
 
