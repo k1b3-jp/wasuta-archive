@@ -5504,10 +5504,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "@types/uuid@npm:10.0.0"
-  checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
+"@types/uuid@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@types/uuid@npm:11.0.0"
+  dependencies:
+    uuid: "npm:*"
+  checksum: 10c0/6ebf1448d8fdc78d348a8a84389b74083f2f58bed75a5a6cf3be8419d33dcf757735c8b2de746b066ff8ef07f4384d02549774dc84195ffa46b24745471e9d8e
   languageName: node
   linkType: hard
 
@@ -15049,6 +15051,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:*":
+  version: 14.0.1
+  resolution: "uuid@npm:14.0.1"
+  bin:
+    uuid: dist-node/bin/uuid
+  checksum: 10c0/2d961289097cb68c37d93d1da0b5c3aafc1eb9948a455cca8d0ae53a099b2fe583b8933254a84097f700e6bac2e23033364904df0467c22551d5d9611febcaf6
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^9.0.0":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
@@ -15130,7 +15141,7 @@ __metadata:
     "@types/node": "npm:^22.13.5"
     "@types/react": "npm:^18.0.0"
     "@types/react-dom": "npm:^19.0.4"
-    "@types/uuid": "npm:^10.0.0"
+    "@types/uuid": "npm:^11.0.0"
     "@vercel/analytics": "npm:^1.5.0"
     "@vercel/og": "npm:^0.11.0"
     "@vercel/speed-insights": "npm:^1.2.0"
