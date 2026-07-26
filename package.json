@@ -29,7 +29,7 @@
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.1",
     "@vercel/analytics": "^1.5.0",
-    "@vercel/og": "^0.6.2",
+    "@vercel/og": "^0.11.0",
     "@vercel/speed-insights": "^1.2.0",
     "browser-image-compression": "^2.0.2",
     "clsx": "^2.1.1",
