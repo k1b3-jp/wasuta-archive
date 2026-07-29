@@ -9294,12 +9294,12 @@ __metadata:
   linkType: hard
 
 "next-seo@npm:^7.0.0":
-  version: 7.2.0
-  resolution: "next-seo@npm:7.2.0"
+  version: 7.3.0
+  resolution: "next-seo@npm:7.3.0"
   peerDependencies:
     next: ">=13.4.0"
     react: ">=18.2.0"
-  checksum: 10c0/0d747cc8e5503eeae4ed2ee375382d4c1fa541e84370b69404111f84d496b704f8b7d8c7b28057a2a7dae5bf17162afd317b38701b6a3cb80e2e6f5d0c983574
+  checksum: 10c0/7340323e7b86ad35bcc9f8790a3bbe63b93558de747bf8b81e67492881cce9dc094e45664c990ed26bc3400b6b0bec59720356b0fef23da04838010c316e407a
   languageName: node
   linkType: hard
 
