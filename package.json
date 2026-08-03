@@ -70,7 +70,7 @@
     "webpack": "^5.0.0"
   },
   "volta": {
-    "node": "24.18.0",
+    "node": "24.19.0",
     "yarn": "4.17.1"
   },
   "packageManager": "yarn@4.17.1"
