@@ -52,7 +52,7 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.5",
+    "@biomejs/biome": "2.5.7",
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/nextjs": "^10.0.0",
     "@storybook/react": "^10.0.0",
