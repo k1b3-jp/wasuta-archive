@@ -2,58 +2,44 @@ import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import {
 	faCalendar,
 	faHouse,
-	faPlus,
+	faInfoCircle,
 	faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-const BottomBar = () => {
-    const router = useRouter();
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-    const pathname = mounted ? router.pathname : null;
-    const linkStyle = (path: string | null) =>
-        `inline-flex flex-col items-center justify-center gap-1 group ${
-            mounted && pathname === path
-                ? "text-deep-green"
-                : "hover:text-deep-green text-deep-gray"
-        }`;
+const items = [
+	{ href: "/", label: "ホーム", icon: faHouse },
+	{ href: "/timeline", label: "時間", icon: faTimeline },
+	{ href: "/events", label: "イベント", icon: faCalendar },
+	{ href: "/movies", label: "動画", icon: faYoutube },
+	{ href: "/about", label: "このサイト", icon: faInfoCircle },
+];
 
+export default function BottomBar() {
+	const router = useRouter();
 	return (
-		<div className="fixed w-full bg-white bottom-0 text-deep-gray font-light py-4 border-t">
-			<div className="grid h-full grid-cols-5 mx-auto max-w-xl">
-				<Link href="/" className={linkStyle("/")}>
-					<FontAwesomeIcon icon={faHouse} />
-					<span className="text-sm">Home</span>
-				</Link>
-				<Link href="/events" className={linkStyle("/events")}>
-					<FontAwesomeIcon icon={faCalendar} />
-					<span className="text-sm">Events</span>
-				</Link>
-				<div className="flex items-center justify-center">
-					<Link
-						href="/events/create"
-						className="inline-flex items-center justify-center w-10 h-10 font-medium bg-deep-green rounded-full hover:bg-deep-gray text-bar-white"
-					>
-						<FontAwesomeIcon icon={faPlus} />
-					</Link>
-				</div>
-				<Link href="/movies" className={linkStyle("/movies")}>
-					<FontAwesomeIcon icon={faYoutube} />
-					<span className="text-sm">Movies</span>
-				</Link>
-				<Link href="/events/history" className={linkStyle("/events/history")}>
-					<FontAwesomeIcon icon={faTimeline} />
-					<span className="text-sm">History</span>
-				</Link>
+		<nav
+			className="fixed bottom-0 z-50 w-full border-t border-black/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+			aria-label="メインナビゲーション"
+		>
+			<div className="mx-auto grid h-[68px] max-w-xl grid-cols-5">
+				{items.map((item) => {
+					const active = router.pathname === item.href;
+					return (
+						<Link
+							key={item.href}
+							href={item.href}
+							aria-current={active ? "page" : undefined}
+							className={`inline-flex min-h-11 flex-col items-center justify-center gap-1 text-[10px] font-bold ${active ? "text-[#9e5381]" : "text-gray-500"}`}
+						>
+							<FontAwesomeIcon icon={item.icon} className="text-base" />
+							<span>{item.label}</span>
+						</Link>
+					);
+				})}
 			</div>
-		</div>
+		</nav>
 	);
-};
-
-export default BottomBar;
+}
