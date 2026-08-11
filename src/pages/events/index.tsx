@@ -1,224 +1,232 @@
-import DefaultLayout from "@/components/layout/DefaultLayout";
-import EventCard from "@/components/events/EventCard";
-import BaseButton from "@/components/ui/BaseButton";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Tag from "@/components/ui/Tag";
-import { useClearQueryParam } from "@/hooks/useClearQueryParam";
-import { getEventTags } from "@/lib/supabase/getEventTags";
-import { getEvents } from "@/lib/supabase/getEvents";
-import type { TagType } from "@/types/tag";
-import { NextSeo } from "@/components/seo";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import useSWRInfinite from "swr/infinite";
+import DefaultLayout from "@/components/layout/DefaultLayout";
+import { NextSeo } from "@/components/seo";
+import Tag from "@/components/ui/Tag";
+import { useClearQueryParam } from "@/hooks/useClearQueryParam";
+import { getEvents } from "@/lib/supabase/getEvents";
+import { getEventTags } from "@/lib/supabase/getEventTags";
+import styles from "@/styles/archiveList.module.scss";
+import type { TagType } from "@/types/tag";
+import formatDate from "@/utils/formatDate";
 
-const EventListPage = () => {
-	const [searchTerm, setSearchTerm] = useState<string>("");
-	const [startDate, setStartDate] = useState<string>("");
-	const [endDate, setEndDate] = useState<string>("");
+const defaultImageUrl = "/event-placeholder.png";
+
+export default function EventListPage() {
+	const [searchTerm, setSearchTerm] = useState("");
+	const [startDate, setStartDate] = useState("");
+	const [endDate, setEndDate] = useState("");
 	const [allTags, setAllTags] = useState<TagType[]>([]);
 	const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string>("");
-
-    const router = useRouter();
-    const toastParams = (router.query?.toast as string) || null;
-    useClearQueryParam("toast", toastParams === "eventDeleted");
-
-    useEffect(() => {
-        const queryTags = (router.query?.tags as string) || undefined;
-        const queryTagIds = queryTags
-            ?.split(",")
-            .map((id) => Number.parseInt(id, 10));
-
-        const selected = allTags.filter((tag) =>
-            queryTagIds?.includes(Number(tag.id)),
-        );
-        setSelectedTags(selected);
-    }, [allTags, router.query?.tags]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const router = useRouter();
+	const toastParam = (router.query?.toast as string) || null;
+	useClearQueryParam("toast", toastParam === "eventDeleted");
 
 	useEffect(() => {
-		handleSearch();
-	}, []);
+		getEventTags().then((tags) => tags && setAllTags(tags));
+		if (toastParam === "eventDeleted") toast.success("イベントを削除しました");
+	}, [toastParam]);
 
 	useEffect(() => {
-		if (toastParams === "eventDeleted") {
-			toast.success("イベントを削除しました");
-		}
-		fetchAllTags();
-	}, [toastParams]);
+		const ids = ((router.query?.tags as string) || "")
+			.split(",")
+			.filter(Boolean)
+			.map(Number);
+		setSelectedTags(allTags.filter((tag) => ids.includes(Number(tag.id))));
+	}, [allTags, router.query?.tags]);
 
-	const fetchAllTags = async () => {
-		const tags = await getEventTags();
-		if (tags) {
-			setAllTags(tags);
-		}
-	};
-
-	const handleTagSelect = (tag: TagType) => {
-		if (selectedTags.some((t) => t.id === tag.id)) {
-			setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
-		} else {
-			setSelectedTags([...selectedTags, tag]);
-		}
-	};
-
-	type FetchEventsParams = {
+	const fetchEvents = async ({
+		page,
+		limit,
+	}: {
 		page: number;
 		limit: number;
-	};
-
-	const fetchEvents = async ({ page, limit }: FetchEventsParams) => {
-		const start = limit * page;
-		const end = start + limit - 1;
-
+	}) => {
 		setLoading(true);
 		setError("");
 		try {
-			const selectedTagIds = selectedTags.map((tag) => tag.id);
-			const eventsData = await getEvents({
+			return await getEvents({
 				keyword: searchTerm,
-				startDate: startDate,
-				endDate: endDate,
-				tags: selectedTagIds,
-				start: start,
-				end: end,
+				startDate,
+				endDate,
+				tags: selectedTags.map((tag) => tag.id),
+				start: page * limit,
+				end: page * limit + limit - 1,
 				pagination: true,
 			});
-			return eventsData;
 		} catch (err) {
-			setLoading(false);
-			setError("イベントの取得中にエラーが発生しました");
 			console.error(err);
+			setError("イベントの取得中にエラーが発生しました");
+			return [];
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const [limit] = useState<number>(12);
-	const getKey = (pageIndex: number, previousPageData: any[]) => {
-		if (previousPageData && !previousPageData.length) return null; // 最後に到達した
-		return { page: pageIndex, limit: limit };
+	const { data, size, setSize, mutate } = useSWRInfinite(
+		(pageIndex, previousPageData: any[]) =>
+			previousPageData && !previousPageData.length
+				? null
+				: { page: pageIndex, limit: 12 },
+		fetchEvents,
+	);
+	const events = useMemo(
+		() => data?.flatMap((page) => page || []) || [],
+		[data],
+	);
+	const search = async () => {
+		await setSize(1);
+		await mutate();
 	};
-
-	const {
-		data: events,
-		size,
-		setSize,
-		mutate,
-	} = useSWRInfinite(getKey, fetchEvents);
-
-	const handleSearch = () => {
-		setSize(1).then(() => mutate());
-	};
+	const toggleTag = (tag: TagType) =>
+		setSelectedTags((current) =>
+			current.some((item) => item.id === tag.id)
+				? current.filter((item) => item.id !== tag.id)
+				: [...current, tag],
+		);
 
 	return (
 		<>
-			<NextSeo
-				title="イベント一覧"
-				openGraph={{
-					images: [
-						{
-							url: process.env.defaultOgpImage || "",
-							width: 1200,
-							height: 630,
-							alt: "Og Image Alt",
-						},
-					],
-				}}
-			/>
+			<NextSeo title="イベント一覧" />
 			<DefaultLayout>
-				<div>
-					<div className="mx-auto">
-						<div className="search-form p-2 bg-light-gray bg-100vw flex">
-							<div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
-								<div className="flex flex-col gap-2">
-									<label className="text-sm font-bold">タイトル</label>
+				<div className={styles.page}>
+					<header className={styles.hero}>
+						<div className={styles.heroInner}>
+							<p className={styles.eyebrow}>EVENT ARCHIVE</p>
+							<h1>あの日の景色を、探しにいく。</h1>
+							<p className={styles.heroCopy}>
+								ライブ、リリースイベント、フェス。日付と場所を手がかりに、わーすたの歩みを辿れます。
+							</p>
+						</div>
+					</header>
+					<section
+						className={styles.filters}
+						aria-labelledby="event-filter-title"
+					>
+						<div className={styles.filterInner}>
+							<div className={styles.filterTop}>
+								<h2 id="event-filter-title">記録を絞り込む</h2>
+								<span>タイトル・期間・タグから検索</span>
+							</div>
+							<div className={styles.filterGrid}>
+								<div className={styles.field}>
+									<label htmlFor="event-keyword">タイトル</label>
 									<input
-										className="bg-light-gray rounded-md p-3"
-										type="text"
-										placeholder="Search"
+										id="event-keyword"
+										type="search"
+										placeholder="イベント名を入力"
 										value={searchTerm}
 										onChange={(e) => setSearchTerm(e.target.value)}
+										onKeyDown={(e) => e.key === "Enter" && search()}
 									/>
 								</div>
-								<div className="flex flex-col gap-2">
-									<label className="text-sm font-bold">期間</label>
-									<div className="flex flex-row flex-nowrap items-center">
+								<div className={styles.field}>
+									<p>開催期間</p>
+									<div className={styles.dateRow}>
 										<input
-											className="bg-light-gray rounded-md p-3"
+											aria-label="開始日"
 											type="date"
 											value={startDate}
 											onChange={(e) => setStartDate(e.target.value)}
 										/>
-										<span className="mx-1">〜</span>
+										<span>—</span>
 										<input
-											className="bg-light-gray rounded-md p-3"
+											aria-label="終了日"
 											type="date"
 											value={endDate}
 											onChange={(e) => setEndDate(e.target.value)}
 										/>
 									</div>
 								</div>
-								<div className="flex flex-col gap-2">
-									<label className="text-sm font-bold">タグ</label>
-									<div className="flex flex-wrap gap-2 mb-2">
+								<div className={`${styles.field} ${styles.tagField}`}>
+									<p>タグ</p>
+									<div className={styles.tags}>
 										{allTags.map((tag) => (
 											<Tag
 												key={tag.id}
 												label={tag.label}
-												selected={selectedTags.some((t) => t.id === tag.id)}
-												onSelect={() => handleTagSelect(tag)}
+												selected={selectedTags.some(
+													(item) => item.id === tag.id,
+												)}
+												onSelect={() => toggleTag(tag)}
 											/>
 										))}
 									</div>
 								</div>
-								<div className="text-center">
-									<BaseButton onClick={handleSearch} label="検索" />
+								<div className={styles.action}>
+									<button
+										type="button"
+										className={styles.searchButton}
+										onClick={search}
+										disabled={loading}
+									>
+										この条件で探す <span>→</span>
+									</button>
 								</div>
 							</div>
 						</div>
-						<main className="event-list grid-base py-8">
-							{error && <p className="text-red-500">{error}</p>}
-							{events?.map((items) => {
-								return items?.map(
-									(event: {
-										event_id: any;
-										event_name: any;
-										location: any;
-										date: any;
-										image_url: any;
-									}) => {
-										return (
-											<EventCard
-												key={event.event_id}
-												title={event.event_name}
-												location={event.location}
-												date={event.date}
-												imageUrl={event.image_url}
-												id={event.event_id}
-											/>
-										);
-									},
-								);
-							})}
-						</main>
-						<div className="mx-auto mb-6 px-6 text-center">
-							<BaseButton
-								label="もっと見る"
-								onClick={() => {
-									setSize(size + 1);
-								}}
-								white
-							/>
+					</section>
+					<main className={styles.content}>
+						<div className={styles.resultHead}>
+							<div>
+								<p>ARCHIVE RECORDS</p>
+								<h2>イベントの記録</h2>
+							</div>
+							<span>{events.length}件を表示中</span>
 						</div>
-					</div>
+						<div className={styles.grid}>
+							{error && <div className={styles.status}>{error}</div>}
+							{!error && !events.length && loading && (
+								<div className={styles.status}>記録を読み込んでいます…</div>
+							)}
+							{!error && !events.length && !loading && (
+								<div className={styles.status}>
+									条件に合うイベントは見つかりませんでした。
+								</div>
+							)}
+							{events.map((event: any) => (
+								<Link
+									key={event.event_id}
+									href={`/events/${event.event_id}`}
+									className={styles.eventCard}
+								>
+									<div className={styles.eventImage}>
+										<img src={event.image_url || defaultImageUrl} alt="" />
+										<span className={styles.dateBadge}>
+											{formatDate(event.date)}
+										</span>
+									</div>
+									<div className={styles.eventBody}>
+										<p>EVENT RECORD</p>
+										<h3>{event.event_name}</h3>
+										<div className={styles.eventMeta}>
+											<span>{event.location || "場所の記録なし"}</span>
+											<span aria-hidden="true">↗</span>
+										</div>
+									</div>
+								</Link>
+							))}
+						</div>
+						{events.length > 0 && (
+							<div className={styles.more}>
+								<button
+									type="button"
+									className={styles.moreButton}
+									onClick={() => setSize(size + 1)}
+									disabled={loading}
+								>
+									{loading ? "読み込み中…" : "さらに記録を見る"}
+								</button>
+							</div>
+						)}
+					</main>
 				</div>
-				{loading && <LoadingSpinner />}
 			</DefaultLayout>
 		</>
 	);
-};
-
-export default EventListPage;
+}

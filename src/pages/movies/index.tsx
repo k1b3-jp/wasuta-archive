@@ -1,229 +1,167 @@
+import { useEffect, useMemo, useState, useTransition } from "react";
+import useSWRInfinite from "swr/infinite";
+import MovieCard from "@/components/events/MovieCard";
 import DefaultLayout from "@/components/layout/DefaultLayout";
-// import MovieCard from "@/components/events/MovieCard";
-
-// MovieCardをクライアントサイドのみでレンダリング
-const MovieCard = dynamic(() => import("@/components/events/MovieCard"), {
-	ssr: false,
-	loading: () => <div className="h-[190px] bg-gray-200 animate-pulse rounded" />
-});
-import BaseButton from "@/components/ui/BaseButton";
+import { NextSeo } from "@/components/seo";
 import Tag from "@/components/ui/Tag";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
+import styles from "@/styles/archiveList.module.scss";
 import type { Movie } from "@/types/movie";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "@/components/seo";
-import React, { useEffect, useState, useTransition } from "react";
-import dynamic from "next/dynamic";
-import useSWRInfinite from "swr/infinite";
 
-const MoviesContent = () => {
+export default function MoviesPage() {
 	const [allTags, setAllTags] = useState<TagType[]>([]);
 	const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [isPending, startTransition] = useTransition();
-
 	useEffect(() => {
-		fetchAllTags();
+		getYoutubeTags(null)
+			.then((tags) => Array.isArray(tags) && setAllTags(tags))
+			.catch(console.error);
 	}, []);
 
-	const fetchAllTags = async () => {
-		try {
-			const tags = await getYoutubeTags(null);
-			if (tags && Array.isArray(tags)) {
-				setAllTags(tags);
-			}
-		} catch (error) {
-			console.error('タグの取得に失敗しました:', error);
-		}
-	};
-
-	const handleTagSelect = (tag: TagType) => {
-		startTransition(() => {
-			if (selectedTags.some((t) => t.id === tag.id)) {
-				setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
-			} else {
-				setSelectedTags([...selectedTags, tag]);
-			}
-		});
-	};
-
-	type FetchEventsParams = {
+	const fetchMovies = async ({
+		page,
+		limit,
+	}: {
 		page: number;
 		limit: number;
-	};
-
-	const fetchMovies = async ({ page, limit }: FetchEventsParams) => {
-		const start = limit * page;
-		const end = start + limit - 1;
-
+	}) => {
 		setLoading(true);
 		setError("");
-
 		try {
-			const selectedTagIds = selectedTags.map((tag) => tag.id);
-			const moviesData = await getMovies({
-				tags: selectedTagIds,
-				start: start,
-				end: end,
+			return await getMovies({
+				tags: selectedTags.map((tag) => tag.id),
+				start: page * limit,
+				end: page * limit + limit - 1,
 			});
-			return moviesData;
 		} catch (err) {
-			setError("イベントの取得中にエラーが発生しました");
 			console.error(err);
+			setError("動画の取得中にエラーが発生しました");
+			return [];
 		} finally {
 			setLoading(false);
 		}
 	};
-
-	const [limit] = useState(12);
-	const getKey = (pageIndex: number, previousPageData: any[]) => {
-		if (previousPageData && !previousPageData.length) return null; // 最後に到達した
-		return { page: pageIndex, limit: limit };
-	};
-
-	const {
-		data: movies,
-		size,
-		setSize,
-		mutate,
-	} = useSWRInfinite<any>(getKey, fetchMovies);
-
-	const handleSearch = async () => {
+	const { data, size, setSize, mutate } = useSWRInfinite(
+		(pageIndex, previous: any[]) =>
+			previous && !previous.length ? null : { page: pageIndex, limit: 12 },
+		fetchMovies,
+	);
+	const movies = useMemo(
+		() =>
+			data
+				?.flatMap((page) => page || [])
+				.filter((movie: Movie) => movie?.youtube_link_id) || [],
+		[data],
+	);
+	const toggleTag = (tag: TagType) =>
+		setSelectedTags((current) =>
+			current.some((item) => item.id === tag.id)
+				? current.filter((item) => item.id !== tag.id)
+				: [...current, tag],
+		);
+	const search = () =>
 		startTransition(async () => {
 			await setSize(1);
 			await mutate();
 		});
-	};
 
-	const handleLoadMore = () => {
-		startTransition(() => {
-			setSize(size + 1);
-		});
-	};
-
-	return (
-		<div>
-			<div className="mx-auto">
-				<div className="search-form p-2 bg-light-gray bg-100vw flex">
-					<div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
-						<div className="flex flex-col gap-2">
-							<label className="text-sm font-bold">タグ</label>
-							<div className="flex flex-wrap gap-2 mb-2">
-								{allTags.map((tag) => (
-									<Tag
-										key={tag.id}
-										label={tag.label}
-										selected={selectedTags.some((t) => t.id === tag.id)}
-										onSelect={() => handleTagSelect(tag)}
-									/>
-								))}
-							</div>
-						</div>
-						<div className="text-center">
-							<BaseButton onClick={handleSearch} label="検索" disabled={isPending} />
-						</div>
-					</div>
-				</div>
-				<main className="event-list grid-base py-10">
-					{(loading || isPending) && <p>読み込み中...</p>}
-					{error && <p className="text-red-500">{error}</p>}
-					{movies?.flatMap((items, pageIndex) => {
-						if (!items || !Array.isArray(items)) {
-							console.warn('Invalid items array at page:', pageIndex, items);
-							return [];
-						}
-
-						return items
-							.filter((link: Movie) => {
-								// 基本的なオブジェクト検証のみ（getMoviesで詳細検証済み）
-								if (!link || typeof link !== 'object') {
-									console.warn('Invalid link object:', link);
-									return false;
-								}
-								// getMoviesで既に検証済みだが、念のため最低限のチェック
-								if (!link.youtube_link_id) {
-									console.warn('Missing youtube_link_id:', link);
-									return false;
-								}
-								return true;
-							})
-							.map((link: Movie) => (
-								<div key={`${pageIndex}-${link.youtube_link_id}`}>
-									<MovieCard
-										videoUrl={link?.youtube_links?.url}
-										id={link.youtube_link_id}
-									/>
-								</div>
-							));
-					}) || []}
-				</main>
-				<div className="mb-6 px-6 text-center">
-					<BaseButton
-						label="もっと見る"
-						onClick={handleLoadMore}
-						white
-						disabled={isPending}
-					/>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-// クライアントサイドでのみレンダリングするコンポーネント
-const ClientOnlyMoviesContent = dynamic(() => Promise.resolve(MoviesContent), {
-	ssr: false,
-	loading: () => (
-		<div className="mx-auto">
-			<div className="search-form p-2 bg-light-gray bg-100vw flex">
-				<div className="flex flex-col gap-4 mx-auto bg-white p-4 rounded-lg lg:w-[700px]">
-					<div className="flex flex-col gap-2">
-						<label className="text-sm font-bold">タグ</label>
-						<div className="flex flex-wrap gap-2 mb-2">
-							<div className="h-8 w-16 bg-gray-200 animate-pulse rounded"></div>
-							<div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
-							<div className="h-8 w-18 bg-gray-200 animate-pulse rounded"></div>
-						</div>
-					</div>
-					<div className="text-center">
-						<div className="h-10 w-20 bg-gray-200 animate-pulse rounded mx-auto"></div>
-					</div>
-				</div>
-			</div>
-			<main className="event-list grid-base py-10">
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{[...Array(12)].map((_, index) => (
-						<div key={index} className="h-[190px] bg-gray-200 animate-pulse rounded" />
-					))}
-				</div>
-			</main>
-		</div>
-	)
-});
-
-const EventListPage = () => {
 	return (
 		<>
-			<NextSeo
-				title="動画一覧"
-				openGraph={{
-					images: [
-						{
-							url: process.env.defaultOgpImage || "",
-							width: 1200,
-							height: 630,
-							alt: "Og Image Alt",
-						},
-					],
-				}}
-			/>
+			<NextSeo title="動画一覧" />
 			<DefaultLayout>
-				<ClientOnlyMoviesContent />
+				<div className={styles.page}>
+					<header className={styles.hero}>
+						<div className={styles.heroInner}>
+							<p className={styles.eyebrow}>MOVIE ARCHIVE</p>
+							<h1>何度でも、あの瞬間を再生する。</h1>
+							<p className={styles.heroCopy}>
+								ライブ映像、ミュージックビデオ、舞台裏。公開された映像から、記憶の続きを見つけられます。
+							</p>
+						</div>
+					</header>
+					<section
+						className={styles.filters}
+						aria-labelledby="movie-filter-title"
+					>
+						<div className={styles.filterInner}>
+							<div className={styles.filterTop}>
+								<h2 id="movie-filter-title">映像を絞り込む</h2>
+								<span>タグから検索</span>
+							</div>
+							<div className={styles.filterGrid}>
+								<div className={`${styles.field} ${styles.tagField}`}>
+									<p>タグ</p>
+									<div className={styles.tags}>
+										{allTags.map((tag) => (
+											<Tag
+												key={tag.id}
+												label={tag.label}
+												selected={selectedTags.some(
+													(item) => item.id === tag.id,
+												)}
+												onSelect={() => toggleTag(tag)}
+											/>
+										))}
+									</div>
+								</div>
+								<div className={styles.action}>
+									<button
+										type="button"
+										className={styles.searchButton}
+										onClick={search}
+										disabled={isPending}
+									>
+										この条件で探す <span>→</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<main className={styles.content}>
+						<div className={styles.resultHead}>
+							<div>
+								<p>ARCHIVE MOVIES</p>
+								<h2>映像の記録</h2>
+							</div>
+							<span>{movies.length}件を表示中</span>
+						</div>
+						<div className={styles.movieGrid}>
+							{error && <div className={styles.status}>{error}</div>}
+							{!error && !movies.length && (loading || isPending) && (
+								<div className={styles.status}>映像を読み込んでいます…</div>
+							)}
+							{!error && !movies.length && !loading && !isPending && (
+								<div className={styles.status}>
+									条件に合う映像は見つかりませんでした。
+								</div>
+							)}
+							{movies.map((movie: Movie) => (
+								<MovieCard
+									key={movie.youtube_link_id}
+									videoUrl={movie.youtube_links?.url}
+									id={movie.youtube_link_id}
+								/>
+							))}
+						</div>
+						{movies.length > 0 && (
+							<div className={styles.more}>
+								<button
+									type="button"
+									className={styles.moreButton}
+									onClick={() => setSize(size + 1)}
+									disabled={isPending || loading}
+								>
+									{isPending || loading ? "読み込み中…" : "さらに映像を見る"}
+								</button>
+							</div>
+						)}
+					</main>
+				</div>
 			</DefaultLayout>
 		</>
 	);
-};
-
-export default EventListPage;
+}

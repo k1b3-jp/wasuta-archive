@@ -1387,12 +1387,6 @@ INSERT INTO "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "r
 
 
 --
--- Data for Name: key; Type: TABLE DATA; Schema: pgsodium; Owner: supabase_admin
---
-
-
-
---
 -- Data for Name: event_tag_names; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -5334,13 +5328,6 @@ INSERT INTO "storage"."objects" ("id", "bucket_id", "name", "owner", "created_at
 --
 
 SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 408, true);
-
-
---
--- Name: key_key_id_seq; Type: SEQUENCE SET; Schema: pgsodium; Owner: supabase_admin
---
-
-SELECT pg_catalog.setval('"pgsodium"."key_key_id_seq"', 1, false);
 
 
 --

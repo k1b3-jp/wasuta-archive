@@ -1,6 +1,7 @@
-import { NextSeo } from "@/components/seo";
 import Link from "next/link";
 import DefaultLayout from "@/components/layout/DefaultLayout";
+import LegalDocument from "@/components/layout/LegalDocument";
+import { NextSeo } from "@/components/seo";
 
 export default function Term() {
 	return (
@@ -19,7 +20,7 @@ export default function Term() {
 				}}
 			/>
 			<DefaultLayout>
-				<div className="p-8">
+				<LegalDocument title="利用規約" label="TERMS OF SERVICE">
 					<h1 className="font-bold text-2xl mb-6">利用規約</h1>
 					<p className="mb-6">
 						この利用規約（以下、「本規約」といいます。）は、本ウェブサイト運営（以下、「運営者」といいます。）がこのウェブサイト上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。
@@ -255,7 +256,7 @@ export default function Term() {
 						</ol>
 					</div>
 					<p className="text-right">以上</p>
-				</div>
+				</LegalDocument>
 			</DefaultLayout>
 		</>
 	);

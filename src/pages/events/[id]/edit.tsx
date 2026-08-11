@@ -1,22 +1,19 @@
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import EventEditorForm from "@/components/events/EventEditorForm";
 import DefaultLayout from "@/components/layout/DefaultLayout";
-import BaseButton from "@/components/ui/BaseButton";
+import { NextSeo } from "@/components/seo";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import MiniTag from "@/components/ui/MiniTag";
-import Tag from "@/components/ui/Tag";
 import { useAuth } from "@/contexts/AuthContext";
 import { deleteEvent } from "@/lib/supabase/deleteEvent";
 import { deleteStorage } from "@/lib/supabase/deleteStorage";
-import { getEventTags } from "@/lib/supabase/getEventTags";
 import { getEvents } from "@/lib/supabase/getEvents";
+import { getEventTags } from "@/lib/supabase/getEventTags";
 import updateEvent from "@/lib/supabase/updateEvent"; // 既存のイベントを更新するための関数
 import { uploadStorage } from "@/lib/supabase/uploadStorage";
 import { supabase } from "@/lib/supabaseClient";
 import type { TagType } from "@/types/tag";
-import { NextSeo } from "@/components/seo";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 const defaultImageUrl = "/event-placeholder.png";
 
@@ -33,9 +30,10 @@ const EditEvent = () => {
 	const [allTags, setAllTags] = useState<TagType[]>([]);
 	const [selectedTags, setSelectedTags] = useState<number[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-    const router = useRouter();
-    const id = router.query?.id;
+	const router = useRouter();
+	const id = router.query?.id;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: route id and auth transition control this initialization
 	useEffect(() => {
 		setErrorMessage("");
 		if (!authLoading) {
@@ -60,10 +58,10 @@ const EditEvent = () => {
 			setDescription(event[0].description);
 
 			// イベントに紐づくタグを取得
-            const { data: eventTags } = await supabase
-                .from("event_tags")
-                .select("tag_id")
-                .eq("event_id", id as any);
+			const { data: eventTags } = await supabase
+				.from("event_tags")
+				.select("tag_id")
+				.eq("event_id", id as any);
 			if (eventTags) {
 				const tagIds = eventTags.map((tag) => tag.tag_id);
 				setSelectedTags(tagIds);
@@ -123,7 +121,7 @@ const EditEvent = () => {
 	};
 
 	const handleUploadStorage = async (folder: FileList | null) => {
-		if (!folder || !folder.length) return null;
+		if (!folder?.length) return null;
 		const { path } = await uploadStorage({
 			folder,
 			bucketName: "event_pics",
@@ -159,17 +157,13 @@ const EditEvent = () => {
 			}
 
 			try {
-				let newPath;
+				let newPath: string | null = null;
 				if (fileList) {
 					newPath = await handleUploadStorage(fileList); // newPathに値を設定
 
 					// 既存のimageUrlのファイルを削除
-					let deletePics;
 					if (imageUrl) {
-						deletePics = await deleteStorage(
-							extractPathFromUrl(imageUrl),
-							"event_pics",
-						);
+						await deleteStorage(extractPathFromUrl(imageUrl), "event_pics");
 					}
 				}
 				const eventData = {
@@ -180,11 +174,11 @@ const EditEvent = () => {
 					description,
 				};
 
-				const updatedData = await updateEvent(
+				await updateEvent(
 					{
 						...eventData,
 					},
-                    (id as string) ?? "",
+					(id as string) ?? "",
 					selectedTags,
 				);
 
@@ -245,122 +239,35 @@ const EditEvent = () => {
 				}}
 			/>
 			<DefaultLayout>
-				<div className="container mx-auto p-4 py-6 lg:max-w-3xl">
-					<h1 className="text-2xl font-bold mb-4">イベントの編集</h1>
-					<form onSubmit={handleSubmit} className="space-y-4 mb-4">
-						<div className="flex flex-col gap-4 mx-auto">
-							<div className="flex flex-col gap-2">
-								<label htmlFor="eventName" className="text-sm font-bold">
-									タイトル
-									<MiniTag label="必須" />
-								</label>
-								<input
-									id="eventName"
-									type="text"
-									value={eventName}
-									onChange={(e) => setEventName(e.target.value)}
-									className="bg-light-gray rounded-md p-3"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="date" className="text-sm font-bold">
-									日付
-									<MiniTag label="必須" />
-								</label>
-								<input
-									id="date"
-									type="date"
-									value={date}
-									onChange={(e) => setDate(e.target.value)}
-									className="bg-light-gray rounded-md p-3"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="location" className="text-sm font-bold">
-									場所
-								</label>
-								<input
-									id="location"
-									type="text"
-									value={location}
-									onChange={(e) => setLocation(e.target.value)}
-									className="bg-light-gray rounded-md p-3"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="file-upload" className="text-sm font-bold">
-									カバー画像
-								</label>
-								<input
-									id="file-upload"
-									name="file-upload"
-									type="file"
-									className=""
-									accept="image/png, image/jpeg"
-									onChange={handleFileChange}
-								/>
-								{(previewUrl && <img src={previewUrl} alt="Preview" />) || (
-									<img
-										src={imageUrl || defaultImageUrl}
-										alt={eventName}
-										width={500}
-										height={300}
-										className="mx-auto"
-									/>
-								)}
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="description" className="text-sm font-bold">
-									説明
-								</label>
-								<textarea
-									id="description"
-									value={description}
-									onChange={(e) => setDescription(e.target.value)}
-									rows={4}
-									className="bg-light-gray rounded-md p-3"
-								/>
-							</div>
-							<div className="flex flex-col gap-2 mb-4">
-								<label className="text-sm font-bold">タグ</label>
-								<div className="flex flex-wrap gap-2 mb-2">
-									{allTags.map((tag) => (
-										<Tag
-											key={tag.id}
-											label={tag.label}
-											selected={selectedTags.includes(tag.id)}
-											onSelect={() => handleTagSelect(tag.id)}
-										/>
-									))}
-								</div>
-							</div>
-							{errorMessage && <p>{errorMessage}</p>}
-							<div className="text-center">
-								<BaseButton onClick={handleSubmit} label="イベントを更新する" />
-							</div>
-						</div>
-					</form>
-					<div className="flex justify-center">
-						<div className="max-w-xs">
-							{isAdmin && (
-								<BaseButton
-									onClick={() => openDialog(Number(id))}
-									label="イベントを削除する"
-									danger
-								/>
-							)}
-						</div>
-					</div>
-					<ConfirmDialog
-						open={isDialogOpen}
-						onClose={closeDialog}
-						onConfirm={handleConfirm}
-						title="イベントを削除しますか？"
-						text="この操作は取り消せません。紐づく動画もすべて削除されます。"
-						confirmText="削除する"
-					/>
-				</div>
-				{loading && <LoadingSpinner />}
+				<EventEditorForm
+					mode="edit"
+					eventName={eventName}
+					date={date}
+					location={location}
+					description={description}
+					imageUrl={imageUrl || defaultImageUrl}
+					previewUrl={previewUrl}
+					allTags={allTags}
+					selectedTagIds={selectedTags}
+					errorMessage={errorMessage}
+					loading={loading}
+					onEventNameChange={setEventName}
+					onDateChange={setDate}
+					onLocationChange={setLocation}
+					onDescriptionChange={setDescription}
+					onFileChange={handleFileChange}
+					onTagSelect={handleTagSelect}
+					onSubmit={handleSubmit}
+					onDelete={isAdmin ? () => openDialog(Number(id)) : undefined}
+				/>
+				<ConfirmDialog
+					open={isDialogOpen}
+					onClose={closeDialog}
+					onConfirm={handleConfirm}
+					title="イベントを削除しますか？"
+					text="この操作は取り消せません。紐づく動画もすべて削除されます。"
+					confirmText="削除する"
+				/>
 			</DefaultLayout>
 		</>
 	);

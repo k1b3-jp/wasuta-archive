@@ -1,6 +1,7 @@
-import { NextSeo } from "@/components/seo";
 import Link from "next/link";
 import DefaultLayout from "@/components/layout/DefaultLayout";
+import LegalDocument from "@/components/layout/LegalDocument";
+import { NextSeo } from "@/components/seo";
 
 export default function Policy() {
 	return (
@@ -19,7 +20,7 @@ export default function Policy() {
 				}}
 			/>
 			<DefaultLayout>
-				<div className="p-8">
+				<LegalDocument title="プライバシーポリシー" label="PRIVACY POLICY">
 					<h1 className="font-bold text-2xl mb-6">プライバシーポリシー</h1>
 					<p className="mb-6">
 						本ウェブサイト運営（以下、「運営者」といいます。）は、本ウェブサイト上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
@@ -193,7 +194,7 @@ export default function Policy() {
 						からお願いいたします。
 					</p>
 					<p className="text-right">以上</p>
-				</div>
+				</LegalDocument>
 			</DefaultLayout>
 		</>
 	);

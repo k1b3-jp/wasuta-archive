@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "postbuild": "next-sitemap",
+		"postbuild": "node -e \"console.log('Dynamic sitemap routes are included in the Next.js build.')\"",
+		"sitemap:generate": "next-sitemap",
     "start": "next start",
     "lint": "biome lint --write src",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "format": "biome format --write src",
-    "check": "biome check --write src",
-    "analyze": "ANALYZE=true next build"
+		"check": "biome check --write src",
+		"test:react-runtime": "node scripts/check-react-runtime.mjs",
+		"test:api": "node scripts/check-api-contracts.mjs",
+		"test:supabase": "supabase migration up --local && supabase db lint --local --level warning && supabase test db --local",
+		"analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
@@ -25,8 +29,6 @@
     "@next/bundle-analyzer": "^16.0.0",
     "@next/third-parties": "^16.0.0",
     "@radix-ui/react-dialog": "^1.1.6",
-    "@supabase/auth-ui-react": "^0.4.6",
-    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.1",
     "@vercel/analytics": "^2.0.0",
     "@vercel/og": "^1.0.0",

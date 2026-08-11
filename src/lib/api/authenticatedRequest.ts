@@ -4,32 +4,43 @@ type ApiError = {
 	error?: string;
 };
 
-export async function authenticatedPost<TResponse = void>(
+async function authenticatedRequest<TResponse>(
 	path: string,
-	body: unknown,
+	init?: RequestInit,
 ): Promise<TResponse> {
 	const { data } = await supabase.auth.getSession();
 	const token = data.session?.access_token;
 	if (!token) throw new Error("ログインが必要です");
 
 	const response = await fetch(path, {
-		method: "POST",
+		...init,
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
+			...init?.headers,
 		},
-		body: JSON.stringify(body),
 	});
 
 	const responseBody = (await response.json().catch(() => ({}))) as TResponse;
 	if (!response.ok) {
 		const apiError = responseBody as ApiError;
-		const message =
-			apiError && typeof apiError === "object" && apiError.error
-				? apiError.error
-				: `HTTP ${response.status}`;
-		throw new Error(message);
+		throw new Error(apiError.error || `HTTP ${response.status}`);
 	}
+	return responseBody;
+}
 
-	return responseBody as TResponse;
+export function authenticatedGet<TResponse>(path: string) {
+	return authenticatedRequest<TResponse>(path);
+}
+
+export async function authenticatedPost<TResponse = void>(
+	path: string,
+	body: unknown,
+): Promise<TResponse> {
+	return authenticatedRequest<TResponse>(path, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(body),
+	});
 }

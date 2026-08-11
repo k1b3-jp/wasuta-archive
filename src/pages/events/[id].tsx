@@ -1,25 +1,26 @@
-import DefaultLayout from "@/components/layout/DefaultLayout";
+import { faSquareXTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import MovieCard from "@/components/events/MovieCard";
-import BaseButton from "@/components/ui/BaseButton";
+import DefaultLayout from "@/components/layout/DefaultLayout";
+import { ArticleJsonLd, NextSeo } from "@/components/seo";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Tag from "@/components/ui/Tag";
 import { useAuth } from "@/contexts/AuthContext";
+import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
 import type { Movie } from "@/types/movie";
 import type { TagType } from "@/types/tag";
 import formatDate from "@/utils/formatDate";
-import { faCalendar } from "@fortawesome/free-regular-svg-icons";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArticleJsonLd, NextSeo } from "@/components/seo";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { faSquareXTwitter } from "@fortawesome/free-brands-svg-icons";
-import { toast } from "react-toastify";
 import { supabase } from "../../lib/supabaseClient";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { useClearQueryParam } from "@/hooks/useClearQueryParam";
+import styles from "./eventDetail.module.scss";
 
 // イベント詳細ページのプロパティ型定義
 interface EventDetailsProps {
@@ -55,7 +56,10 @@ export async function getServerSideProps({
 		let linksData: Movie[];
 		let linksError: any;
 		try {
-			linksData = await getMovies({ eventId: Number.parseInt(id), limit: 6 });
+			linksData = await getMovies({
+				eventId: Number.parseInt(id, 10),
+				limit: 6,
+			});
 		} catch (error) {
 			console.error(`Error fetching movies: ${(error as any).message}`);
 			linksData = [];
@@ -68,12 +72,8 @@ export async function getServerSideProps({
 		console.error("Error fetching data:", error);
 	}
 
-	return {
-		props: {
-			event,
-			youtubeLinks,
-		},
-	};
+	if (!event) return { notFound: true };
+	return { props: { event, youtubeLinks } };
 }
 
 // URLと改行を適切に扱う
@@ -90,7 +90,7 @@ const isValidUrl = (url: string): boolean => {
 	try {
 		const parsedUrl = new URL(url);
 		return ["http:", "https:"].includes(parsedUrl.protocol);
-	} catch (e) {
+	} catch {
 		return false; // 不正な形式またはサポートされていないプロトコルのURL
 	}
 };
@@ -127,8 +127,9 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 	const [url, setUrl] = useState("");
 
 	const ogImage = useMemo(() => {
-		return `https://www.wasuta-archive.com/api/og?title=${event.event_name
-			}&image=${event.image_url || defaultImageUrl}`;
+		return `https://www.wasuta-archive.com/api/og?title=${
+			event.event_name
+		}&image=${event.image_url || defaultImageUrl}`;
 	}, [event.event_name, event.image_url]);
 
 	const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
@@ -149,16 +150,16 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		}
 	};
 
-    const router = useRouter();
-    const toastParam = (router.query?.toast as string) || null;
-    useClearQueryParam("toast", toastParam === "success");
+	const router = useRouter();
+	const toastParam = (router.query?.toast as string) || null;
+	useClearQueryParam("toast", toastParam === "success");
 
-    useEffect(() => {
-        if (toastParam === "success") {
-            toast.success("保存しました🌏");
-        }
-        fetchAllYoutubeTags();
-    }, [toastParam, fetchAllYoutubeTags]);
+	useEffect(() => {
+		if (toastParam === "success") {
+			toast.success("保存しました🌏");
+		}
+		fetchAllYoutubeTags();
+	}, [toastParam, fetchAllYoutubeTags]);
 
 	// YouTubeリンクの追加処理
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -168,11 +169,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		if (isLoggedIn) {
 			try {
 				const selectedYoutubeTagIds = selectedYoutubeTags.map((tag) => tag.id);
-				const insertedData = await createYoutubeLink(
-					url,
-					selectedYoutubeTagIds,
-					id,
-				);
+				await createYoutubeLink(url, selectedYoutubeTagIds, id);
 				setLoading(false);
 				toast.success("動画を登録しました🌏");
 				router.push(`/events/${id}`);
@@ -219,125 +216,141 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 				description={event.description}
 			/>
 			<DefaultLayout>
-				<div>
-					<div className="event">
-						<div className="event-head bg-100vw bg-light-gray p-4">
-							<img
-								src={event.image_url || defaultImageUrl}
-								alt={event.event_name}
-								width={500}
-								height={300}
-								className="mx-auto"
-							/>
-						</div>
-						<div className="event-detail p-6">
-							<h1 className="text-font-color font-bold text-xl mb-4">
-								{event.event_name}
-							</h1>
-							<div className="flex flex-row gap-2 items-center mb-4">
-								<div className="bg-light-gray py-2 px-3 rounded">
+				<article className={styles.page}>
+					<header className={styles.hero}>
+						<img
+							src={event.image_url || defaultImageUrl}
+							alt={event.event_name}
+						/>
+						<div className={styles.shade} />
+						<div className={styles.heroInner}>
+							<Link href="/events" className={styles.back}>
+								← イベント一覧へ
+							</Link>
+							<p className={styles.eyebrow}>EVENT RECORD</p>
+							<h1>{event.event_name}</h1>
+							<div className={styles.heroMeta}>
+								<span>
 									<FontAwesomeIcon icon={faCalendar} />
-								</div>
-								<p>{formatDate(event.date)}</p>
-							</div>
-							<div className="flex flex-row gap-2 items-center mb-6">
-								<div className="bg-light-gray py-2 px-3 rounded">
+									{formatDate(event.date)}
+								</span>
+								<span>
 									<FontAwesomeIcon icon={faLocationDot} />
-								</div>
-								<p>{event.location || "未設定"}</p>
-							</div>
-							<div className="flex flex-col gap-2 mb-6">
-								<h2 className="text-l font-bold">イベントについて</h2>
-								<p dangerouslySetInnerHTML={{ __html: formatDescription(event.description) }} />
-							</div>
-                            <div className="flex flex-col gap-2 mb-8">
-                                <h2 className="text-l font-bold">Share</h2>
-                                <a
-                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://www.wasuta-archive.com/events/${id}`)}&text=${encodeURIComponent(event.event_name)}&hashtags=${encodeURIComponent("わーすた,わーすたアーカイブ")}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-8 inline-block"
-                                    aria-label="Share on X"
-                                >
-                                    <FontAwesomeIcon icon={faSquareXTwitter} className="text-2xl" />
-                                </a>
-                            </div>
-							<div className="text-center">
-								{isLoggedIn ? (
-									<BaseButton
-										link={`/events/${id}/edit`}
-										label="イベント情報を編集"
-										white
-									/>
-								) : null}
+									{event.location || "場所の記録なし"}
+								</span>
 							</div>
 						</div>
-						<div className="event-movie bg-100vw">
-							<div className="container mx-auto p-6">
-								<div className="flex justify-between items-center mb-2">
-									<h3 className="text-xl font-bold text-font-color">
-										イベントの動画
-									</h3>
-									<BaseButton label="もっと見る" link={`/events/${id}/movie`} />
-								</div>
+					</header>
+					<div className={styles.body}>
+						<div className={styles.layout}>
+							<section className={styles.main}>
+								<p className={styles.sectionLabel}>ABOUT THIS DAY</p>
+								<h2>この日の記録</h2>
 								<div
-									style={{ marginRight: "calc(50% - 50vw)" }}
-									className="movie-list min-h-60 flex items-center overflow-scroll mb-6"
-								>
-									{youtubeLinks.length > 0 ? (
-										youtubeLinks.map((link) => (
-											<div key={link.youtube_link_id} className="m-2">
-												<MovieCard
-													videoUrl={link.youtube_links.url}
-													id={link.youtube_link_id}
-												/>
-											</div>
-										))
-									) : (
-										<p>動画が登録されていません😢</p>
-									)}{" "}
-								</div>
-								<div className="add-movie bg-white p-6 rounded-lg shadow-lg lg:w-[700px] mx-auto">
-									<h4 className="text-xl font-bold text-deep-green mb-8">
-										動画の登録
-									</h4>
-									<div className="flex flex-col gap-4 mx-auto">
-										<div className="flex flex-col gap-2">
-											<label htmlFor="url" className="text-sm font-bold">
-												URL
-											</label>
-											<input
-												id="url"
-												type="url"
-												value={url}
-												onChange={(e) => setUrl(e.target.value)}
-												className="mt-1 bg-light-gray py-3 px-4 block w-full border border-gray-200 rounded-lg"
-											/>
-										</div>
-										<div className="flex flex-col gap-2">
-											<label className="text-sm font-bold">タグ</label>
-											<div className="flex flex-wrap gap-2 mb-8">
-												{allYoutubeTags.map((tag) => (
-													<Tag
-														key={tag.id}
-														label={tag.label}
-														selected={selectedYoutubeTags.some(
-															(t) => t.id === tag.id,
-														)}
-														onSelect={() => handleYoutubeTagSelect(tag)}
-													/>
-												))}
-											</div>
-										</div>
+									className={styles.description}
+									// biome-ignore lint/security/noDangerouslySetInnerHtml: content is escaped before links are added
+									dangerouslySetInnerHTML={{
+										__html: formatDescription(event.description),
+									}}
+								/>
+							</section>
+							<aside className={styles.side}>
+								<p className={styles.sectionLabel}>FACTS</p>
+								<h2>記録情報</h2>
+								<dl>
+									<div className={styles.fact}>
+										<dt>DATE</dt>
+										<dd>{formatDate(event.date)}</dd>
 									</div>
-									<div className="text-center">
-										<BaseButton label="登録する" onClick={handleSubmit} />
+									<div className={styles.fact}>
+										<dt>PLACE</dt>
+										<dd>{event.location || "未設定"}</dd>
 									</div>
+									<div className={styles.fact}>
+										<dt>ARCHIVE ID</dt>
+										<dd>EVENT — {id}</dd>
+									</div>
+								</dl>
+								<div className={styles.sideActions}>
+									<a
+										href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://www.wasuta-archive.com/events/${id}`)}&text=${encodeURIComponent(event.event_name)}&hashtags=${encodeURIComponent("わーすた,わーすたアーカイブ")}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										className={styles.share}
+									>
+										<FontAwesomeIcon icon={faSquareXTwitter} /> Xで共有
+									</a>
+									{isLoggedIn && (
+										<Link href={`/events/${id}/edit`} className={styles.edit}>
+											記録を編集
+										</Link>
+									)}
 								</div>
-							</div>
+							</aside>
 						</div>
 					</div>
-				</div>
+					<section className={styles.movies}>
+						<div className={styles.sectionHead}>
+							<div>
+								<p className={styles.sectionLabel}>MOVIES FROM THIS DAY</p>
+								<h2>この日の映像</h2>
+							</div>
+							<Link href={`/events/${id}/movie`}>すべて見る →</Link>
+						</div>
+						<div className={styles.movieRail}>
+							{youtubeLinks.length > 0 ? (
+								youtubeLinks.map((link) => (
+									<div key={link.youtube_link_id}>
+										<MovieCard
+											videoUrl={link.youtube_links.url}
+											id={link.youtube_link_id}
+										/>
+									</div>
+								))
+							) : (
+								<p className={styles.empty}>
+									この日に紐づく映像は、まだ登録されていません。
+								</p>
+							)}
+						</div>
+					</section>
+					{isLoggedIn && (
+						<section className={styles.admin}>
+							<p className={styles.sectionLabel}>EDITOR TOOL</p>
+							<h2>この日に動画を追加</h2>
+							<form onSubmit={handleSubmit}>
+								<div className={styles.adminField}>
+									<label htmlFor="url">YouTube URL</label>
+									<input
+										id="url"
+										type="url"
+										required
+										value={url}
+										onChange={(e) => setUrl(e.target.value)}
+									/>
+								</div>
+								<fieldset className={styles.adminField}>
+									<legend>タグ</legend>
+									<div className={styles.adminTags}>
+										{allYoutubeTags.map((tag) => (
+											<Tag
+												key={tag.id}
+												label={tag.label}
+												selected={selectedYoutubeTags.some(
+													(item) => item.id === tag.id,
+												)}
+												onSelect={() => handleYoutubeTagSelect(tag)}
+											/>
+										))}
+									</div>
+								</fieldset>
+								<button type="submit" disabled={loading}>
+									{loading ? "登録中…" : "動画を登録する"}
+								</button>
+							</form>
+						</section>
+					)}
+				</article>
 				{loading && <LoadingSpinner />}
 			</DefaultLayout>
 		</>

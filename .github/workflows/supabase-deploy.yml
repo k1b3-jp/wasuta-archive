@@ -4,10 +4,41 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    paths:
+      - "supabase/**"
+      - ".github/workflows/supabase-deploy.yml"
+      - "package.json"
   workflow_dispatch:
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_CLIENT_ID: local-ci-client-id
+      GOOGLE_SECRET: local-ci-client-secret
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v3
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Rebuild local database from migrations
+        run: supabase db reset --local
+
+      - name: Lint database schema
+        run: supabase db lint --local --level warning
+
+      - name: Run database tests
+        run: supabase test db --local
+
   deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

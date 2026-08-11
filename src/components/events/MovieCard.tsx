@@ -1,9 +1,10 @@
-import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
-import type { TagType } from "@/types/tag";
 import type React from "react";
 import { useEffect, useState } from "react";
-import MiniTag from "../ui/MiniTag";
 import { getEventsByYoutubeLink } from "@/lib/supabase/getEventsByYoutubeLink";
+import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
+import type { TagType } from "@/types/tag";
+import MiniTag from "../ui/MiniTag";
+import styles from "./MovieCard.module.scss";
 
 export function extractYouTubeVideoId(url: string): string | null {
 	const matched =
@@ -29,6 +30,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 	const [youtubeTags, setYoutubeTags] = useState<TagType[] | undefined>([]);
 	const [eventName, setEventName] = useState<string | null>(null);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fetch helpers intentionally rerun only when the link id changes
 	useEffect(() => {
 		// idが有効な場合のみデータを取得
 		if (id && Number.isInteger(id) && id > 0) {
@@ -41,7 +43,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 		try {
 			// idが有効な数値かチェック
 			if (!Number.isInteger(id) || id <= 0) {
-				console.warn('Invalid YouTube link ID for tags:', id);
+				console.warn("Invalid YouTube link ID for tags:", id);
 				setYoutubeTags([]);
 				return;
 			}
@@ -49,7 +51,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 			const tags = await getYoutubeTags(id);
 			setYoutubeTags(tags);
 		} catch (error) {
-			console.error('Error fetching YouTube tags:', error);
+			console.error("Error fetching YouTube tags:", error);
 			setYoutubeTags([]);
 		}
 	};
@@ -58,7 +60,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 		try {
 			// idが有効な数値かチェック
 			if (!Number.isInteger(id) || id <= 0) {
-				console.warn('Invalid YouTube link ID:', id);
+				console.warn("Invalid YouTube link ID:", id);
 				setEventName(null);
 				return;
 			}
@@ -70,14 +72,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 				setEventName(null);
 			}
 		} catch (error) {
-			console.error('Error fetching event name:', error);
+			console.error("Error fetching event name:", error);
 			setEventName(null);
 		}
 	};
 
 	return (
-		<div>
-			<div className="mb-2">
+		<article className={styles.card}>
+			<div className={styles.frame}>
 				{videoId ? (
 					<iframe
 						width="340"
@@ -86,21 +88,25 @@ const MovieCard: React.FC<MovieCardProps> = ({ videoUrl, id }) => {
 						loading="lazy"
 						title="YouTube video player"
 						allowFullScreen
-						className="aspect-video"
 					/>
 				) : (
-					<p>Invalid URL</p>
+					<p className={styles.invalid}>動画URLを確認できません</p>
 				)}
 			</div>
-			<div className="text-sm line-clamp-1 leading-7 h-7 mb-2 max-w-[320px]">{eventName}</div>
-			<div className="min-h-[28px]">
-				{youtubeTags?.map(
-					(tag: { id: React.Key | null | undefined; label: string }) => (
-						<MiniTag key={tag.id} label={tag.label} />
-					),
-				)}
+			<div className={styles.body}>
+				<p className={styles.label}>ARCHIVE MOVIE</p>
+				<p className={styles.eventName}>
+					{eventName || "わーすた アーカイブ映像"}
+				</p>
+				<div className={styles.tags}>
+					{youtubeTags?.map(
+						(tag: { id: React.Key | null | undefined; label: string }) => (
+							<MiniTag key={tag.id} label={tag.label} />
+						),
+					)}
+				</div>
 			</div>
-		</div>
+		</article>
 	);
 };
 

@@ -1,0 +1,8 @@
+.card { min-width: 0; }
+.frame { position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: 1rem; background: #29262d; box-shadow: 0 10px 28px rgba(43,34,46,.1); }
+.frame iframe { width: 100%; height: 100%; border: 0; }
+.invalid { height: 100%; display: grid; place-items: center; color: #c9bdcc; font-size: .72rem; }
+.body { padding: .8rem .15rem 0; }
+.label { margin-bottom: .45rem; color: #817783; font-size: .55rem; font-weight: 900; letter-spacing: .12em; }
+.eventName { min-height: 1.55rem; overflow: hidden; color: #353037; font-size: .76rem; font-weight: 800; line-height: 1.55; white-space: nowrap; text-overflow: ellipsis; }
+.tags { min-height: 28px; margin-top: .45rem; }
