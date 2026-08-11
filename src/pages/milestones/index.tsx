@@ -35,6 +35,8 @@ const actionLabels: Record<string, string> = {
 	submit_for_review: "内容確認",
 	publish: "公開",
 	withdraw: "取り下げ",
+	revise_published: "公開内容の訂正",
+	discard_draft: "下書き破棄",
 };
 
 export default function MilestoneManagementPage() {
@@ -50,6 +52,9 @@ export default function MilestoneManagementPage() {
 	const [audit, setAudit] = useState<Record<number, AuditItem[]>>({});
 	const [openAuditId, setOpenAuditId] = useState<number | null>(null);
 	const [withdrawId, setWithdrawId] = useState<number | null>(null);
+	const [destructiveAction, setDestructiveAction] = useState<
+		"withdraw" | "discard"
+	>("withdraw");
 	const [reason, setReason] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 
@@ -102,20 +107,26 @@ export default function MilestoneManagementPage() {
 			);
 		}
 	};
-	const withdraw = async (id: number) => {
+	const applyDestructiveAction = async (id: number) => {
 		setSubmitting(true);
 		try {
-			await authenticatedPost("/api/milestones/withdraw", {
+			await authenticatedPost(`/api/milestones/${destructiveAction}`, {
 				milestoneId: id,
 				reason,
 			});
-			toast.success("節目を取り下げました");
+			toast.success(
+				destructiveAction === "withdraw"
+					? "節目を取り下げました"
+					: "下書きを破棄しました",
+			);
 			setWithdrawId(null);
 			setReason("");
 			setAudit({});
 			await load();
 		} catch (e) {
-			toast.error(e instanceof Error ? e.message : "取り下げできませんでした");
+			toast.error(
+				e instanceof Error ? e.message : "操作を完了できませんでした",
+			);
 		} finally {
 			setSubmitting(false);
 		}
@@ -137,6 +148,24 @@ export default function MilestoneManagementPage() {
 						再編集・プレビュー →
 					</Link>
 				)}
+				{isAdmin && item.status === "draft" && (
+					<button
+						className={milestoneStyles.withdrawButton}
+						type="button"
+						onClick={() => {
+							setWithdrawId(item.milestone_id);
+							setDestructiveAction("discard");
+							setReason("");
+						}}
+					>
+						破棄
+					</button>
+				)}
+				{isAdmin && item.status === "published" && (
+					<Link href={`/milestones/create?id=${item.milestone_id}`}>
+						内容を訂正 →
+					</Link>
+				)}
 				{isAdmin && (
 					<button
 						type="button"
@@ -151,6 +180,7 @@ export default function MilestoneManagementPage() {
 						type="button"
 						onClick={() => {
 							setWithdrawId(item.milestone_id);
+							setDestructiveAction("withdraw");
 							setReason("");
 						}}
 					>
@@ -178,7 +208,8 @@ export default function MilestoneManagementPage() {
 			{withdrawId === item.milestone_id && (
 				<div className={milestoneStyles.withdrawForm}>
 					<label htmlFor={`reason-${item.milestone_id}`}>
-						取り下げ理由（履歴に保存されます）
+						{destructiveAction === "withdraw" ? "取り下げ理由" : "破棄理由"}
+						（履歴に保存されます）
 					</label>
 					<textarea
 						id={`reason-${item.milestone_id}`}
@@ -194,9 +225,10 @@ export default function MilestoneManagementPage() {
 						<button
 							type="button"
 							disabled={submitting || reason.trim().length < 3}
-							onClick={() => void withdraw(item.milestone_id)}
+							onClick={() => void applyDestructiveAction(item.milestone_id)}
 						>
-							理由を記録して取り下げ
+							理由を記録して
+							{destructiveAction === "withdraw" ? "取り下げ" : "破棄"}
 						</button>
 					</div>
 				</div>
@@ -230,6 +262,7 @@ export default function MilestoneManagementPage() {
 							{isAdmin && (
 								<Link href="/archive/member-relations">メンバー関連</Link>
 							)}
+							{isAdmin && <Link href="/archive/manage">楽曲・衣装・出典</Link>}
 							<Link href="/milestones/create">＋ 新しい節目</Link>
 						</div>
 						{loading && (

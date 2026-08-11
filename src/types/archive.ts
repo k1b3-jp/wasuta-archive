@@ -3,6 +3,10 @@ export type ArchiveSource = {
 	label: string;
 	url: string;
 	accessed_on: string;
+	sources?: {
+		availability_status: "unchecked" | "available" | "suspect" | "unavailable";
+		archived_url?: string | null;
+	} | null;
 };
 
 export type ArchiveEventRelation = {

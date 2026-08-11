@@ -12,8 +12,8 @@ import {
 	timelineYears,
 } from "@/data/timelineDemo";
 import { getCostumes } from "@/lib/supabase/getCostumes";
-import { getEvents } from "@/lib/supabase/getEvents";
 import { getSongs } from "@/lib/supabase/getSongs";
+import { getTimelineEvents } from "@/lib/supabase/getTimelineEvents";
 import {
 	getTimelineMemberRelations,
 	type TimelineMemberRelations,
@@ -151,13 +151,20 @@ const getKind = (value: string | string[] | undefined) => {
 	return kind && Object.hasOwn(kindLabels, kind) ? kind : "all";
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({
+	res,
+	query,
+}: {
+	res: { setHeader: (name: string, value: string) => void };
+	query: Record<string, string | string[] | undefined>;
+}) {
+	res.setHeader(
+		"Cache-Control",
+		"public, s-maxage=300, stale-while-revalidate=1800",
+	);
+	const requestedYear = getYear(query.year);
 	const results = await Promise.allSettled([
-		getEvents({
-			startDate: "2015-01-01",
-			endDate: "2026-12-31",
-			ascending: true,
-		}),
+		getTimelineEvents(requestedYear),
 		getTimelineMovies(),
 		getSongs(),
 		getCostumes(),
@@ -176,10 +183,20 @@ export async function getServerSideProps() {
 	return {
 		props: {
 			events: fallback<Event>(0, "events"),
-			movies: fallback<TimelineMovie>(1, "movies"),
-			songs: fallback<Song>(2, "songs"),
-			costumes: fallback<Costume>(3, "costumes"),
-			milestones: fallback<TimelineMilestone>(4, "milestones"),
+			movies: fallback<TimelineMovie>(1, "movies").filter((item) =>
+				item.events?.date?.startsWith(String(requestedYear)),
+			),
+			songs: fallback<Song>(2, "songs").filter((item) =>
+				(item.first_performed_date ?? item.release_date)?.startsWith(
+					String(requestedYear),
+				),
+			),
+			costumes: fallback<Costume>(3, "costumes").filter((item) =>
+				item.debut_date?.startsWith(String(requestedYear)),
+			),
+			milestones: fallback<TimelineMilestone>(4, "milestones").filter((item) =>
+				item.occurred_on.startsWith(String(requestedYear)),
+			),
 			memberOptions:
 				fallback<TimelineMember>(5, "members").length > 0
 					? fallback<TimelineMember>(5, "members")
@@ -239,9 +256,7 @@ export default function TimelinePage({
 		const query: Record<string, string> = { year: String(nextYear) };
 		if (nextMember !== "all") query.member = nextMember;
 		if (nextKind !== "all") query.kind = nextKind;
-		void router.push({ pathname: "/timeline", query }, undefined, {
-			shallow: true,
-		});
+		void router.push({ pathname: "/timeline", query });
 	};
 
 	const items = useMemo(() => {
@@ -412,6 +427,11 @@ export default function TimelinePage({
 									{selectedMember ? `・${selectedMember.shortName}推し` : ""}
 								</h2>
 								<p aria-live="polite">{items.length}件の記録</p>
+								{selectedMember && (
+									<Link href={`/members/${selectedMember.slug}`}>
+										{selectedMember.name}の全記録を見る →
+									</Link>
+								)}
 							</div>
 							{isLoggedIn && (
 								<Link className={styles.editorLink} href="/milestones/create">

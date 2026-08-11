@@ -50,6 +50,8 @@ export default function CreateMilestonePage() {
 		typeof router.query.id === "string" ? Number(router.query.id) : null;
 	const editing = Number.isSafeInteger(editId) && (editId ?? 0) > 0;
 	const [loadingDraft, setLoadingDraft] = useState(false);
+	const [editingPublished, setEditingPublished] = useState(false);
+	const [revisionReason, setRevisionReason] = useState("");
 
 	useEffect(() => {
 		if (!authLoading && !isLoggedIn) {
@@ -65,8 +67,9 @@ export default function CreateMilestonePage() {
 		)
 			.then(({ milestones }) => {
 				const item = milestones[0];
-				if (item?.status !== "draft")
-					throw new Error("編集できる下書きが見つかりません");
+				if (!item || !["draft", "published"].includes(item.status))
+					throw new Error("編集できる節目が見つかりません");
+				setEditingPublished(item.status === "published");
 				const occurrence = item.timeline_occurrences[0];
 				const source = occurrence?.occurrence_sources[0]?.sources;
 				setCreatedId(item.milestone_id);
@@ -125,6 +128,7 @@ export default function CreateMilestonePage() {
 					sourceUrl,
 					sourceKind,
 					isGroupWide,
+					revisionReason: editingPublished ? revisionReason : undefined,
 				});
 			} else milestoneId = await createDraft();
 			if (publishAfterConfirmation) {
@@ -161,7 +165,11 @@ export default function CreateMilestonePage() {
 							</Link>
 							<p>ARCHIVE EDITOR</p>
 							<h1>
-								{editing ? "節目の下書きを編集する" : "新しい節目を記録する"}
+								{editingPublished
+									? "公開中の節目を訂正する"
+									: editing
+										? "節目の下書きを編集する"
+										: "新しい節目を記録する"}
 							</h1>
 							<span>
 								確認できる事実と出典を一緒に保存し、内容を確認して公開します。
@@ -311,6 +319,22 @@ export default function CreateMilestonePage() {
 									グループ全体の節目として扱う
 								</label>
 							</div>
+							{editingPublished && (
+								<div className={styles.field}>
+									<label htmlFor="revision-reason">
+										訂正理由 <b>*</b>
+									</label>
+									<p>公開履歴に保存されます。</p>
+									<textarea
+										id="revision-reason"
+										required
+										rows={3}
+										maxLength={500}
+										value={revisionReason}
+										onChange={(event) => setRevisionReason(event.target.value)}
+									/>
+								</div>
+							)}
 							<div className={styles.field}>
 								<label className={milestoneStyles.checkbox}>
 									<input
@@ -342,9 +366,15 @@ export default function CreateMilestonePage() {
 									type="submit"
 									disabled={saving || published || loadingDraft}
 								>
-									{saving ? "保存中…" : createdId ? "変更を保存" : "下書き保存"}
+									{saving
+										? "保存中…"
+										: editingPublished
+											? "訂正を保存"
+											: createdId
+												? "変更を保存"
+												: "下書き保存"}
 								</button>
-								{isAdmin && (
+								{isAdmin && !editingPublished && (
 									<button
 										type="button"
 										disabled={saving || published || !confirmedFacts}

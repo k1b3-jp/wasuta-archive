@@ -3,7 +3,7 @@ import { supabase } from "../supabaseClient";
 
 const songSelect = `
   song_id, title, release_date, first_performed_date, description, image_url,
-  song_sources (source_id, label, url, accessed_on),
+  song_sources (source_id, label, url, accessed_on, sources:canonical_source_id (availability_status, archived_url)),
   song_events (relation_type, events (event_id, event_name, date, image_url))
 `;
 

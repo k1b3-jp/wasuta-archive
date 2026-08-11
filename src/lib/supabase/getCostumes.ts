@@ -3,7 +3,7 @@ import { supabase } from "../supabaseClient";
 
 const costumeSelect = `
   costume_id, name, debut_date, description, image_url,
-  costume_sources (source_id, label, url, accessed_on),
+  costume_sources (source_id, label, url, accessed_on, sources:canonical_source_id (availability_status, archived_url)),
   costume_events (relation_type, events (event_id, event_name, date, image_url))
 `;
 

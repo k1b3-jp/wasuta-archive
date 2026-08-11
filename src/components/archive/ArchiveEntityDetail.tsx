@@ -65,8 +65,16 @@ export default function ArchiveEntityDetail({
 						{sources.length ? (
 							sources.map((source) => (
 								<div className={styles.sourceItem} key={source.source_id}>
+									{source.sources?.availability_status === "unavailable" && (
+										<strong>元の出典は現在閲覧できません</strong>
+									)}
 									<a
-										href={source.url}
+										href={
+											source.sources?.availability_status === "unavailable" &&
+											source.sources.archived_url
+												? source.sources.archived_url
+												: source.url
+										}
 										target={
 											source.url.startsWith("http") ? "_blank" : undefined
 										}
@@ -75,7 +83,12 @@ export default function ArchiveEntityDetail({
 										}
 									>
 										<span>{source.label}</span>
-										<span>↗</span>
+										<span>
+											{source.sources?.availability_status === "unavailable" &&
+											source.sources.archived_url
+												? "保存版 ↗"
+												: "↗"}
+										</span>
 									</a>
 									<time dateTime={source.accessed_on}>
 										確認日 {formatDate(source.accessed_on)}

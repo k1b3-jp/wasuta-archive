@@ -3,6 +3,7 @@ import {
 	createAuthenticatedClient,
 	getErrorMessage,
 	isRateLimited,
+	isSafeExternalHttpUrl,
 	requireAuthenticatedUser,
 } from "@/lib/server/supabaseApi";
 
@@ -56,10 +57,7 @@ export default async function handler(
 	if (Number.isNaN(new Date(`${occurredOn}T00:00:00`).getTime())) {
 		return res.status(400).json({ error: "invalid milestone date" });
 	}
-	try {
-		const parsedSourceUrl = new URL(sourceUrl);
-		if (!/^https?:$/.test(parsedSourceUrl.protocol)) throw new Error();
-	} catch {
+	if (!isSafeExternalHttpUrl(sourceUrl)) {
 		return res.status(400).json({ error: "invalid source URL" });
 	}
 

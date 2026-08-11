@@ -1,4 +1,4 @@
-import { type SupabaseClient, createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -141,4 +141,30 @@ export function isPositiveIntegerArray(
 
 export function getErrorMessage(error: unknown) {
 	return error instanceof Error ? error.message : "unknown error";
+}
+
+export function isSafeExternalHttpUrl(value: string) {
+	try {
+		const url = new URL(value);
+		if (!/^https?:$/.test(url.protocol)) return false;
+		const host = url.hostname.toLowerCase();
+		if (host === "localhost" || host === "::1" || host.endsWith(".local"))
+			return false;
+		if (
+			/^(127|10|0)\./.test(host) ||
+			/^192\.168\./.test(host) ||
+			/^169\.254\./.test(host)
+		)
+			return false;
+		const private172 = host.match(/^172\.(\d+)\./);
+		if (
+			private172 &&
+			Number(private172[1]) >= 16 &&
+			Number(private172[1]) <= 31
+		)
+			return false;
+		return true;
+	} catch {
+		return false;
+	}
 }

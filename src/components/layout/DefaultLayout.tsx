@@ -24,6 +24,7 @@ export default function DefaultLayout({
 	children: React.ReactNode;
 	hideBottomNav?: boolean;
 }) {
+	const analyticsEnabled = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
 	return (
 		<>
 			<DefaultSeo
@@ -65,8 +66,8 @@ export default function DefaultLayout({
 					pauseOnHover
 					theme="light"
 				/>
-				{process.env.NODE_ENV === "production" && <Analytics />}
-				{process.env.NODE_ENV === "production" && <SpeedInsights />}
+				{analyticsEnabled && <Analytics />}
+				{analyticsEnabled && <SpeedInsights />}
 			</div>
 		</>
 	);

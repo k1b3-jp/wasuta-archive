@@ -3,6 +3,7 @@ import {
 	createAuthenticatedClient,
 	getErrorMessage,
 	isRateLimited,
+	isSafeExternalHttpUrl,
 	requireAuthenticatedUser,
 } from "@/lib/server/supabaseApi";
 
@@ -27,6 +28,7 @@ export default async function handler(
 		sourceUrl,
 		sourceTitle,
 		sourceKind,
+		revisionReason,
 	} = req.body ?? {};
 	if (
 		!Number.isSafeInteger(milestoneId) ||
@@ -44,27 +46,45 @@ export default async function handler(
 		!sourceKinds.has(sourceKind)
 	)
 		return res.status(400).json({ error: "invalid milestone fields" });
-	try {
-		const url = new URL(sourceUrl);
-		if (!/^https?:$/.test(url.protocol)) throw new Error();
-	} catch {
+	if (!isSafeExternalHttpUrl(sourceUrl)) {
 		return res.status(400).json({ error: "invalid source URL" });
 	}
 	if (isRateLimited(`milestones_update:${user.id}`, 30))
 		return res.status(429).json({ error: "rate limited" });
 	try {
-		const { error } = await supabase.rpc("update_milestone_draft", {
-			milestone_to_update: milestoneId,
-			draft_title: title.trim(),
-			draft_kind: kind.trim(),
-			draft_description:
-				typeof description === "string" ? description.trim() : "",
-			draft_occurred_on: occurredOn,
-			draft_is_group_wide: isGroupWide === true,
-			draft_source_url: sourceUrl,
-			draft_source_title: sourceTitle.trim(),
-			draft_source_kind: sourceKind,
-		});
+		const revisingPublished =
+			typeof revisionReason === "string" && revisionReason.trim().length > 0;
+		const { error } = await supabase.rpc(
+			revisingPublished
+				? "revise_published_milestone"
+				: "update_milestone_draft",
+			revisingPublished
+				? {
+						milestone_to_revise: milestoneId,
+						revised_title: title.trim(),
+						revised_kind: kind.trim(),
+						revised_description:
+							typeof description === "string" ? description.trim() : "",
+						revised_occurred_on: occurredOn,
+						revised_is_group_wide: isGroupWide === true,
+						revised_source_url: sourceUrl,
+						revised_source_title: sourceTitle.trim(),
+						revised_source_kind: sourceKind,
+						revision_reason: revisionReason.trim(),
+					}
+				: {
+						milestone_to_update: milestoneId,
+						draft_title: title.trim(),
+						draft_kind: kind.trim(),
+						draft_description:
+							typeof description === "string" ? description.trim() : "",
+						draft_occurred_on: occurredOn,
+						draft_is_group_wide: isGroupWide === true,
+						draft_source_url: sourceUrl,
+						draft_source_title: sourceTitle.trim(),
+						draft_source_kind: sourceKind,
+					},
+		);
 		if (error)
 			return res
 				.status(

@@ -165,6 +165,7 @@ export default function About() {
 							<Link href="/form">
 								記録について連絡する <FontAwesomeIcon icon={faLink} />
 							</Link>
+							<a href="/api/archive/export.csv">公開記録をCSVで保存</a>
 						</section>
 					</main>
 				</div>

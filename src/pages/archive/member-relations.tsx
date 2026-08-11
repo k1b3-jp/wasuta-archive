@@ -138,6 +138,19 @@ export default function MemberRelationsPage() {
 			setSaving(false);
 		}
 	};
+	if (authLoading || !isAdmin)
+		return (
+			<>
+				<NextSeo title="メンバー関連の管理" />
+				<DefaultLayout>
+					<div className={styles.page}>
+						<main className={styles.layout}>
+							<div className={styles.empty}>権限を確認しています…</div>
+						</main>
+					</div>
+				</DefaultLayout>
+			</>
+		);
 
 	return (
 		<>

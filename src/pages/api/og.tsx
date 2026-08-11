@@ -1,8 +1,8 @@
-import type { NextRequest } from "next/server";
 import { ImageResponse } from "@vercel/og";
+import type { NextRequest } from "next/server";
 
 export const config = {
-	runtime: "edge",
+	runtime: "nodejs",
 };
 
 export async function fetchFont(text: string): Promise<ArrayBuffer | null> {
