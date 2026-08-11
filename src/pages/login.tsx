@@ -1,25 +1,30 @@
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import supabase from "@/lib/supabaseClient";
 import styles from "./login.module.scss";
 
-const Auth = dynamic(
-	() => import("@supabase/auth-ui-react").then((module) => module.Auth),
-	{ ssr: false },
-);
-
 export default function LoginPage() {
 	const router = useRouter();
 	const toastParam = (router.query?.toast as string) || null;
+	const [signingIn, setSigningIn] = useState(false);
 	useEffect(() => {
 		if (toastParam === "login") toast.error("編集にはログインが必要です");
 	}, [toastParam]);
+	const signInWithGoogle = async () => {
+		setSigningIn(true);
+		const { error } = await supabase.auth.signInWithOAuth({
+			provider: "google",
+			options: { redirectTo: window.location.origin },
+		});
+		if (error) {
+			setSigningIn(false);
+			toast.error("ログインを開始できませんでした");
+		}
+	};
 	return (
 		<>
 			<NextSeo title="編集者ログイン" noindex />
@@ -55,23 +60,15 @@ export default function LoginPage() {
 							<h2>ログイン</h2>
 							<span>登録済みのGoogleアカウントを使用してください。</span>
 						</div>
-						<Auth
-							supabaseClient={supabase}
-							appearance={{
-								theme: ThemeSupa,
-								variables: {
-									default: {
-										colors: { brand: "#29262d", brandAccent: "#554d57" },
-										radii: {
-											borderRadiusButton: "999px",
-											buttonBorderRadius: "999px",
-											inputBorderRadius: "10px",
-										},
-									},
-								},
-							}}
-							providers={["google"]}
-						/>
+						<button
+							type="button"
+							className={styles.googleButton}
+							onClick={signInWithGoogle}
+							disabled={signingIn}
+						>
+							<span aria-hidden="true">G</span>
+							{signingIn ? "Googleへ移動中…" : "Googleでログイン"}
+						</button>
 						<p className={styles.legal}>
 							ログインすることで、<Link href="/terms">利用規約</Link>および
 							<Link href="/policy">プライバシーポリシー</Link>

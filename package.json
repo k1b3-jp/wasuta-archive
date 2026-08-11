@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build --webpack",
     "postbuild": "next-sitemap",
     "start": "next start",
@@ -12,6 +12,7 @@
     "build-storybook": "storybook build",
     "format": "biome format --write src",
     "check": "biome check --write src",
+    "test:react-runtime": "node scripts/check-react-runtime.mjs",
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
@@ -25,8 +26,6 @@
     "@next/bundle-analyzer": "^16.0.0",
     "@next/third-parties": "^16.0.0",
     "@radix-ui/react-dialog": "^1.1.6",
-    "@supabase/auth-ui-react": "^0.4.6",
-    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.1",
     "@vercel/analytics": "^2.0.0",
     "@vercel/og": "^1.0.0",
