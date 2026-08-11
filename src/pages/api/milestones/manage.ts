@@ -15,6 +15,11 @@ export default async function handler(
 	if (!(await requireAuthenticatedUser(supabase, res))) return;
 
 	try {
+		const status =
+			typeof req.query.status === "string" ? req.query.status : "draft";
+		if (!["draft", "published", "withdrawn"].includes(status)) {
+			return res.status(400).json({ error: "invalid status" });
+		}
 		let query = supabase
 			.from("milestones")
 			.select(`milestone_id, slug, title, kind, description, status, updated_at,
@@ -22,7 +27,7 @@ export default async function handler(
 					occurrence_sources(source_id, sources(source_id, url, title, source_kind)))`)
 			.order("updated_at", { ascending: false });
 		if (req.query.id) query = query.eq("milestone_id", Number(req.query.id));
-		else query = query.eq("status", "draft");
+		else query = query.eq("status", status);
 		const { data, error } = await query;
 		if (error) throw error;
 		if (req.query.id && !data?.length)

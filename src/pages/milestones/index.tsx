@@ -1,42 +1,209 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import styles from "@/components/events/EventEditorForm.module.scss";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import { useAuth } from "@/contexts/AuthContext";
-import { authenticatedGet } from "@/lib/api/authenticatedRequest";
+import {
+	authenticatedGet,
+	authenticatedPost,
+} from "@/lib/api/authenticatedRequest";
 import milestoneStyles from "./milestoneEditor.module.scss";
 
-type Draft = {
+type Milestone = {
 	milestone_id: number;
 	slug: string;
 	title: string;
 	kind: string;
+	status: "draft" | "published" | "withdrawn";
 	updated_at: string;
 	timeline_occurrences: Array<{ occurred_on: string }>;
+};
+type AuditItem = {
+	audit_id: number;
+	action: string;
+	from_status: string | null;
+	to_status: string | null;
+	reason: string | null;
+	created_at: string;
+};
+const actionLabels: Record<string, string> = {
+	create_draft: "下書き作成",
+	update_draft: "下書き更新",
+	submit_for_review: "内容確認",
+	publish: "公開",
+	withdraw: "取り下げ",
 };
 
 export default function MilestoneManagementPage() {
 	const router = useRouter();
-	const { isLoggedIn, loading: authLoading } = useAuth();
-	const [drafts, setDrafts] = useState<Draft[]>([]);
+	const { isLoggedIn, isAdmin, loading: authLoading } = useAuth();
+	const [items, setItems] = useState<Record<string, Milestone[]>>({
+		draft: [],
+		published: [],
+		withdrawn: [],
+	});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
+	const [audit, setAudit] = useState<Record<number, AuditItem[]>>({});
+	const [openAuditId, setOpenAuditId] = useState<number | null>(null);
+	const [withdrawId, setWithdrawId] = useState<number | null>(null);
+	const [reason, setReason] = useState("");
+	const [submitting, setSubmitting] = useState(false);
+
 	useEffect(() => {
 		if (!authLoading && !isLoggedIn) void router.push("/login?toast=login");
 	}, [authLoading, isLoggedIn, router]);
-	useEffect(() => {
+	const load = useCallback(async () => {
 		if (!isLoggedIn) return;
-		authenticatedGet<{ milestones: Draft[] }>("/api/milestones/manage")
-			.then(({ milestones }) => setDrafts(milestones))
-			.catch((e: unknown) =>
-				setError(
-					e instanceof Error ? e.message : "下書きを取得できませんでした",
+		setLoading(true);
+		setError("");
+		try {
+			const statuses = ["draft", "published", "withdrawn"] as const;
+			const results = await Promise.all(
+				statuses.map((status) =>
+					authenticatedGet<{ milestones: Milestone[] }>(
+						`/api/milestones/manage?status=${status}`,
+					),
 				),
-			)
-			.finally(() => setLoading(false));
+			);
+			setItems(
+				Object.fromEntries(
+					statuses.map((status, index) => [status, results[index].milestones]),
+				),
+			);
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "節目を取得できませんでした");
+		} finally {
+			setLoading(false);
+		}
 	}, [isLoggedIn]);
+	useEffect(() => {
+		void load();
+	}, [load]);
+
+	const toggleAudit = async (id: number) => {
+		if (openAuditId === id) {
+			setOpenAuditId(null);
+			return;
+		}
+		setOpenAuditId(id);
+		if (audit[id] || !isAdmin) return;
+		try {
+			const response = await authenticatedGet<{ audit: AuditItem[] }>(
+				`/api/milestones/audit?id=${id}`,
+			);
+			setAudit((current) => ({ ...current, [id]: response.audit }));
+		} catch (e) {
+			toast.error(
+				e instanceof Error ? e.message : "履歴を取得できませんでした",
+			);
+		}
+	};
+	const withdraw = async (id: number) => {
+		setSubmitting(true);
+		try {
+			await authenticatedPost("/api/milestones/withdraw", {
+				milestoneId: id,
+				reason,
+			});
+			toast.success("節目を取り下げました");
+			setWithdrawId(null);
+			setReason("");
+			setAudit({});
+			await load();
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : "取り下げできませんでした");
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
+	const renderCard = (item: Milestone) => (
+		<article className={milestoneStyles.draftCard} key={item.milestone_id}>
+			<div>
+				<span>{item.timeline_occurrences[0]?.occurred_on ?? "日付未設定"}</span>
+				<span>{item.kind}</span>
+				<span>{item.status}</span>
+			</div>
+			<h3>{item.title}</h3>
+			<p>/{item.slug}</p>
+			<small>更新 {new Date(item.updated_at).toLocaleString("ja-JP")}</small>
+			<div className={milestoneStyles.cardActions}>
+				{item.status === "draft" && (
+					<Link href={`/milestones/create?id=${item.milestone_id}`}>
+						再編集・プレビュー →
+					</Link>
+				)}
+				{isAdmin && (
+					<button
+						type="button"
+						onClick={() => void toggleAudit(item.milestone_id)}
+					>
+						履歴{openAuditId === item.milestone_id ? "を閉じる" : "を見る"}
+					</button>
+				)}
+				{isAdmin && item.status === "published" && (
+					<button
+						className={milestoneStyles.withdrawButton}
+						type="button"
+						onClick={() => {
+							setWithdrawId(item.milestone_id);
+							setReason("");
+						}}
+					>
+						取り下げ
+					</button>
+				)}
+			</div>
+			{openAuditId === item.milestone_id && (
+				<div className={milestoneStyles.audit}>
+					{!audit[item.milestone_id] ? (
+						<small>履歴を読み込んでいます…</small>
+					) : (
+						audit[item.milestone_id].map((entry) => (
+							<div key={entry.audit_id}>
+								<b>{actionLabels[entry.action] ?? entry.action}</b>
+								<time>
+									{new Date(entry.created_at).toLocaleString("ja-JP")}
+								</time>
+								{entry.reason && <p>理由：{entry.reason}</p>}
+							</div>
+						))
+					)}
+				</div>
+			)}
+			{withdrawId === item.milestone_id && (
+				<div className={milestoneStyles.withdrawForm}>
+					<label htmlFor={`reason-${item.milestone_id}`}>
+						取り下げ理由（履歴に保存されます）
+					</label>
+					<textarea
+						id={`reason-${item.milestone_id}`}
+						rows={3}
+						maxLength={500}
+						value={reason}
+						onChange={(e) => setReason(e.target.value)}
+					/>
+					<div>
+						<button type="button" onClick={() => setWithdrawId(null)}>
+							キャンセル
+						</button>
+						<button
+							type="button"
+							disabled={submitting || reason.trim().length < 3}
+							onClick={() => void withdraw(item.milestone_id)}
+						>
+							理由を記録して取り下げ
+						</button>
+					</div>
+				</div>
+			)}
+		</article>
+	);
+
 	return (
 		<>
 			<NextSeo title="節目の管理" />
@@ -50,15 +217,15 @@ export default function MilestoneManagementPage() {
 							<p>ARCHIVE EDITOR</p>
 							<h1>節目の管理</h1>
 							<span>
-								保存した下書きを再編集し、公開前の見え方と出典を確認できます。
+								下書きから公開後の履歴まで、節目の状態をここで確認できます。
 							</span>
 						</div>
 					</header>
 					<main className={milestoneStyles.manage}>
 						<div className={milestoneStyles.manageHead}>
 							<div>
-								<p>DRAFTS</p>
-								<h2>保存済みの下書き</h2>
+								<p>MILESTONES</p>
+								<h2>記録した節目</h2>
 							</div>
 							<Link href="/milestones/create">＋ 新しい節目</Link>
 						</div>
@@ -66,35 +233,31 @@ export default function MilestoneManagementPage() {
 							<div className={milestoneStyles.empty}>読み込んでいます…</div>
 						)}
 						{error && <div className={styles.error}>{error}</div>}
-						{!loading && !error && drafts.length === 0 && (
-							<div className={milestoneStyles.empty}>
-								下書きはありません。新しい節目を記録できます。
-							</div>
-						)}
-						<div className={milestoneStyles.draftGrid}>
-							{drafts.map((draft) => (
-								<article
-									className={milestoneStyles.draftCard}
-									key={draft.milestone_id}
-								>
-									<div>
-										<span>
-											{draft.timeline_occurrences[0]?.occurred_on ??
-												"日付未設定"}
-										</span>
-										<span>{draft.kind}</span>
+						{!loading &&
+							!error &&
+							(["draft", "published", "withdrawn"] as const).map((status) => (
+								<section className={milestoneStyles.statusSection} key={status}>
+									<div className={milestoneStyles.sectionHead}>
+										<h2>
+											{status === "draft"
+												? "下書き"
+												: status === "published"
+													? "公開中"
+													: "取り下げ済み"}
+										</h2>
+										<span>{items[status].length}件</span>
 									</div>
-									<h3>{draft.title}</h3>
-									<p>/{draft.slug}</p>
-									<small>
-										更新 {new Date(draft.updated_at).toLocaleString("ja-JP")}
-									</small>
-									<Link href={`/milestones/create?id=${draft.milestone_id}`}>
-										再編集・プレビュー →
-									</Link>
-								</article>
+									{items[status].length ? (
+										<div className={milestoneStyles.draftGrid}>
+											{items[status].map(renderCard)}
+										</div>
+									) : (
+										<div className={milestoneStyles.empty}>
+											該当する節目はありません。
+										</div>
+									)}
+								</section>
 							))}
-						</div>
 					</main>
 				</div>
 			</DefaultLayout>
