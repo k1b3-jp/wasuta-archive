@@ -17,7 +17,14 @@ export type TimelineItem = {
 	href?: string;
 };
 
-export const members = [
+export type TimelineMember = {
+	slug: string;
+	name: string;
+	shortName: string;
+	color: string;
+};
+
+export const defaultMembers: TimelineMember[] = [
 	{ slug: "nanase", name: "廣川奈々聖", shortName: "奈々聖", color: "#8abf92" },
 	{ slug: "miri", name: "松田美里", shortName: "美里", color: "#c6a4c6" },
 	{ slug: "ririka", name: "小玉梨々華", shortName: "梨々華", color: "#7ec8d9" },

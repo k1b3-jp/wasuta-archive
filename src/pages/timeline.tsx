@@ -3,14 +3,16 @@ import { useEffect, useMemo, useState } from "react";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import {
-	members,
+	defaultMembers,
 	type TimelineItem,
 	type TimelineKind,
+	type TimelineMember,
 	timelineYears,
 } from "@/data/timelineDemo";
 import { getCostumes } from "@/lib/supabase/getCostumes";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { getSongs } from "@/lib/supabase/getSongs";
+import { getTimelineMembers } from "@/lib/supabase/getTimelineMembers";
 import {
 	getTimelineMilestones,
 	type TimelineMilestone,
@@ -39,14 +41,17 @@ const kindColors: Record<TimelineKind, string> = {
 	milestone: "#8abf92",
 };
 
-const memberSlugForEvent = (event: Event) => {
+const memberSlugForEvent = (event: Event, memberOptions: TimelineMember[]) => {
 	const haystack = `${event.event_name} ${event.description || ""}`;
-	return members
+	return memberOptions
 		.filter((member) => haystack.includes(member.name))
 		.map((member) => member.slug);
 };
 
-const eventToTimelineItem = (event: Event): TimelineItem => ({
+const eventToTimelineItem = (
+	event: Event,
+	memberOptions: TimelineMember[],
+): TimelineItem => ({
 	id: `event-${event.event_id}`,
 	kind: "event",
 	date: event.date,
@@ -54,8 +59,8 @@ const eventToTimelineItem = (event: Event): TimelineItem => ({
 	summary:
 		event.description ||
 		`${event.location || "会場未登録"}で開催されたイベント。`,
-	members: memberSlugForEvent(event),
-	isGroupWide: memberSlugForEvent(event).length === 0,
+	members: memberSlugForEvent(event, memberOptions),
+	isGroupWide: memberSlugForEvent(event, memberOptions).length === 0,
 	sources: [{ label: "登録済みイベント情報" }],
 	href: `/events/${event.event_id}`,
 });
@@ -104,13 +109,14 @@ const costumeToTimelineItem = (costume: Costume): TimelineItem => ({
 
 const milestoneToTimelineItem = (
 	milestone: TimelineMilestone,
+	memberOptions: TimelineMember[],
 ): TimelineItem => ({
 	id: `milestone-${milestone.occurrence_id}`,
 	kind: "milestone",
 	date: milestone.occurred_on,
 	title: milestone.title,
 	summary: milestone.description || "出典を確認できる節目の記録です。",
-	members: members
+	members: memberOptions
 		.filter((member) => milestone.member_names.includes(member.name))
 		.map((member) => member.slug),
 	isGroupWide: milestone.is_group_wide,
@@ -125,9 +131,14 @@ const getYear = (value: string | string[] | undefined) => {
 	return timelineYears.includes(parsed) ? parsed : 2022;
 };
 
-const getMember = (value: string | string[] | undefined) => {
+const getMember = (
+	value: string | string[] | undefined,
+	memberOptions: TimelineMember[],
+) => {
 	const slug = Array.isArray(value) ? value[0] : value;
-	return members.some((member) => member.slug === slug) ? slug || "all" : "all";
+	return memberOptions.some((member) => member.slug === slug)
+		? slug || "all"
+		: "all";
 };
 
 const getKind = (value: string | string[] | undefined) => {
@@ -146,6 +157,7 @@ export async function getServerSideProps() {
 		getSongs(),
 		getCostumes(),
 		getTimelineMilestones(),
+		getTimelineMembers(),
 	]);
 
 	const fallback = <T,>(index: number, label: string): T[] => {
@@ -162,6 +174,10 @@ export async function getServerSideProps() {
 			songs: fallback<Song>(2, "songs"),
 			costumes: fallback<Costume>(3, "costumes"),
 			milestones: fallback<TimelineMilestone>(4, "milestones"),
+			memberOptions:
+				fallback<TimelineMember>(5, "members").length > 0
+					? fallback<TimelineMember>(5, "members")
+					: defaultMembers,
 		},
 	};
 }
@@ -172,12 +188,14 @@ export default function TimelinePage({
 	songs,
 	costumes,
 	milestones,
+	memberOptions,
 }: {
 	events: Event[];
 	movies: TimelineMovie[];
 	songs: Song[];
 	costumes: Costume[];
 	milestones: TimelineMilestone[];
+	memberOptions: TimelineMember[];
 }) {
 	const router = useRouter();
 	const [year, setYear] = useState(2022);
@@ -187,13 +205,14 @@ export default function TimelinePage({
 	useEffect(() => {
 		if (!router.isReady) return;
 		setYear(getYear(router.query.year));
-		setMember(getMember(router.query.member));
+		setMember(getMember(router.query.member, memberOptions));
 		setKind(getKind(router.query.kind));
 	}, [
 		router.isReady,
 		router.query.kind,
 		router.query.member,
 		router.query.year,
+		memberOptions,
 	]);
 
 	const updateFilter = (
@@ -214,11 +233,13 @@ export default function TimelinePage({
 
 	const items = useMemo(() => {
 		const merged = [
-			...events.map(eventToTimelineItem),
+			...events.map((event) => eventToTimelineItem(event, memberOptions)),
 			...movies.map(movieToTimelineItem),
 			...songs.map(songToTimelineItem).filter((item) => item.date),
 			...costumes.map(costumeToTimelineItem).filter((item) => item.date),
-			...milestones.map(milestoneToTimelineItem),
+			...milestones.map((milestone) =>
+				milestoneToTimelineItem(milestone, memberOptions),
+			),
 		];
 		const unique = Array.from(
 			new Map(merged.map((item) => [item.id, item])).values(),
@@ -231,10 +252,20 @@ export default function TimelinePage({
 			)
 			.filter((item) => kind === "all" || item.kind === kind)
 			.sort((a, b) => a.date.localeCompare(b.date));
-	}, [costumes, events, kind, member, milestones, movies, songs, year]);
+	}, [
+		costumes,
+		events,
+		kind,
+		member,
+		memberOptions,
+		milestones,
+		movies,
+		songs,
+		year,
+	]);
 
 	let previousMonth = "";
-	const selectedMember = members.find((item) => item.slug === member);
+	const selectedMember = memberOptions.find((item) => item.slug === member);
 
 	return (
 		<>
@@ -286,7 +317,7 @@ export default function TimelinePage({
 									>
 										全員
 									</button>
-									{members.map((item) => (
+									{memberOptions.map((item) => (
 										<button
 											key={item.slug}
 											type="button"
