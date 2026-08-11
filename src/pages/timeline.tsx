@@ -208,7 +208,7 @@ export default function TimelinePage({
 		<>
 			<NextSeo title="思い出タイムライン" />
 			<DefaultLayout>
-				<div className={`${styles.page} bg-100vw`}>
+				<div className={styles.page}>
 					<header className={styles.hero}>
 						<div className={styles.eyebrow}>
 							<span>●</span> MEMORY TIMELINE

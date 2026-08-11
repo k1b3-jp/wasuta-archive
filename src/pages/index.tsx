@@ -93,7 +93,7 @@ export default function HomePage({
 				id="https://www.wasuta-archive.com/"
 			/>
 			<DefaultLayout>
-				<div className={`${styles.page} bg-100vw`}>
+				<div className={styles.page}>
 					<section className={styles.hero}>
 						{heroEvent?.image_url && (
 							<img
