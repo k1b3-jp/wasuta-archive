@@ -13,7 +13,7 @@ type CreateResponse = { milestoneId: number };
 
 export default function CreateMilestonePage() {
 	const router = useRouter();
-	const { isLoggedIn, loading: authLoading } = useAuth();
+	const { isLoggedIn, isAdmin, loading: authLoading } = useAuth();
 	const [title, setTitle] = useState("");
 	const [slug, setSlug] = useState("");
 	const [kind, setKind] = useState("group_history");
@@ -23,9 +23,10 @@ export default function CreateMilestonePage() {
 	const [sourceUrl, setSourceUrl] = useState("");
 	const [sourceKind, setSourceKind] = useState("official");
 	const [isGroupWide, setIsGroupWide] = useState(true);
+	const [confirmedFacts, setConfirmedFacts] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [createdId, setCreatedId] = useState<number | null>(null);
-	const [submitted, setSubmitted] = useState(false);
+	const [published, setPublished] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	useEffect(() => {
@@ -53,15 +54,15 @@ export default function CreateMilestonePage() {
 		return response.milestoneId;
 	};
 
-	const save = async (requestReview: boolean) => {
+	const save = async (publishAfterConfirmation: boolean) => {
 		setSaving(true);
 		setErrorMessage("");
 		try {
 			const milestoneId = createdId || (await createDraft());
-			if (requestReview) {
-				await authenticatedPost("/api/milestones/submit", { milestoneId });
-				setSubmitted(true);
-				toast.success("節目をレビュー依頼しました");
+			if (publishAfterConfirmation) {
+				await authenticatedPost("/api/milestones/publish", { milestoneId });
+				setPublished(true);
+				toast.success("節目を公開しました");
 			} else {
 				toast.success("節目を下書き保存しました");
 			}
@@ -93,7 +94,7 @@ export default function CreateMilestonePage() {
 							<p>ARCHIVE EDITOR</p>
 							<h1>新しい節目を記録する</h1>
 							<span>
-								確認できる事実と出典を一緒に下書き保存し、公開前レビューへ送ります。
+								確認できる事実と出典を一緒に保存し、内容を確認して公開します。
 							</span>
 						</div>
 					</header>
@@ -234,6 +235,18 @@ export default function CreateMilestonePage() {
 									グループ全体の節目として扱う
 								</label>
 							</div>
+							<div className={styles.field}>
+								<label className={milestoneStyles.checkbox}>
+									<input
+										type="checkbox"
+										checked={confirmedFacts}
+										onChange={(event) =>
+											setConfirmedFacts(event.target.checked)
+										}
+									/>
+									入力内容・日付・出典URLを確認した
+								</label>
+							</div>
 
 							{errorMessage && (
 								<div className={styles.error} role="alert">
@@ -243,7 +256,7 @@ export default function CreateMilestonePage() {
 							{createdId && (
 								<div className={milestoneStyles.saved} role="status">
 									節目 #{createdId} を
-									{submitted ? "レビュー依頼済み" : "下書き保存済み"}です。
+									{published ? "公開済み" : "下書き保存済み"}です。
 								</div>
 							)}
 
@@ -252,13 +265,15 @@ export default function CreateMilestonePage() {
 								<button type="submit" disabled={saving || createdId !== null}>
 									{saving ? "保存中…" : "下書き保存"}
 								</button>
-								<button
-									type="button"
-									disabled={saving || submitted}
-									onClick={() => void save(true)}
-								>
-									{saving ? "送信中…" : "レビュー依頼"}
-								</button>
+								{isAdmin && (
+									<button
+										type="button"
+										disabled={saving || published || !confirmedFacts}
+										onClick={() => void save(true)}
+									>
+										{saving ? "公開中…" : "確認して公開"}
+									</button>
+								)}
 							</div>
 						</form>
 
@@ -276,8 +291,8 @@ export default function CreateMilestonePage() {
 								<p>WORKFLOW</p>
 								<h2>公開までの流れ</h2>
 								<small className={milestoneStyles.workflowCopy}>
-									下書き保存 → レビュー依頼 → reviewerが出典を検証 →
-									公開。登録者が直接公開することはできません。
+									下書き保存 → 内容と出典を確認
+									→「確認して公開」。公開時に確認者と履歴が記録されます。
 								</small>
 							</section>
 						</aside>

@@ -19,13 +19,13 @@ export default async function handler(
 	if (!Number.isSafeInteger(milestoneId) || milestoneId <= 0) {
 		return res.status(400).json({ error: "invalid milestoneId" });
 	}
-	if (isRateLimited(`milestones_submit:${user.id}`, 30)) {
+	if (isRateLimited(`milestones_publish:${user.id}`, 20)) {
 		return res.status(429).json({ error: "rate limited" });
 	}
 
 	try {
-		const { error } = await supabase.rpc("submit_milestone_for_review", {
-			milestone_to_submit: milestoneId,
+		const { error } = await supabase.rpc("confirm_and_publish_milestone", {
+			milestone_to_publish: milestoneId,
 		});
 		if (error) {
 			return res
