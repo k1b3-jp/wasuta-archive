@@ -15,6 +15,7 @@
 		"check": "biome check --write src",
 		"test:react-runtime": "node scripts/check-react-runtime.mjs",
 		"test:api": "node scripts/check-api-contracts.mjs",
+		"test:navigation": "node scripts/check-navigation-contracts.mjs",
 		"test:supabase": "supabase migration up --local && supabase db lint --local --level warning && supabase test db --local",
 		"analyze": "ANALYZE=true next build"
   },
