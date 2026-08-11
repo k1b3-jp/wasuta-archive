@@ -11,9 +11,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "format": "biome format --write src",
-    "check": "biome check --write src",
-    "test:react-runtime": "node scripts/check-react-runtime.mjs",
-    "analyze": "ANALYZE=true next build"
+		"check": "biome check --write src",
+		"test:react-runtime": "node scripts/check-react-runtime.mjs",
+		"test:supabase": "supabase migration up --local && supabase db lint --local --level warning && supabase test db --local",
+		"analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
