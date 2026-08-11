@@ -87,6 +87,7 @@
 .summary { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 2rem; }
 .summary h2 { font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 900; letter-spacing: -.035em; }
 .summary p { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+.editorLink { flex: 0 0 auto; padding: .65rem .9rem; border: 1px solid #d6cbd8; border-radius: 999px; background: white; font-size: .65rem; font-weight: 900; }
 
 .timeline { position: relative; }
 .timeline::before { content: ""; position: absolute; top: .75rem; bottom: 1rem; left: .52rem; width: 1px; background: linear-gradient(var(--line), #d3c3d5, var(--line)); }

@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
+import { useAuth } from "@/contexts/AuthContext";
 import {
 	defaultMembers,
 	type TimelineItem,
@@ -198,6 +200,7 @@ export default function TimelinePage({
 	memberOptions: TimelineMember[];
 }) {
 	const router = useRouter();
+	const { isLoggedIn } = useAuth();
 	const [year, setYear] = useState(2022);
 	const [member, setMember] = useState("all");
 	const [kind, setKind] = useState("all");
@@ -368,11 +371,18 @@ export default function TimelinePage({
 
 					<main className={styles.main}>
 						<div className={styles.summary}>
-							<h2>
-								{year}年
-								{selectedMember ? `・${selectedMember.shortName}推し` : ""}
-							</h2>
-							<p aria-live="polite">{items.length}件の記録</p>
+							<div>
+								<h2>
+									{year}年
+									{selectedMember ? `・${selectedMember.shortName}推し` : ""}
+								</h2>
+								<p aria-live="polite">{items.length}件の記録</p>
+							</div>
+							{isLoggedIn && (
+								<Link className={styles.editorLink} href="/milestones/create">
+									節目を登録
+								</Link>
+							)}
 						</div>
 						<div className={styles.timeline}>
 							{items.length === 0 && (
