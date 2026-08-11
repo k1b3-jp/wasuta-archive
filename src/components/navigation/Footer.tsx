@@ -24,6 +24,7 @@ export default function Footer() {
 					</div>
 					<div className="grid grid-cols-2 gap-3 text-xs font-bold text-white/65">
 						<Link href="/about">このサイトについて</Link>
+						<Link href="/about#policy">掲載・出典方針</Link>
 						<Link href="/form">お問い合わせ</Link>
 						<Link href="/policy">プライバシー</Link>
 						<Link href="/terms">利用規約</Link>
