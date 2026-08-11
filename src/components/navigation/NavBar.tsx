@@ -10,8 +10,8 @@ const links = [
 	{ href: "/timeline", label: "タイムライン" },
 	{ href: "/events", label: "イベント" },
 	{ href: "/movies", label: "動画" },
-	{ href: "/timeline?year=2022&kind=song", label: "楽曲" },
-	{ href: "/timeline?year=2022&kind=costume", label: "衣装" },
+	{ href: "/songs", label: "楽曲" },
+	{ href: "/costumes", label: "衣装" },
 ];
 
 export default function NavBar() {

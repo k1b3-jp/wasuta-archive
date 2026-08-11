@@ -9,11 +9,14 @@ import {
 	type TimelineKind,
 	timelineYears,
 } from "@/data/timelineDemo";
+import { getCostumes } from "@/lib/supabase/getCostumes";
 import { getEvents } from "@/lib/supabase/getEvents";
+import { getSongs } from "@/lib/supabase/getSongs";
 import {
 	getTimelineMovies,
 	type TimelineMovie,
 } from "@/lib/supabase/getTimelineMovies";
+import type { Costume, Song } from "@/types/archive";
 import type { Event } from "@/types/event";
 import styles from "./timeline.module.scss";
 
@@ -66,6 +69,36 @@ const movieToTimelineItem = (movie: TimelineMovie): TimelineDemoItem => ({
 	href: movie.youtube_links?.url,
 });
 
+const songToTimelineItem = (song: Song): TimelineDemoItem => ({
+	id: `song-${song.song_id}`,
+	kind: "song",
+	date: song.first_performed_date || song.release_date || "",
+	title: song.title,
+	summary: song.description || "出典を確認できる楽曲記録です。",
+	members: [],
+	isGroupWide: true,
+	sources: (song.song_sources || []).map((source) => ({
+		label: source.label,
+		url: source.url,
+	})),
+	href: `/songs/${song.song_id}`,
+});
+
+const costumeToTimelineItem = (costume: Costume): TimelineDemoItem => ({
+	id: `costume-${costume.costume_id}`,
+	kind: "costume",
+	date: costume.debut_date || "",
+	title: costume.name,
+	summary: costume.description || "出典を確認できる衣装記録です。",
+	members: [],
+	isGroupWide: true,
+	sources: (costume.costume_sources || []).map((source) => ({
+		label: source.label,
+		url: source.url,
+	})),
+	href: `/costumes/${costume.costume_id}`,
+});
+
 const getYear = (value: string | string[] | undefined) => {
 	const parsed = Number(Array.isArray(value) ? value[0] : value);
 	return timelineYears.includes(parsed) ? parsed : 2022;
@@ -84,27 +117,35 @@ const getKind = (value: string | string[] | undefined) => {
 export async function getServerSideProps() {
 	let events: Event[] = [];
 	let movies: TimelineMovie[] = [];
+	let songs: Song[] = [];
+	let costumes: Costume[] = [];
 	try {
-		[events, movies] = await Promise.all([
+		[events, movies, songs, costumes] = await Promise.all([
 			getEvents({
 				startDate: "2015-01-01",
 				endDate: "2026-12-31",
 				ascending: true,
 			}),
 			getTimelineMovies(),
+			getSongs(),
+			getCostumes(),
 		]);
 	} catch (error) {
 		console.error("Timeline demo could not load archive data", error);
 	}
-	return { props: { events, movies } };
+	return { props: { events, movies, songs, costumes } };
 }
 
 export default function TimelinePage({
 	events,
 	movies,
+	songs,
+	costumes,
 }: {
 	events: Event[];
 	movies: TimelineMovie[];
+	songs: Song[];
+	costumes: Costume[];
 }) {
 	const router = useRouter();
 	const [year, setYear] = useState(2022);
@@ -143,7 +184,9 @@ export default function TimelinePage({
 		const merged = [
 			...events.map(eventToTimelineItem),
 			...movies.map(movieToTimelineItem),
-			...demoArchiveItems,
+			...songs.map(songToTimelineItem).filter((item) => item.date),
+			...costumes.map(costumeToTimelineItem).filter((item) => item.date),
+			...demoArchiveItems.filter((item) => item.kind === "milestone"),
 		];
 		const unique = Array.from(
 			new Map(merged.map((item) => [item.id, item])).values(),
@@ -156,26 +199,26 @@ export default function TimelinePage({
 			)
 			.filter((item) => kind === "all" || item.kind === kind)
 			.sort((a, b) => a.date.localeCompare(b.date));
-	}, [events, kind, member, movies, year]);
+	}, [costumes, events, kind, member, movies, songs, year]);
 
 	let previousMonth = "";
 	const selectedMember = members.find((item) => item.slug === member);
 
 	return (
 		<>
-			<NextSeo title="思い出タイムライン（ローカル試作）" noindex />
+			<NextSeo title="思い出タイムライン" />
 			<DefaultLayout>
 				<div className={`${styles.page} bg-100vw`}>
 					<header className={styles.hero}>
 						<div className={styles.eyebrow}>
-							<span>●</span> LOCAL PROTOTYPE
+							<span>●</span> MEMORY TIMELINE
 						</div>
 						<h1 className={styles.title}>
 							あの頃のわーすたに、
 							<span className={styles.titleAccent}>もう一度会いにいく。</span>
 						</h1>
 						<p className={styles.intro}>
-							年代と推しメンを選ぶと、イベント、初披露曲、衣装、動画、節目がひとつの時間軸に集まります。まずは既存イベントを中心に、体験を確かめるためのローカル試作です。
+							年代と推しメンを選ぶと、イベント、初披露曲、衣装、動画、節目がひとつの時間軸に集まります。出典を確認できる記録だけで、あの年を辿れます。
 						</p>
 					</header>
 
@@ -268,11 +311,6 @@ export default function TimelinePage({
 							</h2>
 							<p aria-live="polite">{items.length}件の記録</p>
 						</div>
-						{year === 2022 && (
-							<p className={styles.demoNote}>
-								イベントと動画はローカルSupabaseの実データです。衣装・楽曲・節目カードのみ体験確認用の少数データで、衣装画像は転載せず公式出典だけを表示しています。
-							</p>
-						)}
 						<div className={styles.timeline}>
 							{items.length === 0 && (
 								<div className={styles.empty}>
