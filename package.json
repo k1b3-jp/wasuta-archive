@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-	"sitemap:generate": "next-sitemap",
+		"postbuild": "node -e \"console.log('Dynamic sitemap routes are included in the Next.js build.')\"",
+		"sitemap:generate": "next-sitemap",
     "start": "next start",
     "lint": "biome lint --write src",
     "storybook": "storybook dev -p 6006",
