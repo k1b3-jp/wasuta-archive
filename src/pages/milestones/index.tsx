@@ -227,6 +227,9 @@ export default function MilestoneManagementPage() {
 								<p>MILESTONES</p>
 								<h2>記録した節目</h2>
 							</div>
+							{isAdmin && (
+								<Link href="/archive/member-relations">メンバー関連</Link>
+							)}
 							<Link href="/milestones/create">＋ 新しい節目</Link>
 						</div>
 						{loading && (

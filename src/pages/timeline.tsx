@@ -14,6 +14,10 @@ import {
 import { getCostumes } from "@/lib/supabase/getCostumes";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { getSongs } from "@/lib/supabase/getSongs";
+import {
+	getTimelineMemberRelations,
+	type TimelineMemberRelations,
+} from "@/lib/supabase/getTimelineMemberRelations";
 import { getTimelineMembers } from "@/lib/supabase/getTimelineMembers";
 import {
 	getTimelineMilestones,
@@ -43,16 +47,9 @@ const kindColors: Record<TimelineKind, string> = {
 	milestone: "#8abf92",
 };
 
-const memberSlugForEvent = (event: Event, memberOptions: TimelineMember[]) => {
-	const haystack = `${event.event_name} ${event.description || ""}`;
-	return memberOptions
-		.filter((member) => haystack.includes(member.name))
-		.map((member) => member.slug);
-};
-
 const eventToTimelineItem = (
 	event: Event,
-	memberOptions: TimelineMember[],
+	members: string[],
 ): TimelineItem => ({
 	id: `event-${event.event_id}`,
 	kind: "event",
@@ -61,32 +58,35 @@ const eventToTimelineItem = (
 	summary:
 		event.description ||
 		`${event.location || "会場未登録"}で開催されたイベント。`,
-	members: memberSlugForEvent(event, memberOptions),
-	isGroupWide: memberSlugForEvent(event, memberOptions).length === 0,
+	members,
+	isGroupWide: members.length === 0,
 	sources: [{ label: "登録済みイベント情報" }],
 	href: `/events/${event.event_id}`,
 });
 
-const movieToTimelineItem = (movie: TimelineMovie): TimelineItem => ({
+const movieToTimelineItem = (
+	movie: TimelineMovie,
+	members: string[],
+): TimelineItem => ({
 	id: `video-${movie.youtube_link_id}`,
 	kind: "video",
 	date: movie.events?.date || "",
 	title: `動画：${movie.events?.event_name || "イベント映像"}`,
 	summary: "登録済みイベントに関連づけられたYouTube動画です。",
-	members: [],
-	isGroupWide: true,
+	members,
+	isGroupWide: members.length === 0,
 	sources: [{ label: "YouTube", url: movie.youtube_links?.url }],
 	href: movie.youtube_links?.url,
 });
 
-const songToTimelineItem = (song: Song): TimelineItem => ({
+const songToTimelineItem = (song: Song, members: string[]): TimelineItem => ({
 	id: `song-${song.song_id}`,
 	kind: "song",
 	date: song.first_performed_date || song.release_date || "",
 	title: song.title,
 	summary: song.description || "出典を確認できる楽曲記録です。",
-	members: [],
-	isGroupWide: true,
+	members,
+	isGroupWide: members.length === 0,
 	sources: (song.song_sources || []).map((source) => ({
 		label: source.label,
 		url: source.url,
@@ -94,14 +94,17 @@ const songToTimelineItem = (song: Song): TimelineItem => ({
 	href: `/songs/${song.song_id}`,
 });
 
-const costumeToTimelineItem = (costume: Costume): TimelineItem => ({
+const costumeToTimelineItem = (
+	costume: Costume,
+	members: string[],
+): TimelineItem => ({
 	id: `costume-${costume.costume_id}`,
 	kind: "costume",
 	date: costume.debut_date || "",
 	title: costume.name,
 	summary: costume.description || "出典を確認できる衣装記録です。",
-	members: [],
-	isGroupWide: true,
+	members,
+	isGroupWide: members.length === 0,
 	sources: (costume.costume_sources || []).map((source) => ({
 		label: source.label,
 		url: source.url,
@@ -160,6 +163,7 @@ export async function getServerSideProps() {
 		getCostumes(),
 		getTimelineMilestones(),
 		getTimelineMembers(),
+		getTimelineMemberRelations(),
 	]);
 
 	const fallback = <T,>(index: number, label: string): T[] => {
@@ -180,6 +184,10 @@ export async function getServerSideProps() {
 				fallback<TimelineMember>(5, "members").length > 0
 					? fallback<TimelineMember>(5, "members")
 					: defaultMembers,
+			memberRelations:
+				results[6].status === "fulfilled"
+					? results[6].value
+					: { events: {}, songs: {}, costumes: {} },
 		},
 	};
 }
@@ -191,6 +199,7 @@ export default function TimelinePage({
 	costumes,
 	milestones,
 	memberOptions,
+	memberRelations,
 }: {
 	events: Event[];
 	movies: TimelineMovie[];
@@ -198,6 +207,7 @@ export default function TimelinePage({
 	costumes: Costume[];
 	milestones: TimelineMilestone[];
 	memberOptions: TimelineMember[];
+	memberRelations: TimelineMemberRelations;
 }) {
 	const router = useRouter();
 	const { isLoggedIn } = useAuth();
@@ -236,10 +246,34 @@ export default function TimelinePage({
 
 	const items = useMemo(() => {
 		const merged = [
-			...events.map((event) => eventToTimelineItem(event, memberOptions)),
-			...movies.map(movieToTimelineItem),
-			...songs.map(songToTimelineItem).filter((item) => item.date),
-			...costumes.map(costumeToTimelineItem).filter((item) => item.date),
+			...events.map((event) =>
+				eventToTimelineItem(
+					event,
+					memberRelations.events[String(event.event_id)] ?? [],
+				),
+			),
+			...movies.map((movie) =>
+				movieToTimelineItem(
+					movie,
+					memberRelations.events[String(movie.event_id)] ?? [],
+				),
+			),
+			...songs
+				.map((song) =>
+					songToTimelineItem(
+						song,
+						memberRelations.songs[String(song.song_id)] ?? [],
+					),
+				)
+				.filter((item) => item.date),
+			...costumes
+				.map((costume) =>
+					costumeToTimelineItem(
+						costume,
+						memberRelations.costumes[String(costume.costume_id)] ?? [],
+					),
+				)
+				.filter((item) => item.date),
 			...milestones.map((milestone) =>
 				milestoneToTimelineItem(milestone, memberOptions),
 			),
@@ -261,6 +295,7 @@ export default function TimelinePage({
 		kind,
 		member,
 		memberOptions,
+		memberRelations,
 		milestones,
 		movies,
 		songs,
