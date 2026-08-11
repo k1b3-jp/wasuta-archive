@@ -6,10 +6,28 @@ import styles from "@/components/events/EventEditorForm.module.scss";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import { useAuth } from "@/contexts/AuthContext";
-import { authenticatedPost } from "@/lib/api/authenticatedRequest";
+import {
+	authenticatedGet,
+	authenticatedPost,
+} from "@/lib/api/authenticatedRequest";
 import milestoneStyles from "./milestoneEditor.module.scss";
 
 type CreateResponse = { milestoneId: number };
+type ManagedMilestone = {
+	milestone_id: number;
+	slug: string;
+	title: string;
+	kind: string;
+	description: string | null;
+	status: string;
+	timeline_occurrences: Array<{
+		occurred_on: string;
+		is_group_wide: boolean;
+		occurrence_sources: Array<{
+			sources: { url: string; title: string; source_kind: string } | null;
+		}>;
+	}>;
+};
 
 export default function CreateMilestonePage() {
 	const router = useRouter();
@@ -28,12 +46,49 @@ export default function CreateMilestonePage() {
 	const [createdId, setCreatedId] = useState<number | null>(null);
 	const [published, setPublished] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const editId =
+		typeof router.query.id === "string" ? Number(router.query.id) : null;
+	const editing = Number.isSafeInteger(editId) && (editId ?? 0) > 0;
+	const [loadingDraft, setLoadingDraft] = useState(false);
 
 	useEffect(() => {
 		if (!authLoading && !isLoggedIn) {
 			void router.push("/login?toast=login");
 		}
 	}, [authLoading, isLoggedIn, router]);
+
+	useEffect(() => {
+		if (!router.isReady || !editing || !isLoggedIn) return;
+		setLoadingDraft(true);
+		authenticatedGet<{ milestones: ManagedMilestone[] }>(
+			`/api/milestones/manage?id=${editId}`,
+		)
+			.then(({ milestones }) => {
+				const item = milestones[0];
+				if (item?.status !== "draft")
+					throw new Error("編集できる下書きが見つかりません");
+				const occurrence = item.timeline_occurrences[0];
+				const source = occurrence?.occurrence_sources[0]?.sources;
+				setCreatedId(item.milestone_id);
+				setTitle(item.title);
+				setSlug(item.slug);
+				setKind(item.kind);
+				setDescription(item.description ?? "");
+				setOccurredOn(occurrence?.occurred_on ?? "");
+				setIsGroupWide(occurrence?.is_group_wide ?? false);
+				setSourceTitle(source?.title ?? "");
+				setSourceUrl(source?.url ?? "");
+				setSourceKind(source?.source_kind ?? "official");
+			})
+			.catch((error: unknown) =>
+				setErrorMessage(
+					error instanceof Error
+						? error.message
+						: "下書きを読み込めませんでした",
+				),
+			)
+			.finally(() => setLoadingDraft(false));
+	}, [editId, editing, isLoggedIn, router.isReady]);
 
 	const createDraft = async () => {
 		const response = await authenticatedPost<CreateResponse>(
@@ -58,7 +113,20 @@ export default function CreateMilestonePage() {
 		setSaving(true);
 		setErrorMessage("");
 		try {
-			const milestoneId = createdId || (await createDraft());
+			let milestoneId = createdId;
+			if (milestoneId) {
+				await authenticatedPost("/api/milestones/update", {
+					milestoneId,
+					title,
+					kind,
+					description,
+					occurredOn,
+					sourceTitle,
+					sourceUrl,
+					sourceKind,
+					isGroupWide,
+				});
+			} else milestoneId = await createDraft();
 			if (publishAfterConfirmation) {
 				await authenticatedPost("/api/milestones/publish", { milestoneId });
 				setPublished(true);
@@ -88,11 +156,13 @@ export default function CreateMilestonePage() {
 				<div className={styles.page}>
 					<header className={styles.hero}>
 						<div className={styles.heroInner}>
-							<Link href="/timeline?year=2022" className={styles.back}>
-								← 思い出タイムラインへ
+							<Link href="/milestones" className={styles.back}>
+								← 節目の管理へ
 							</Link>
 							<p>ARCHIVE EDITOR</p>
-							<h1>新しい節目を記録する</h1>
+							<h1>
+								{editing ? "節目の下書きを編集する" : "新しい節目を記録する"}
+							</h1>
 							<span>
 								確認できる事実と出典を一緒に保存し、内容を確認して公開します。
 							</span>
@@ -100,6 +170,11 @@ export default function CreateMilestonePage() {
 					</header>
 					<main className={styles.layout}>
 						<form className={styles.form} onSubmit={handleSubmit}>
+							{loadingDraft && (
+								<div className={milestoneStyles.saved}>
+									下書きを読み込んでいます…
+								</div>
+							)}
 							<div className={styles.formHead}>
 								<div>
 									<p>MILESTONE RECORD</p>
@@ -135,6 +210,7 @@ export default function CreateMilestonePage() {
 										pattern="[a-z0-9]+(-[a-z0-9]+)*"
 										placeholder="four-member-first-live"
 										value={slug}
+										disabled={editing}
 										onChange={(event) => setSlug(event.target.value)}
 									/>
 								</div>
@@ -261,9 +337,12 @@ export default function CreateMilestonePage() {
 							)}
 
 							<div className={styles.submitRow}>
-								<Link href="/timeline?year=2022">キャンセル</Link>
-								<button type="submit" disabled={saving || createdId !== null}>
-									{saving ? "保存中…" : "下書き保存"}
+								<Link href="/milestones">キャンセル</Link>
+								<button
+									type="submit"
+									disabled={saving || published || loadingDraft}
+								>
+									{saving ? "保存中…" : createdId ? "変更を保存" : "下書き保存"}
 								</button>
 								{isAdmin && (
 									<button
@@ -288,12 +367,24 @@ export default function CreateMilestonePage() {
 								</ul>
 							</section>
 							<section className={styles.imagePanel}>
-								<p>WORKFLOW</p>
-								<h2>公開までの流れ</h2>
+								<p>PUBLIC PREVIEW</p>
+								<h2>{title || "節目のタイトル"}</h2>
+								<div className={milestoneStyles.previewMeta}>
+									{occurredOn || "発生日未入力"} · {kind}
+								</div>
 								<small className={milestoneStyles.workflowCopy}>
-									下書き保存 → 内容と出典を確認
-									→「確認して公開」。公開時に確認者と履歴が記録されます。
+									{description || "事実の説明がここに表示されます。"}
 								</small>
+								{sourceUrl && (
+									<a
+										className={milestoneStyles.sourceLink}
+										href={sourceUrl}
+										target="_blank"
+										rel="noreferrer"
+									>
+										出典：{sourceTitle || sourceUrl} ↗
+									</a>
+								)}
 							</section>
 						</aside>
 					</main>
