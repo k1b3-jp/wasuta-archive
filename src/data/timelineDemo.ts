@@ -5,7 +5,7 @@ export type TimelineSource = {
 	url?: string;
 };
 
-export type TimelineDemoItem = {
+export type TimelineItem = {
 	id: string;
 	kind: TimelineKind;
 	date: string;
@@ -28,46 +28,3 @@ export const timelineYears = Array.from(
 	{ length: 12 },
 	(_, index) => 2015 + index,
 );
-
-export const demoArchiveItems: TimelineDemoItem[] = [
-	{
-		id: "milestone-four-members",
-		kind: "milestone",
-		date: "2022-01-10",
-		title: "4人体制初のワンマンライブ",
-		summary:
-			"「The World Standard〜改めまして、わーすたです!〜」を開催。既存イベント情報に4人体制初のワンマンライブとして記録されています。",
-		members: members.map((member) => member.slug),
-		isGroupWide: true,
-		sources: [{ label: "登録済みイベント情報" }],
-		href: "/events/118",
-	},
-	{
-		id: "song-miraibaru",
-		kind: "song",
-		date: "2022-01-10",
-		title: "「ミライバルダンス」初披露",
-		summary:
-			"4人体制初のワンマンライブ第1部で初披露されたことが、既存イベント情報に記録されています。",
-		members: members.map((member) => member.slug),
-		isGroupWide: true,
-		sources: [{ label: "登録済みイベント情報" }],
-		href: "/events/118",
-	},
-	{
-		id: "costume-miraibaru",
-		kind: "costume",
-		date: "2022-03-26",
-		title: "ミライバルダンス衣装",
-		summary:
-			"7周年ライブの公式グッズで「ミライバルダンス衣装ver.」という衣装名が確認できます。画像は転載せず、公式ページを出典として表示しています。",
-		members: members.map((member) => member.slug),
-		isGroupWide: true,
-		sources: [
-			{
-				label: "わーすた公式グッズ",
-				url: "https://wa-suta.world/goods/items.php?id=1001982",
-			},
-		],
-	},
-];

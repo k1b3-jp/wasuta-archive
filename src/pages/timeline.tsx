@@ -3,15 +3,18 @@ import { useEffect, useMemo, useState } from "react";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import {
-	demoArchiveItems,
 	members,
-	type TimelineDemoItem,
+	type TimelineItem,
 	type TimelineKind,
 	timelineYears,
 } from "@/data/timelineDemo";
 import { getCostumes } from "@/lib/supabase/getCostumes";
 import { getEvents } from "@/lib/supabase/getEvents";
 import { getSongs } from "@/lib/supabase/getSongs";
+import {
+	getTimelineMilestones,
+	type TimelineMilestone,
+} from "@/lib/supabase/getTimelineMilestones";
 import {
 	getTimelineMovies,
 	type TimelineMovie,
@@ -43,7 +46,7 @@ const memberSlugForEvent = (event: Event) => {
 		.map((member) => member.slug);
 };
 
-const eventToTimelineItem = (event: Event): TimelineDemoItem => ({
+const eventToTimelineItem = (event: Event): TimelineItem => ({
 	id: `event-${event.event_id}`,
 	kind: "event",
 	date: event.date,
@@ -57,7 +60,7 @@ const eventToTimelineItem = (event: Event): TimelineDemoItem => ({
 	href: `/events/${event.event_id}`,
 });
 
-const movieToTimelineItem = (movie: TimelineMovie): TimelineDemoItem => ({
+const movieToTimelineItem = (movie: TimelineMovie): TimelineItem => ({
 	id: `video-${movie.youtube_link_id}`,
 	kind: "video",
 	date: movie.events?.date || "",
@@ -69,7 +72,7 @@ const movieToTimelineItem = (movie: TimelineMovie): TimelineDemoItem => ({
 	href: movie.youtube_links?.url,
 });
 
-const songToTimelineItem = (song: Song): TimelineDemoItem => ({
+const songToTimelineItem = (song: Song): TimelineItem => ({
 	id: `song-${song.song_id}`,
 	kind: "song",
 	date: song.first_performed_date || song.release_date || "",
@@ -84,7 +87,7 @@ const songToTimelineItem = (song: Song): TimelineDemoItem => ({
 	href: `/songs/${song.song_id}`,
 });
 
-const costumeToTimelineItem = (costume: Costume): TimelineDemoItem => ({
+const costumeToTimelineItem = (costume: Costume): TimelineItem => ({
 	id: `costume-${costume.costume_id}`,
 	kind: "costume",
 	date: costume.debut_date || "",
@@ -97,6 +100,24 @@ const costumeToTimelineItem = (costume: Costume): TimelineDemoItem => ({
 		url: source.url,
 	})),
 	href: `/costumes/${costume.costume_id}`,
+});
+
+const milestoneToTimelineItem = (
+	milestone: TimelineMilestone,
+): TimelineItem => ({
+	id: `milestone-${milestone.occurrence_id}`,
+	kind: "milestone",
+	date: milestone.occurred_on,
+	title: milestone.title,
+	summary: milestone.description || "出典を確認できる節目の記録です。",
+	members: members
+		.filter((member) => milestone.member_names.includes(member.name))
+		.map((member) => member.slug),
+	isGroupWide: milestone.is_group_wide,
+	sources: milestone.sources,
+	href: milestone.related_event_id
+		? `/events/${milestone.related_event_id}`
+		: undefined,
 });
 
 const getYear = (value: string | string[] | undefined) => {
@@ -115,25 +136,34 @@ const getKind = (value: string | string[] | undefined) => {
 };
 
 export async function getServerSideProps() {
-	let events: Event[] = [];
-	let movies: TimelineMovie[] = [];
-	let songs: Song[] = [];
-	let costumes: Costume[] = [];
-	try {
-		[events, movies, songs, costumes] = await Promise.all([
-			getEvents({
-				startDate: "2015-01-01",
-				endDate: "2026-12-31",
-				ascending: true,
-			}),
-			getTimelineMovies(),
-			getSongs(),
-			getCostumes(),
-		]);
-	} catch (error) {
-		console.error("Timeline demo could not load archive data", error);
-	}
-	return { props: { events, movies, songs, costumes } };
+	const results = await Promise.allSettled([
+		getEvents({
+			startDate: "2015-01-01",
+			endDate: "2026-12-31",
+			ascending: true,
+		}),
+		getTimelineMovies(),
+		getSongs(),
+		getCostumes(),
+		getTimelineMilestones(),
+	]);
+
+	const fallback = <T,>(index: number, label: string): T[] => {
+		const result = results[index];
+		if (result.status === "fulfilled") return result.value as T[];
+		console.error(`Timeline could not load ${label}`, result.reason);
+		return [];
+	};
+
+	return {
+		props: {
+			events: fallback<Event>(0, "events"),
+			movies: fallback<TimelineMovie>(1, "movies"),
+			songs: fallback<Song>(2, "songs"),
+			costumes: fallback<Costume>(3, "costumes"),
+			milestones: fallback<TimelineMilestone>(4, "milestones"),
+		},
+	};
 }
 
 export default function TimelinePage({
@@ -141,11 +171,13 @@ export default function TimelinePage({
 	movies,
 	songs,
 	costumes,
+	milestones,
 }: {
 	events: Event[];
 	movies: TimelineMovie[];
 	songs: Song[];
 	costumes: Costume[];
+	milestones: TimelineMilestone[];
 }) {
 	const router = useRouter();
 	const [year, setYear] = useState(2022);
@@ -186,7 +218,7 @@ export default function TimelinePage({
 			...movies.map(movieToTimelineItem),
 			...songs.map(songToTimelineItem).filter((item) => item.date),
 			...costumes.map(costumeToTimelineItem).filter((item) => item.date),
-			...demoArchiveItems.filter((item) => item.kind === "milestone"),
+			...milestones.map(milestoneToTimelineItem),
 		];
 		const unique = Array.from(
 			new Map(merged.map((item) => [item.id, item])).values(),
@@ -199,7 +231,7 @@ export default function TimelinePage({
 			)
 			.filter((item) => kind === "all" || item.kind === kind)
 			.sort((a, b) => a.date.localeCompare(b.date));
-	}, [costumes, events, kind, member, movies, songs, year]);
+	}, [costumes, events, kind, member, milestones, movies, songs, year]);
 
 	let previousMonth = "";
 	const selectedMember = members.find((item) => item.slug === member);
