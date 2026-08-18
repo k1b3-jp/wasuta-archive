@@ -34,6 +34,13 @@ const nextConfig = {
       ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: http://127.0.0.1:54321; font-src 'self' data: https:; connect-src 'self' http: https: ws:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'self';"
       : "default-src 'self'; script-src 'self' 'unsafe-inline' https:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://lottie.host; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'self';";
     return [
+		{
+			source: "/sw.js",
+			headers: [
+				{ key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+				{ key: "Service-Worker-Allowed", value: "/" },
+			],
+		},
       {
         source: "/(.*)",
         headers: [
