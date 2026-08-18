@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import EventEditorForm from "@/components/events/EventEditorForm";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/contexts/AuthContext";
 import createEvent from "@/lib/supabase/createEvent";
 import { getEventTags } from "@/lib/supabase/getEventTags";
@@ -12,7 +13,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { TagType } from "@/types/tag";
 
 const CreateEvent = () => {
-	const { isLoggedIn, loading: authLoading } = useAuth();
+	const { isAdmin, loading: authLoading } = useAuth();
 	const [eventName, setEventName] = useState("");
 	const [date, setDate] = useState("");
 	const [location, setLocation] = useState("");
@@ -30,13 +31,13 @@ const CreateEvent = () => {
 		//エラーをリセットする
 		setErrorMessage("");
 		if (!authLoading) {
-			if (!isLoggedIn) {
-				router.push(`/login?toast=login`);
+			if (!isAdmin) {
+				router.replace("/events");
 			} else {
 				fetchAllTags();
 			}
 		}
-	}, [isLoggedIn, authLoading]);
+	}, [isAdmin, authLoading, router]);
 
 	const fetchAllTags = async () => {
 		const tags = await getEventTags();
@@ -104,7 +105,7 @@ const CreateEvent = () => {
 		e.preventDefault();
 		setLoading(true);
 
-		if (isLoggedIn) {
+		if (isAdmin) {
 			// Check if required fields are filled
 			const fields = {
 				イベント名: eventName,
@@ -142,9 +143,17 @@ const CreateEvent = () => {
 			}
 		} else {
 			setLoading(false);
-			toast.error("ログインが必要です。");
+			toast.error("管理者権限が必要です。");
 		}
 	};
+
+	if (authLoading || !isAdmin) {
+		return (
+			<DefaultLayout>
+				<LoadingSpinner />
+			</DefaultLayout>
+		);
+	}
 
 	return (
 		<>

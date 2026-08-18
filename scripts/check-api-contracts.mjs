@@ -10,6 +10,8 @@ const adminApis = [
 	"src/pages/api/milestones/audit.ts",
 	"src/pages/api/milestones/discard.ts",
 	"src/pages/api/milestones/withdraw.ts",
+	"src/pages/api/events/create.ts",
+	"src/pages/api/events/update.ts",
 ];
 for (const path of adminApis) {
 	const source = await readFile(new URL(`../${path}`, import.meta.url), "utf8");
