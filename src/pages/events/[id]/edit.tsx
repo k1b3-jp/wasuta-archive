@@ -5,6 +5,7 @@ import EventEditorForm from "@/components/events/EventEditorForm";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/contexts/AuthContext";
 import { deleteEvent } from "@/lib/supabase/deleteEvent";
 import { deleteStorage } from "@/lib/supabase/deleteStorage";
@@ -18,7 +19,7 @@ import type { TagType } from "@/types/tag";
 const defaultImageUrl = "/event-placeholder.png";
 
 const EditEvent = () => {
-	const { isLoggedIn, isAdmin, loading: authLoading } = useAuth();
+	const { isAdmin, loading: authLoading } = useAuth();
 	const [eventName, setEventName] = useState("");
 	const [date, setDate] = useState("");
 	const [location, setLocation] = useState("");
@@ -37,13 +38,13 @@ const EditEvent = () => {
 	useEffect(() => {
 		setErrorMessage("");
 		if (!authLoading) {
-			if (!isLoggedIn) {
-				router.push("/login?toast=login");
+			if (!isAdmin) {
+				router.replace(id ? `/events/${id}` : "/events");
 			} else {
 				fetchEventAndTags();
 			}
 		}
-	}, [id, isLoggedIn, authLoading]);
+	}, [id, isAdmin, authLoading, router]);
 
 	const fetchEventAndTags = async () => {
 		if (id) {
@@ -145,7 +146,7 @@ const EditEvent = () => {
 		e.preventDefault();
 		setLoading(true);
 
-		if (isLoggedIn) {
+		if (isAdmin) {
 			const fields = {
 				イベント名: eventName,
 				日付: date,
@@ -223,6 +224,14 @@ const EditEvent = () => {
 			closeDialog();
 		}
 	};
+
+	if (authLoading || !isAdmin) {
+		return (
+			<DefaultLayout>
+				<LoadingSpinner />
+			</DefaultLayout>
+		);
+	}
 
 	return (
 		<>

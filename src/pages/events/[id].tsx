@@ -120,7 +120,7 @@ const formatDescription = (description: string): string => {
 };
 
 const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
-	const { isLoggedIn } = useAuth();
+	const { isLoggedIn, isAdmin } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const id = event?.event_id;
@@ -280,7 +280,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 									>
 										<FontAwesomeIcon icon={faSquareXTwitter} /> Xで共有
 									</a>
-									{isLoggedIn && (
+									{isAdmin && (
 										<Link href={`/events/${id}/edit`} className={styles.edit}>
 											記録を編集
 										</Link>

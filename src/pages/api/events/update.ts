@@ -3,7 +3,7 @@ import {
 	getErrorMessage,
 	isPositiveIntegerArray,
 	isRateLimited,
-	requireAuthenticatedUser,
+	requireAdmin,
 } from "@/lib/server/supabaseApi";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,7 +15,7 @@ export default async function handler(
 
 	const supabase = createAuthenticatedClient(req, res);
 	if (!supabase) return;
-	const user = await requireAuthenticatedUser(supabase, res);
+	const user = await requireAdmin(supabase, res);
 	if (!user) return;
 
 	const { eventId, eventName, date, location, imageUrl, description, tags } =
