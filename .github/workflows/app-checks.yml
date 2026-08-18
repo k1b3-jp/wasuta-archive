@@ -16,3 +16,4 @@ jobs:
       - run: yarn tsc --noEmit
       - run: yarn test:react-runtime
       - run: yarn test:api
+      - run: yarn test:navigation

@@ -15,7 +15,7 @@ const links = [
 ];
 
 export default function NavBar() {
-	const { isLoggedIn, signOut } = useAuth();
+	const { isLoggedIn, isAdmin, signOut } = useAuth();
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const isActive = (href: string) => router.pathname === href.split("?")[0];
@@ -48,6 +48,14 @@ export default function NavBar() {
 							{link.label}
 						</Link>
 					))}
+					{isAdmin && (
+						<Link
+							href="/events/create"
+							className="ml-1 rounded-full border border-[#9e5381]/25 bg-[#f8eef5] px-3 py-2 text-xs font-bold text-[#7d3f68] transition-colors hover:bg-[#f1ddea]"
+						>
+							イベント追加
+						</Link>
+					)}
 				</div>
 				<Link
 					href="/timeline?year=2022"
@@ -79,6 +87,31 @@ export default function NavBar() {
 								{link.label}
 							</Link>
 						))}
+						{isAdmin && (
+							<>
+								<Link
+									href="/events/create"
+									onClick={() => setOpen(false)}
+									className="rounded-xl bg-[#f8eef5] px-4 py-3 text-sm font-bold text-[#7d3f68]"
+								>
+									イベントを追加
+								</Link>
+								<Link
+									href="/milestones"
+									onClick={() => setOpen(false)}
+									className="rounded-xl bg-[#f8eef5] px-4 py-3 text-sm font-bold text-[#7d3f68]"
+								>
+									節目を管理
+								</Link>
+								<Link
+									href="/archive/manage"
+									onClick={() => setOpen(false)}
+									className="rounded-xl bg-[#f8eef5] px-4 py-3 text-sm font-bold text-[#7d3f68]"
+								>
+									アーカイブ管理
+								</Link>
+							</>
+						)}
 						{isLoggedIn ? (
 							<button
 								type="button"
