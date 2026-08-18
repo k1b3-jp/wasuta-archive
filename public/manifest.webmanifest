@@ -1,0 +1,20 @@
+{
+  "name": "わーすたアーカイブ",
+  "short_name": "わーすた",
+  "description": "イベント、動画、楽曲、衣装を出典とともに未来へ残す非公式ファンアーカイブ",
+  "lang": "ja",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fffdfa",
+  "theme_color": "#29262d",
+  "categories": ["entertainment", "music", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
