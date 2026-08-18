@@ -4,6 +4,44 @@ alter table public.events enable row level security;
 alter table public.event_tags enable row level security;
 alter table public.event_tag_names enable row level security;
 
+create or replace function public.is_admin(u uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists(
+    select 1
+    from public.user_roles r
+    where r.user_id = u and r.role = 'admin'
+  );
+$$;
+
+revoke all on function public.is_admin(uuid) from public;
+grant execute on function public.is_admin(uuid) to authenticated;
+
+grant select on public.events, public.event_tags, public.event_tag_names
+  to anon, authenticated;
+grant insert, update, delete on public.events, public.event_tags, public.event_tag_names
+  to authenticated;
+
+do $$
+declare
+  sequence_name text;
+begin
+  sequence_name := pg_get_serial_sequence('public.events', 'event_id');
+  if sequence_name is not null then
+    execute format('grant usage, select on sequence %s to authenticated', sequence_name);
+  end if;
+
+  sequence_name := pg_get_serial_sequence('public.event_tag_names', 'tag_id');
+  if sequence_name is not null then
+    execute format('grant usage, select on sequence %s to authenticated', sequence_name);
+  end if;
+end
+$$;
+
 drop policy if exists "events_insert_authenticated" on public.events;
 drop policy if exists "events_update_authenticated" on public.events;
 drop policy if exists "events_write_admin_only" on public.events;

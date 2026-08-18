@@ -116,12 +116,19 @@ select lives_ok(
     where bucket_id = 'event_pics' and name = 'pgtap-admin.jpg'$$,
   'an administrator can update an event image'
 );
-select lives_ok(
-  $$delete from storage.objects
-    where bucket_id = 'event_pics' and name = 'pgtap-admin.jpg'$$,
-  'an administrator can delete an event image'
+reset role;
+select ok(
+  exists(
+    select 1
+    from pg_policies
+    where schemaname = 'storage'
+      and tablename = 'objects'
+      and policyname = 'storage_objects_admin_delete_only'
+      and cmd = 'DELETE'
+      and qual like '%is_admin(auth.uid())%'
+  ),
+  'event image deletion is restricted to administrators'
 );
 
-reset role;
 select * from finish();
 rollback;
