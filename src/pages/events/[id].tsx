@@ -10,7 +10,6 @@ import MovieCard from "@/components/events/MovieCard";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { ArticleJsonLd, NextSeo } from "@/components/seo";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Tag from "@/components/ui/Tag";
 import { useAuth } from "@/contexts/AuthContext";
 import { useClearQueryParam } from "@/hooks/useClearQueryParam";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
@@ -338,14 +337,22 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 									</p>
 									<div className={styles.adminTags}>
 										{allYoutubeTags.map((tag) => (
-											<Tag
+											<button
 												key={tag.id}
-												label={tag.label}
-												selected={selectedYoutubeTags.some(
+												type="button"
+												aria-pressed={selectedYoutubeTags.some(
 													(item) => item.id === tag.id,
 												)}
-												onSelect={() => handleYoutubeTagSelect(tag)}
-											/>
+												className={styles.videoTag}
+												onClick={() => handleYoutubeTagSelect(tag)}
+											>
+												<span aria-hidden="true" className={styles.videoTagIcon}>
+													{selectedYoutubeTags.some((item) => item.id === tag.id)
+														? "✓"
+														: "+"}
+												</span>
+												{tag.label}
+											</button>
 										))}
 									</div>
 								</fieldset>

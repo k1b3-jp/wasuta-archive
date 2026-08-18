@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const [tag, eventPage, eventStyles] = await Promise.all([
-	readFile(new URL("../src/components/ui/Tag.tsx", import.meta.url), "utf8"),
+const [eventPage, eventStyles] = await Promise.all([
 	readFile(new URL("../src/pages/events/[id].tsx", import.meta.url), "utf8"),
 	readFile(
 		new URL("../src/pages/events/eventDetail.module.scss", import.meta.url),
@@ -20,7 +19,21 @@ assert.match(
 	/className=\{styles\.submitButton\}/,
 	"submit styling must be scoped to the submit button",
 );
-assert.match(tag, /selected \? "✓" : "\+"/, "tags need a visible state icon");
+assert.match(
+	eventPage,
+	/className=\{styles\.videoTag\}/,
+	"video attributes need dedicated tag styling",
+);
+assert.match(
+	eventPage,
+	/aria-pressed=\{selectedYoutubeTags\.some/,
+	"video attributes must expose their selected state",
+);
+assert.match(
+	eventPage,
+	/\? "✓"[^]*: "\+"/,
+	"video attributes need a visible state icon",
+);
 assert.match(
 	eventPage,
 	/selectedYoutubeTags\.length[^]*件選択中/,
