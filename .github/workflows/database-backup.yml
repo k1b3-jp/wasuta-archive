@@ -1,4 +1,4 @@
-name: Database backup
+name: Database and storage backup
 
 on:
   schedule:
@@ -107,5 +107,70 @@ jobs:
           aws s3api head-object \
             --bucket "$R2_BUCKET" \
             --key "$OBJECT_KEY" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --query '{size:ContentLength,updated:LastModified}'
+
+      - name: Download Supabase Storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p storage/event_pics
+          supabase storage cp \
+            ss://event_pics \
+            storage/event_pics \
+            --recursive \
+            --jobs 16 \
+            --experimental \
+            --linked
+
+          file_count="$(find storage/event_pics -type f | wc -l | tr -d ' ')"
+          if [ "$file_count" -eq 0 ]; then
+            echo "No files were downloaded from event_pics" >&2
+            exit 1
+          fi
+          echo "Downloaded $file_count Storage objects"
+
+      - name: Upload new Storage content to Cloudflare R2
+        id: storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          timestamp="$(date -u +'%Y-%m-%dT%H-%M-%SZ')"
+          manifest="storage-manifest-${timestamp}.tsv"
+          : > "$manifest"
+
+          while IFS= read -r -d '' file; do
+            relative_path="${file#storage/}"
+            hash="$(sha256sum "$file" | cut -d ' ' -f 1)"
+            object_key="storage/objects/${hash:0:2}/${hash}"
+            printf '%s\t%s\n' "$hash" "$relative_path" >> "$manifest"
+
+            if ! aws s3api head-object \
+              --bucket "$R2_BUCKET" \
+              --key "$object_key" \
+              --endpoint-url "$endpoint" >/dev/null 2>&1; then
+              aws s3 cp "$file" "s3://${R2_BUCKET}/${object_key}" \
+                --endpoint-url "$endpoint" \
+                --only-show-errors
+            fi
+          done < <(find storage/event_pics -type f -print0 | sort -z)
+
+          manifest_key="storage/manifests/$(date -u +'%Y/%m')/${manifest}"
+          aws s3 cp "$manifest" "s3://${R2_BUCKET}/${manifest_key}" \
+            --endpoint-url "$endpoint" \
+            --content-type text/tab-separated-values \
+            --only-show-errors
+          echo "manifest_key=$manifest_key" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Storage manifest
+        shell: bash
+        env:
+          MANIFEST_KEY: ${{ steps.storage.outputs.manifest_key }}
+        run: |
+          set -euo pipefail
+          aws s3api head-object \
+            --bucket "$R2_BUCKET" \
+            --key "$MANIFEST_KEY" \
             --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
             --query '{size:ContentLength,updated:LastModified}'
