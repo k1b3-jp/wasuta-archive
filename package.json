@@ -22,6 +22,7 @@
 		"research:songs-migration": "node scripts/generate-official-songs-migration.mjs",
 		"research:costumes": "node scripts/fetch-official-costumes.mjs",
 		"research:costumes-migration": "node scripts/generate-official-costumes-migration.mjs",
+		"research:costume-appearances-migration": "node scripts/generate-official-costume-appearances-migration.mjs",
 		"analyze": "ANALYZE=true next build"
   },
   "dependencies": {
