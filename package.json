@@ -18,6 +18,8 @@
 		"test:pwa": "node scripts/check-pwa.mjs",
 		"test:navigation": "node scripts/check-navigation-contracts.mjs",
 		"test:supabase": "supabase migration up --local && supabase db lint --local --level warning && supabase test db --local",
+		"research:discography": "node scripts/fetch-official-discography.mjs",
+		"research:songs-migration": "node scripts/generate-official-songs-migration.mjs",
 		"analyze": "ANALYZE=true next build"
   },
   "dependencies": {
