@@ -1,0 +1,111 @@
+name: Database backup
+
+on:
+  schedule:
+    # GitHub cron is UTC. 19:00 UTC is 04:00 JST the following day.
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            SUPABASE_ACCESS_TOKEN
+            SUPABASE_PROJECT_REF
+            SUPABASE_DB_PASSWORD
+            AWS_ACCESS_KEY_ID
+            AWS_SECRET_ACCESS_KEY
+            R2_ACCOUNT_ID
+            R2_BUCKET
+          )
+          for variable in "${required[@]}"; do
+            if [ -z "${!variable:-}" ]; then
+              echo "Required secret for ${variable} is not set" >&2
+              exit 1
+            fi
+          done
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v3
+
+      - name: Link Supabase project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Dump roles, schema, and data
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+          supabase db dump --linked --role-only -f backup/roles.sql
+          supabase db dump --linked -f backup/schema.sql
+          supabase db dump --linked --data-only --use-copy -f backup/data.sql
+
+          test -s backup/roles.sql
+          test -s backup/schema.sql
+          test -s backup/data.sql
+
+      - name: Package and checksum backup
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          timestamp="$(date -u +'%Y-%m-%dT%H-%M-%SZ')"
+          archive="wasuta-archive-${timestamp}.tar.gz"
+          tar -C backup -czf "$archive" roles.sql schema.sql data.sql
+          sha256sum "$archive" > "${archive}.sha256"
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+          echo "key=database/$(date -u +'%Y/%m')/$archive" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Cloudflare R2
+        shell: bash
+        env:
+          ARCHIVE: ${{ steps.package.outputs.archive }}
+          OBJECT_KEY: ${{ steps.package.outputs.key }}
+        run: |
+          set -euo pipefail
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          aws s3 cp "$ARCHIVE" "s3://${R2_BUCKET}/${OBJECT_KEY}" \
+            --endpoint-url "$endpoint" \
+            --only-show-errors
+          aws s3 cp "${ARCHIVE}.sha256" "s3://${R2_BUCKET}/${OBJECT_KEY}.sha256" \
+            --endpoint-url "$endpoint" \
+            --content-type text/plain \
+            --only-show-errors
+
+      - name: Verify uploaded object
+        shell: bash
+        env:
+          OBJECT_KEY: ${{ steps.package.outputs.key }}
+        run: |
+          set -euo pipefail
+          aws s3api head-object \
+            --bucket "$R2_BUCKET" \
+            --key "$OBJECT_KEY" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --query '{size:ContentLength,updated:LastModified}'
