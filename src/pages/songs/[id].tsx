@@ -32,6 +32,7 @@ export default function SongDetailPage({ song }: { song: Song }) {
 					kind="song"
 					title={song.title}
 					date={song.first_performed_date || song.release_date}
+					imageUrl={song.image_url}
 					description={song.description}
 					sources={song.song_sources || []}
 					relations={song.song_events || []}

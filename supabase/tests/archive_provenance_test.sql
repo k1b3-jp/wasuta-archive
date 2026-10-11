@@ -33,7 +33,15 @@ select results_eq(
 );
 
 select results_eq(
-  $$select count(*)::bigint from public.occurrence_sources where verification_status = 'verified' and fact_kind = 'occurred_on'$$,
+	$$
+		select count(*)::bigint
+		from public.occurrence_sources source
+		join public.timeline_occurrences occurrence
+			on occurrence.occurrence_id = source.occurrence_id
+		where source.verification_status = 'verified'
+			and source.fact_kind = 'occurred_on'
+			and occurrence.occurrence_kind = 'milestone'
+	$$,
   array[1::bigint],
   'the reviewed milestone occurrence has a verified date source'
 );
