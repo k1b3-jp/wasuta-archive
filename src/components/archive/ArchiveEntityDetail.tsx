@@ -8,6 +8,7 @@ type Props = {
 	kind: "song" | "costume";
 	title: string;
 	date?: string | null;
+	imageUrl?: string | null;
 	description?: string | null;
 	sources: ArchiveSource[];
 	relations: ArchiveEventRelation[];
@@ -17,20 +18,27 @@ export default function ArchiveEntityDetail({
 	kind,
 	title,
 	date,
+	imageUrl,
 	description,
 	sources,
 	relations,
 }: Props) {
 	const isSong = kind === "song";
 	const listHref = isSong ? "/songs" : "/costumes";
+	const uniqueSources = sources.filter(
+		(source, index) =>
+			sources.findIndex((item) => item.url === source.url) === index,
+	);
 	return (
 		<article
 			className={styles.page}
 			style={
 				{
-					"--archive-hero": isSong
-						? "linear-gradient(125deg,#252229,#5e304e 62%,#a85f88)"
-						: "linear-gradient(125deg,#252229,#46344f 58%,#75618a)",
+					"--archive-hero": imageUrl
+						? `linear-gradient(125deg,rgba(37,34,41,.94),rgba(70,52,79,.78) 58%,rgba(117,97,138,.66)),url("${imageUrl}")`
+						: isSong
+							? "linear-gradient(125deg,#252229,#5e304e 62%,#a85f88)"
+							: "linear-gradient(125deg,#252229,#46344f 58%,#75618a)",
 				} as CSSProperties
 			}
 		>
@@ -62,8 +70,8 @@ export default function ArchiveEntityDetail({
 					<aside className={styles.evidence}>
 						<p className={styles.label}>SOURCES</p>
 						<h2>確認した出典</h2>
-						{sources.length ? (
-							sources.map((source) => (
+						{uniqueSources.length ? (
+							uniqueSources.map((source) => (
 								<div className={styles.sourceItem} key={source.source_id}>
 									{source.sources?.availability_status === "unavailable" && (
 										<strong>元の出典は現在閲覧できません</strong>

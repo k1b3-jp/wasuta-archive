@@ -31,15 +31,17 @@ for (let page = 1; ; page += 1) {
 		const block = match[1];
 		const contentPath = block.match(/href="(\/contents\/\d+)"/)?.[1];
 		const publishedOn = block.match(/<time[^>]*datetime="([^"]+)"/)?.[1];
+		const imageUrl = block.match(/data-bg="(https:\/\/tws-tws\.com\/s3\/[^\"]+)"/)?.[1];
 		const name = decode(
 			block.match(/<h2 class="c_thumb-list-heading">([\s\S]*?)<\/h2>/)?.[1] ?? "",
 		);
-		if (contentPath && publishedOn && name)
+		if (contentPath && publishedOn && name && imageUrl)
 			pageItems.push({
 				name,
 				publishedOn,
 				sourceUrl: `${base}${contentPath}`,
 				listingUrl: `${base}${listingPath}`,
+				imageUrl,
 			});
 	}
 	if (pageItems.length === 0) break;
@@ -52,9 +54,10 @@ const artifact = {
 	source: "わーすた公式ファンクラブ わーすた衣装博物館",
 	retrievedAt: new Date().toISOString(),
 	notes: [
-		"公開一覧に表示された公式衣装名と記事URLのみを収録しています。",
+		"公開一覧に表示された公式衣装名、記事URL、公開サムネイルURLを収録しています。",
 		"publishedOnは記事公開日であり、衣装の初登場日ではありません。",
-		"会員限定の本文と画像は取得・保存していません。",
+		"画像ファイルは複製せず、公式サイトの公開サムネイルURLのみを参照しています。",
+		"会員限定の本文と詳細画像は取得・保存していません。",
 	],
 	costumes: unique,
 };

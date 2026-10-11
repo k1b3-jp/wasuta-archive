@@ -32,6 +32,7 @@ export default function CostumeDetailPage({ costume }: { costume: Costume }) {
 					kind="costume"
 					title={costume.name}
 					date={costume.debut_date}
+					imageUrl={costume.image_url}
 					description={costume.description}
 					sources={costume.costume_sources || []}
 					relations={costume.costume_events || []}
