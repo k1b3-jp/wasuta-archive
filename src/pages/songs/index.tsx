@@ -65,17 +65,18 @@ export default function SongsPage({ songs }: { songs: Song[] }) {
 									href={`/songs/${song.song_id}`}
 									className={styles.card}
 								>
-									{song.image_url && (
-										<img
-											className={styles.cardImage}
-											src={song.image_url}
-											alt=""
-										/>
-									)}
+									<div className={`${styles.cardImage} ${styles.songImage}`}>
+										{song.image_url && (
+											<img
+												src={song.image_url}
+												alt={`${song.title} ジャケット`}
+											/>
+										)}
+										<span className={styles.index}>
+											SONG {String(index + 1).padStart(3, "0")}
+										</span>
+									</div>
 									<div className={styles.cardBody}>
-										<p className={styles.index}>
-											SONG — {String(index + 1).padStart(3, "0")}
-										</p>
 										<h3>{song.title}</h3>
 										<p className={styles.date}>
 											{song.first_performed_date
