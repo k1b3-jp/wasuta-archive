@@ -1,11 +1,16 @@
 {
   "source": "わーすた オフィシャルウェブサイト DISCOGRAPHY",
-  "retrievedAt": "2026-09-13T08:02:19.322Z",
+  "retrievedAt": "2026-10-11T02:25:26.651Z",
+  "imagePolicy": "各楽曲について、最初に収録された公式リリースの代表ジャケットURLを使用。画像ファイルは複製しない。",
   "releases": [
     {
       "title": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
       "releaseDate": "2015-10-05",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1017947.jpg"
+      ],
       "tracks": [
         "Overture",
         "いぬねこ。青春真っ盛り",
@@ -19,6 +24,12 @@
       "title": "The World Standard",
       "releaseDate": "2016-05-04",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1019146.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1019148.jpg"
+      ],
       "tracks": [
         "うるとらみらくるくるふぁいなるアルティメットチョコびーむ",
         "Doki Doki♡today",
@@ -37,6 +48,11 @@
       "title": "完全なるアイドル",
       "releaseDate": "2016-09-28",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1014156",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024074.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1024074.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1024293.jpg"
+      ],
       "tracks": [
         "完全なるアイドル",
         "ぱわわわわん!!! パワーパフ ガールズ"
@@ -46,6 +62,11 @@
       "title": "ゆうめいに、にゃりたい。",
       "releaseDate": "2017-02-22",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1014584",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024941.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1024941.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1025022.jpg"
+      ],
       "tracks": [
         "ゆうめいに、にゃりたい。",
         "グーチョキパンツの正義さん"
@@ -55,12 +76,24 @@
       "title": "完全なるライブハウスツアー2016 ～猫耳捨てて走り出すに゛ゃー～",
       "releaseDate": "2017-02-22",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1014583",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024939.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1024939.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1024940.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1025021.jpg"
+      ],
       "tracks": []
     },
     {
       "title": "「劇場版プリパラみ～んなでかがやけ！キラリン☆スターライブ！」主題歌\nテレビ東京系アニメ「アイドルタイムプリパラ」オープニングテーマ\nJust be yourself",
       "releaseDate": "2017-04-19",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1014810",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1025529.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1025529.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1025530.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1025531.jpg"
+      ],
       "tracks": [
         "Just be yourself",
         "いぬねこ。青春真っ盛り"
@@ -70,6 +103,10 @@
       "title": "最上級ぱらどっくす",
       "releaseDate": "2017-10-18",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1015206",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026369.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1026369.jpg"
+      ],
       "tracks": [
         "最上級ぱらどっくす",
         "GOGO!プリパライフ",
@@ -80,6 +117,12 @@
       "title": "パラドックス ワールド",
       "releaseDate": "2017-10-18",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1026371.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1026372.jpg"
+      ],
       "tracks": [
         "恋するにゃこたん～フリもフラレもあなたのまま～",
         "Just be yourself",
@@ -99,12 +142,22 @@
       "title": "WELCOME TO DREAM",
       "releaseDate": "2018-03-21",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1015511",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027026.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1027026.jpg"
+      ],
       "tracks": []
     },
     {
       "title": "JUMPING SUMMER",
       "releaseDate": "2018-06-20",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1027663.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1027664.jpg"
+      ],
       "tracks": [
         "JUMPING SUMMER",
         "タピオカミルクティー",
@@ -117,6 +170,12 @@
       "title": "GIRLS, BE AMBITIOUS!",
       "releaseDate": "2018-10-31",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1028329.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1028330.jpg"
+      ],
       "tracks": [
         "大志を抱け！カルビアンビシャス！",
         "ヨ・キエロ・ビビール",
@@ -129,6 +188,12 @@
       "title": "CAT’CH THE WORLD",
       "releaseDate": "2019-03-06",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1029023.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1029024.jpg"
+      ],
       "tracks": [
         "プロローグ",
         "くらえ！必殺！！ねこパンチ★ ～私達、戦うにゃこたん【レベル５】～",
@@ -149,6 +214,12 @@
       "title": "The Legend of WASUTA",
       "releaseDate": "2019-06-26",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030218.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030244.jpg"
+      ],
       "tracks": [
         "ゆるぷれいる",
         "アンバランス・アンサーズ",
@@ -161,6 +232,17 @@
       "title": "遮二無二 生きる！ / バスタブ・アロマティック",
       "releaseDate": "2019-10-30",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1017065",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030634.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030635.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030636.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030784.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030785.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030786.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1030787.jpg"
+      ],
       "tracks": [
         "遮二無二 生きる！",
         "バスタブ・アロマティック",
@@ -172,12 +254,24 @@
       "title": "わーすたBEST",
       "releaseDate": "2020-03-25",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1017364",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031200.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1031200.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031201.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031202.jpg"
+      ],
       "tracks": []
     },
     {
       "title": "サンデー！サンシャイン！",
       "releaseDate": "2020-08-12",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1017614",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031688.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1031688.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031689.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031690.jpg"
+      ],
       "tracks": [
         "サンデー！サンシャイン！",
         "べちょべちょパンケーキ？ feat.そこの君。a.k.a.ヲタ",
@@ -188,6 +282,12 @@
       "title": "What's \"standard\"!?",
       "releaseDate": "2020-11-25",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031993.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1031994.jpg"
+      ],
       "tracks": [
         "清濁あわせていただくにゃー",
         "萌ってかエモ",
@@ -200,6 +300,12 @@
       "title": "春花火",
       "releaseDate": "2021-03-03",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1017975",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1032401.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1032401.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1032402.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1032403.jpg"
+      ],
       "tracks": [
         "春花火",
         "Congrats!"
@@ -209,6 +315,11 @@
       "title": "詠み人知らずの青春歌",
       "releaseDate": "2021-08-18",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1018438",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033212.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1033212.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1033213.jpg"
+      ],
       "tracks": [
         "詠み人知らずの青春歌",
         "雨のキモチ"
@@ -218,6 +329,12 @@
       "title": "ミライバルダンス",
       "releaseDate": "2022-01-11",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1018825",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033908.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1033908.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1033909.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1033910.jpg"
+      ],
       "tracks": [
         "ミライバルダンス",
         "リル・リル・トリップ"
@@ -227,6 +344,10 @@
       "title": "空とサカナ",
       "releaseDate": "2022-05-30",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019147",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034446.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1034446.jpg"
+      ],
       "tracks": [
         "空とサカナ"
       ]
@@ -235,6 +356,10 @@
       "title": "The World Standard Dancing Club",
       "releaseDate": "2022-06-13",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019182",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034515.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1034515.jpg"
+      ],
       "tracks": [
         "The World Standard Dancing Club"
       ]
@@ -243,6 +368,10 @@
       "title": "Cat Walkin'",
       "releaseDate": "2022-07-18",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019235",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034610.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1034610.jpg"
+      ],
       "tracks": [
         "Cat Walkin'"
       ]
@@ -251,6 +380,11 @@
       "title": "我々はネコである。",
       "releaseDate": "2022-08-17",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1034393.jpg"
+      ],
       "tracks": [
         "マッシュ・ド・アート",
         "The World Standard Dancing Club",
@@ -268,6 +402,11 @@
       "title": "すまん、犬。",
       "releaseDate": "2023-02-22",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019474",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034971.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1034971.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1034972.jpg"
+      ],
       "tracks": [
         "すまん、犬。",
         "Tokimeki＊Sing A Song"
@@ -277,12 +416,21 @@
       "title": "ミラクルマジカルヘルシーパワー",
       "releaseDate": "2023-07-19",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019832",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1035611.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1035611.jpg"
+      ],
       "tracks": []
     },
     {
       "title": "メロメロ！ラヴロック",
       "releaseDate": "2023-08-30",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1019811",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1035584.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1035584.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1035585.jpg"
+      ],
       "tracks": [
         "メロメロ！ラヴロック",
         "セラセラヴィ。",
@@ -293,6 +441,12 @@
       "title": "えいきゅーむちゅーでこうしんちゅっ！♡",
       "releaseDate": "2024-02-21",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1020059",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036045.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1036045.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1036046.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1036047.jpg"
+      ],
       "tracks": [
         "えいきゅーむちゅーでこうしんちゅっ！♡",
         "ミラクルマジカルヘルシーパワー",
@@ -303,6 +457,12 @@
       "title": "夏恋ジレンマ",
       "releaseDate": "2024-08-21",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1020288",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036478.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1036478.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1036479.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1036480.jpg"
+      ],
       "tracks": [
         "夏恋ジレンマ",
         "君とtea for two♡"
@@ -312,6 +472,12 @@
       "title": "わーるどすたんだーど",
       "releaseDate": "2025-02-26",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1020631",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037091.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1037091.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037092.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037093.jpg"
+      ],
       "tracks": [
         "わーるどすたんだーど",
         "悪戯ロマンス"
@@ -321,6 +487,15 @@
       "title": "Sweet Fancy Chu-n / アレグロめいてるランナップ",
       "releaseDate": "2025-09-24",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1020984",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037657.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1037657.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037658.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037659.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037660.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037661.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1037662.jpg"
+      ],
       "tracks": [
         "Sweet Fancy Chu-n",
         "アレグロめいてるランナップ"
@@ -330,6 +505,15 @@
       "title": "わったらいふ！",
       "releaseDate": "2026-09-02",
       "sourceUrl": "https://wa-suta.world/discography/detail.php?id=1021443",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1038496.jpg",
+      "imageUrls": [
+        "https://img.imageimg.net/artist/tws/img/product_1038496.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1038497.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1038498.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1038499.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1038500.jpg",
+        "https://img.imageimg.net/artist/tws/img/product_1038501.jpg"
+      ],
       "tracks": [
         "わったらいふ！",
         "どんな君でも大好き♡ってお話"
@@ -340,20 +524,24 @@
     {
       "title": "Cat Walkin'",
       "releaseDate": "2022-07-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034610.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019235",
       "sources": [
-        {
-          "release": "我々はネコである。",
-          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
-        },
         {
           "release": "Cat Walkin'",
           "url": "https://wa-suta.world/discography/detail.php?id=1019235"
+        },
+        {
+          "release": "我々はネコである。",
+          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
         }
       ]
     },
     {
       "title": "Congrats!",
       "releaseDate": "2021-03-03",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1032401.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017975",
       "sources": [
         {
           "release": "春花火",
@@ -364,6 +552,8 @@
     {
       "title": "Do on Do ～坊っちゃんいっしょに踊りゃんせ～",
       "releaseDate": "2019-10-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017065",
       "sources": [
         {
           "release": "遮二無二 生きる！ / バスタブ・アロマティック",
@@ -374,20 +564,24 @@
     {
       "title": "Doki Doki♡today",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
-        {
-          "release": "The World Standard",
-          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
-        },
         {
           "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
           "url": "https://wa-suta.world/discography/detail.php?id=1011013"
+        },
+        {
+          "release": "The World Standard",
+          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
         }
       ]
     },
     {
       "title": "GOGO!プリパライフ",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026369.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015206",
       "sources": [
         {
           "release": "最上級ぱらどっくす",
@@ -398,34 +592,40 @@
     {
       "title": "JUMPING SUMMER",
       "releaseDate": "2018-06-20",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "JUMPING SUMMER",
           "url": "https://wa-suta.world/discography/detail.php?id=1015772"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "Just be yourself",
       "releaseDate": "2017-04-19",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1025529.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1014810",
       "sources": [
-        {
-          "release": "パラドックス ワールド",
-          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
-        },
         {
           "release": "「劇場版プリパラみ～んなでかがやけ！キラリン☆スターライブ！」主題歌\nテレビ東京系アニメ「アイドルタイムプリパラ」オープニングテーマ\nJust be yourself",
           "url": "https://wa-suta.world/discography/detail.php?id=1014810"
+        },
+        {
+          "release": "パラドックス ワールド",
+          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
         }
       ]
     },
     {
       "title": "KIRA KIRA ホログラム",
       "releaseDate": "2018-10-31",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
       "sources": [
         {
           "release": "GIRLS, BE AMBITIOUS!",
@@ -436,6 +636,8 @@
     {
       "title": "Love Unmelt",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -446,6 +648,8 @@
     {
       "title": "Magical Word",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -456,6 +660,8 @@
     {
       "title": "Never Ending The World",
       "releaseDate": "2020-11-25",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
       "sources": [
         {
           "release": "What's \"standard\"!?",
@@ -466,6 +672,8 @@
     {
       "title": "NEW にゃーくにゃくにゃ水族館2",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -476,6 +684,8 @@
     {
       "title": "Overture",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
         {
           "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
@@ -486,20 +696,24 @@
     {
       "title": "PLATONIC GIRL",
       "releaseDate": "2018-06-20",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "JUMPING SUMMER",
           "url": "https://wa-suta.world/discography/detail.php?id=1015772"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "SHINING FLOWER",
       "releaseDate": "2019-10-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017065",
       "sources": [
         {
           "release": "遮二無二 生きる！ / バスタブ・アロマティック",
@@ -510,6 +724,8 @@
     {
       "title": "Stay with me baby",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -520,6 +736,8 @@
     {
       "title": "Sweet Fancy Chu-n",
       "releaseDate": "2025-09-24",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037657.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020984",
       "sources": [
         {
           "release": "Sweet Fancy Chu-n / アレグロめいてるランナップ",
@@ -530,20 +748,24 @@
     {
       "title": "The World Standard Dancing Club",
       "releaseDate": "2022-06-13",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034515.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019182",
       "sources": [
-        {
-          "release": "我々はネコである。",
-          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
-        },
         {
           "release": "The World Standard Dancing Club",
           "url": "https://wa-suta.world/discography/detail.php?id=1019182"
+        },
+        {
+          "release": "我々はネコである。",
+          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
         }
       ]
     },
     {
       "title": "Tokimeki＊Sing A Song",
       "releaseDate": "2023-02-22",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034971.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019474",
       "sources": [
         {
           "release": "すまん、犬。",
@@ -554,6 +776,8 @@
     {
       "title": "TOXICATS",
       "releaseDate": "2020-11-25",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
       "sources": [
         {
           "release": "What's \"standard\"!?",
@@ -564,20 +788,24 @@
     {
       "title": "Zili Zili Love",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
-        {
-          "release": "The World Standard",
-          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
-        },
         {
           "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
           "url": "https://wa-suta.world/discography/detail.php?id=1011013"
+        },
+        {
+          "release": "The World Standard",
+          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
         }
       ]
     },
     {
       "title": "アレグロめいてるランナップ",
       "releaseDate": "2025-09-24",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037657.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020984",
       "sources": [
         {
           "release": "Sweet Fancy Chu-n / アレグロめいてるランナップ",
@@ -588,6 +816,8 @@
     {
       "title": "アンバランス・アンサーズ",
       "releaseDate": "2019-06-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
       "sources": [
         {
           "release": "The Legend of WASUTA",
@@ -598,24 +828,28 @@
     {
       "title": "いぬねこ。青春真っ盛り",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
         {
-          "release": "「劇場版プリパラみ～んなでかがやけ！キラリン☆スターライブ！」主題歌\nテレビ東京系アニメ「アイドルタイムプリパラ」オープニングテーマ\nJust be yourself",
-          "url": "https://wa-suta.world/discography/detail.php?id=1014810"
+          "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
+          "url": "https://wa-suta.world/discography/detail.php?id=1011013"
         },
         {
           "release": "The World Standard",
           "url": "https://wa-suta.world/discography/detail.php?id=1011662"
         },
         {
-          "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
-          "url": "https://wa-suta.world/discography/detail.php?id=1011013"
+          "release": "「劇場版プリパラみ～んなでかがやけ！キラリン☆スターライブ！」主題歌\nテレビ東京系アニメ「アイドルタイムプリパラ」オープニングテーマ\nJust be yourself",
+          "url": "https://wa-suta.world/discography/detail.php?id=1014810"
         }
       ]
     },
     {
       "title": "いぬねこ。青春真っ盛り -2022 ver.-",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -626,6 +860,8 @@
     {
       "title": "いまはむかし",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -636,6 +872,8 @@
     {
       "title": "うるとらみらくるくるふぁいなるアルティメットチョコびーむ",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -646,6 +884,8 @@
     {
       "title": "うるとらみらくるくるふぁいなるアルティメットチョコびーむ -2022 ver.-",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -656,6 +896,8 @@
     {
       "title": "えいきゅーむちゅーでこうしんちゅっ！♡",
       "releaseDate": "2024-02-21",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036045.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020059",
       "sources": [
         {
           "release": "えいきゅーむちゅーでこうしんちゅっ！♡",
@@ -666,6 +908,8 @@
     {
       "title": "オーダーメイドとレディーメイド（廣川奈々聖&小玉梨々華）",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -676,6 +920,8 @@
     {
       "title": "おやすみ",
       "releaseDate": "2019-06-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
       "sources": [
         {
           "release": "The Legend of WASUTA",
@@ -686,6 +932,8 @@
     {
       "title": "きゅんビート（松田美里&三品瑠香）",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -696,20 +944,24 @@
     {
       "title": "グーチョキパンツの正義さん",
       "releaseDate": "2017-02-22",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024941.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1014584",
       "sources": [
-        {
-          "release": "パラドックス ワールド",
-          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
-        },
         {
           "release": "ゆうめいに、にゃりたい。",
           "url": "https://wa-suta.world/discography/detail.php?id=1014584"
+        },
+        {
+          "release": "パラドックス ワールド",
+          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
         }
       ]
     },
     {
       "title": "くらえ！必殺！！ねこパンチ★ ～私達、戦うにゃこたん【レベル５】～",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -720,6 +972,8 @@
     {
       "title": "ぐるトレ",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -730,6 +984,8 @@
     {
       "title": "サンデー！サンシャイン！",
       "releaseDate": "2020-08-12",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031688.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017614",
       "sources": [
         {
           "release": "サンデー！サンシャイン！",
@@ -740,6 +996,8 @@
     {
       "title": "スイカ割り",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -750,6 +1008,8 @@
     {
       "title": "スーパーありがとう",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -760,20 +1020,24 @@
     {
       "title": "スタンドアロン・コンプレックス",
       "releaseDate": "2018-06-20",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "JUMPING SUMMER",
           "url": "https://wa-suta.world/discography/detail.php?id=1015772"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "すまん、犬。",
       "releaseDate": "2023-02-22",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034971.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019474",
       "sources": [
         {
           "release": "すまん、犬。",
@@ -784,6 +1048,8 @@
     {
       "title": "セラセラヴィ。",
       "releaseDate": "2023-08-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1035584.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019811",
       "sources": [
         {
           "release": "メロメロ！ラヴロック",
@@ -794,48 +1060,56 @@
     {
       "title": "タピオカミルクティー",
       "releaseDate": "2018-06-20",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "JUMPING SUMMER",
           "url": "https://wa-suta.world/discography/detail.php?id=1015772"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "ちいさな ちいさな",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
-        {
-          "release": "The World Standard",
-          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
-        },
         {
           "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
           "url": "https://wa-suta.world/discography/detail.php?id=1011013"
+        },
+        {
+          "release": "The World Standard",
+          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
         }
       ]
     },
     {
       "title": "デデスパボン！",
       "releaseDate": "2018-10-31",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "GIRLS, BE AMBITIOUS!",
           "url": "https://wa-suta.world/discography/detail.php?id=1016075"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "どんな君でも大好き♡ってお話",
       "releaseDate": "2026-09-02",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1038496.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1021443",
       "sources": [
         {
           "release": "わったらいふ！",
@@ -846,6 +1120,8 @@
     {
       "title": "にこにこハンブンコ",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -856,6 +1132,8 @@
     {
       "title": "ねぇ愛してみて",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -866,6 +1144,8 @@
     {
       "title": "バスタブ・アロマティック",
       "releaseDate": "2019-10-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017065",
       "sources": [
         {
           "release": "遮二無二 生きる！ / バスタブ・アロマティック",
@@ -876,6 +1156,8 @@
     {
       "title": "ハロー to the world",
       "releaseDate": "2020-11-25",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
       "sources": [
         {
           "release": "What's \"standard\"!?",
@@ -886,6 +1168,8 @@
     {
       "title": "ハロハロフレンズ",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026369.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015206",
       "sources": [
         {
           "release": "最上級ぱらどっくす",
@@ -896,20 +1180,24 @@
     {
       "title": "ぱわわわわん!!! パワーパフ ガールズ",
       "releaseDate": "2016-09-28",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024074.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1014156",
       "sources": [
-        {
-          "release": "パラドックス ワールド",
-          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
-        },
         {
           "release": "完全なるアイドル",
           "url": "https://wa-suta.world/discography/detail.php?id=1014156"
+        },
+        {
+          "release": "パラドックス ワールド",
+          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
         }
       ]
     },
     {
       "title": "プリティー☆チャンネル",
       "releaseDate": "2018-06-20",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1027662.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015772",
       "sources": [
         {
           "release": "JUMPING SUMMER",
@@ -920,6 +1208,8 @@
     {
       "title": "プロローグ",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -930,6 +1220,8 @@
     {
       "title": "べちょべちょパンケーキ？ feat.そこの君。a.k.a.ヲタ",
       "releaseDate": "2020-08-12",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031688.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017614",
       "sources": [
         {
           "release": "サンデー！サンシャイン！",
@@ -940,6 +1232,8 @@
     {
       "title": "マッシュ・ド・アート",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -950,20 +1244,24 @@
     {
       "title": "ミライバルダンス",
       "releaseDate": "2022-01-11",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033908.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1018825",
       "sources": [
-        {
-          "release": "我々はネコである。",
-          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
-        },
         {
           "release": "ミライバルダンス",
           "url": "https://wa-suta.world/discography/detail.php?id=1018825"
+        },
+        {
+          "release": "我々はネコである。",
+          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
         }
       ]
     },
     {
       "title": "ミラクルマジカルヘルシーパワー",
       "releaseDate": "2024-02-21",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036045.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020059",
       "sources": [
         {
           "release": "えいきゅーむちゅーでこうしんちゅっ！♡",
@@ -974,6 +1272,8 @@
     {
       "title": "メラにゃイザー !!!!! ～君に、あ・げ・う♪～",
       "releaseDate": "2019-06-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
       "sources": [
         {
           "release": "The Legend of WASUTA",
@@ -984,6 +1284,8 @@
     {
       "title": "メロメロ！ラヴロック",
       "releaseDate": "2023-08-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1035584.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019811",
       "sources": [
         {
           "release": "メロメロ！ラヴロック",
@@ -994,34 +1296,40 @@
     {
       "title": "やーだー",
       "releaseDate": "2018-10-31",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "GIRLS, BE AMBITIOUS!",
           "url": "https://wa-suta.world/discography/detail.php?id=1016075"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "ゆうめいに、にゃりたい。",
       "releaseDate": "2017-02-22",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024941.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1014584",
       "sources": [
-        {
-          "release": "パラドックス ワールド",
-          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
-        },
         {
           "release": "ゆうめいに、にゃりたい。",
           "url": "https://wa-suta.world/discography/detail.php?id=1014584"
+        },
+        {
+          "release": "パラドックス ワールド",
+          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
         }
       ]
     },
     {
       "title": "ゆるぷれいる",
       "releaseDate": "2019-06-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
       "sources": [
         {
           "release": "The Legend of WASUTA",
@@ -1032,6 +1340,8 @@
     {
       "title": "ヨ・キエロ・ビビール",
       "releaseDate": "2018-10-31",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
       "sources": [
         {
           "release": "GIRLS, BE AMBITIOUS!",
@@ -1042,20 +1352,24 @@
     {
       "title": "らんらん・時代",
       "releaseDate": "2015-10-05",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1017947.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011013",
       "sources": [
-        {
-          "release": "The World Standard",
-          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
-        },
         {
           "release": "いぬねこ。青春真っ盛り （イベント会場限定商品）SOLD OUT！",
           "url": "https://wa-suta.world/discography/detail.php?id=1011013"
+        },
+        {
+          "release": "The World Standard",
+          "url": "https://wa-suta.world/discography/detail.php?id=1011662"
         }
       ]
     },
     {
       "title": "リル・リル・トリップ",
       "releaseDate": "2022-01-11",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033908.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1018825",
       "sources": [
         {
           "release": "ミライバルダンス",
@@ -1066,6 +1380,8 @@
     {
       "title": "わーるどすたんだーど",
       "releaseDate": "2025-02-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037091.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020631",
       "sources": [
         {
           "release": "わーるどすたんだーど",
@@ -1076,6 +1392,8 @@
     {
       "title": "わったらいふ！",
       "releaseDate": "2026-09-02",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1038496.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1021443",
       "sources": [
         {
           "release": "わったらいふ！",
@@ -1086,6 +1404,8 @@
     {
       "title": "ワンダフル・ワールド",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -1096,6 +1416,8 @@
     {
       "title": "悪戯ロマンス",
       "releaseDate": "2025-02-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1037091.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020631",
       "sources": [
         {
           "release": "わーるどすたんだーど",
@@ -1106,6 +1428,8 @@
     {
       "title": "雨のキモチ",
       "releaseDate": "2021-08-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033212.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1018438",
       "sources": [
         {
           "release": "詠み人知らずの青春歌",
@@ -1116,6 +1440,8 @@
     {
       "title": "詠み人知らずの青春歌",
       "releaseDate": "2021-08-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1033212.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1018438",
       "sources": [
         {
           "release": "詠み人知らずの青春歌",
@@ -1126,6 +1452,8 @@
     {
       "title": "詠み人知らずの青春歌 -2022 ver.-",
       "releaseDate": "2022-08-17",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034392.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019116",
       "sources": [
         {
           "release": "我々はネコである。",
@@ -1136,6 +1464,8 @@
     {
       "title": "夏恋ジレンマ",
       "releaseDate": "2024-08-21",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036478.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020288",
       "sources": [
         {
           "release": "夏恋ジレンマ",
@@ -1146,34 +1476,40 @@
     {
       "title": "完全なるアイドル",
       "releaseDate": "2016-09-28",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1024074.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1014156",
       "sources": [
-        {
-          "release": "パラドックス ワールド",
-          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
-        },
         {
           "release": "完全なるアイドル",
           "url": "https://wa-suta.world/discography/detail.php?id=1014156"
+        },
+        {
+          "release": "パラドックス ワールド",
+          "url": "https://wa-suta.world/discography/detail.php?id=1015207"
         }
       ]
     },
     {
       "title": "空とサカナ",
       "releaseDate": "2022-05-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1034446.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019147",
       "sources": [
-        {
-          "release": "我々はネコである。",
-          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
-        },
         {
           "release": "空とサカナ",
           "url": "https://wa-suta.world/discography/detail.php?id=1019147"
+        },
+        {
+          "release": "我々はネコである。",
+          "url": "https://wa-suta.world/discography/detail.php?id=1019116"
         }
       ]
     },
     {
       "title": "君とtea for two♡",
       "releaseDate": "2024-08-21",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036478.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020288",
       "sources": [
         {
           "release": "夏恋ジレンマ",
@@ -1184,6 +1520,8 @@
     {
       "title": "好きな人とか居ますか",
       "releaseDate": "2016-05-04",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1019147.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1011662",
       "sources": [
         {
           "release": "The World Standard",
@@ -1194,6 +1532,8 @@
     {
       "title": "最上級ぱらどっくす",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026369.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015206",
       "sources": [
         {
           "release": "最上級ぱらどっくす",
@@ -1208,6 +1548,8 @@
     {
       "title": "四季ドロップス",
       "releaseDate": "2020-08-12",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031688.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017614",
       "sources": [
         {
           "release": "サンデー！サンシャイン！",
@@ -1218,6 +1560,8 @@
     {
       "title": "遮二無二 生きる！",
       "releaseDate": "2019-10-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030633.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017065",
       "sources": [
         {
           "release": "遮二無二 生きる！ / バスタブ・アロマティック",
@@ -1228,6 +1572,8 @@
     {
       "title": "春花火",
       "releaseDate": "2021-03-03",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1032401.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017975",
       "sources": [
         {
           "release": "春花火",
@@ -1238,6 +1584,8 @@
     {
       "title": "星の降らないタイムライン",
       "releaseDate": "2023-08-30",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1035584.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1019811",
       "sources": [
         {
           "release": "メロメロ！ラヴロック",
@@ -1248,6 +1596,8 @@
     {
       "title": "清濁あわせていただくにゃー",
       "releaseDate": "2020-11-25",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
       "sources": [
         {
           "release": "What's \"standard\"!?",
@@ -1258,20 +1608,24 @@
     {
       "title": "大志を抱け！カルビアンビシャス！",
       "releaseDate": "2018-10-31",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1028328.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016075",
       "sources": [
-        {
-          "release": "CAT’CH THE WORLD",
-          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
-        },
         {
           "release": "GIRLS, BE AMBITIOUS!",
           "url": "https://wa-suta.world/discography/detail.php?id=1016075"
+        },
+        {
+          "release": "CAT’CH THE WORLD",
+          "url": "https://wa-suta.world/discography/detail.php?id=1016369"
         }
       ]
     },
     {
       "title": "誰も悪くない",
       "releaseDate": "2019-06-26",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1030217.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016863",
       "sources": [
         {
           "release": "The Legend of WASUTA",
@@ -1282,6 +1636,8 @@
     {
       "title": "暮れないハート",
       "releaseDate": "2019-03-06",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1029022.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1016369",
       "sources": [
         {
           "release": "CAT’CH THE WORLD",
@@ -1292,6 +1648,8 @@
     {
       "title": "萌ってかエモ",
       "releaseDate": "2020-11-25",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1031992.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1017766",
       "sources": [
         {
           "release": "What's \"standard\"!?",
@@ -1302,6 +1660,8 @@
     {
       "title": "約束だから",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -1312,6 +1672,8 @@
     {
       "title": "恋するにゃこたん～フリもフラレもあなたのまま～",
       "releaseDate": "2017-10-18",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1026370.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1015207",
       "sources": [
         {
           "release": "パラドックス ワールド",
@@ -1322,6 +1684,8 @@
     {
       "title": "恋に恋する眠り姫",
       "releaseDate": "2024-02-21",
+      "imageUrl": "https://img.imageimg.net/artist/tws/img/product_1036045.jpg",
+      "imageSourceUrl": "https://wa-suta.world/discography/detail.php?id=1020059",
       "sources": [
         {
           "release": "えいきゅーむちゅーでこうしんちゅっ！♡",
