@@ -34,15 +34,23 @@ export default function ArchiveEntityDetail({
 			className={styles.page}
 			style={
 				{
-					"--archive-hero": imageUrl
-						? `linear-gradient(125deg,rgba(37,34,41,.94),rgba(70,52,79,.78) 58%,rgba(117,97,138,.66)),url("${imageUrl}")`
-						: isSong
-							? "linear-gradient(125deg,#252229,#5e304e 62%,#a85f88)"
-							: "linear-gradient(125deg,#252229,#46344f 58%,#75618a)",
+					"--archive-hero": isSong
+						? "linear-gradient(125deg,#252229,#5e304e 62%,#a85f88)"
+						: "linear-gradient(125deg,#252229,#46344f 58%,#75618a)",
 				} as CSSProperties
 			}
 		>
 			<header className={styles.detailHero}>
+				{imageUrl && (
+					<>
+						<img
+							className={styles.detailHeroImage}
+							src={imageUrl}
+							alt={title}
+						/>
+						<div className={styles.detailHeroShade} />
+					</>
+				)}
 				<div className={styles.inner}>
 					<Link href={listHref} className={styles.back}>
 						← {isSong ? "楽曲" : "衣装"}アーカイブへ

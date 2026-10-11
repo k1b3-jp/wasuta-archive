@@ -65,17 +65,15 @@ export default function CostumesPage({ costumes }: { costumes: Costume[] }) {
 									href={`/costumes/${costume.costume_id}`}
 									className={styles.card}
 								>
-									{costume.image_url && (
-										<img
-											className={styles.cardImage}
-											src={costume.image_url}
-											alt=""
-										/>
-									)}
+									<div className={styles.cardImage}>
+										{costume.image_url && (
+											<img src={costume.image_url} alt={costume.name} />
+										)}
+										<span className={styles.index}>
+											COSTUME {String(index + 1).padStart(3, "0")}
+										</span>
+									</div>
 									<div className={styles.cardBody}>
-										<p className={styles.index}>
-											COSTUME — {String(index + 1).padStart(3, "0")}
-										</p>
 										<h3>{costume.name}</h3>
 										<p className={styles.date}>
 											{costume.debut_date
