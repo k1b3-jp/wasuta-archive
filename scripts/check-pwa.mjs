@@ -15,6 +15,10 @@ const app = await readFile(
 	new URL("../src/pages/_app.tsx", import.meta.url),
 	"utf8",
 );
+const navigation = await readFile(
+	new URL("../src/components/navigation/NavBar.tsx", import.meta.url),
+	"utf8",
+);
 
 assert.equal(manifest.display, "standalone");
 assert.equal(manifest.start_url, "/?source=pwa");
@@ -25,6 +29,20 @@ assert.match(serviceWorker, /request\.mode === "navigate"/);
 assert.match(serviceWorker, /url\.pathname\.startsWith\("\/api\/"\)/);
 assert.match(app, /rel="manifest" href="\/manifest\.webmanifest"/);
 assert.match(app, /apple-touch-icon/);
+assert.match(app, /viewport-fit=cover/);
+for (const edge of ["top", "left", "right"]) {
+	assert.ok(
+		navigation.includes(`env(safe-area-inset-${edge}, 0px)`),
+		`navigation must avoid the ${edge} system safe area`,
+	);
+}
+assert.match(navigation, /overflow-y-auto overscroll-contain/);
+assert.ok(
+	navigation.includes(
+		"calc(100svh - 67px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))",
+	),
+	"expanded navigation must fit above browser controls and the home indicator",
+);
 
 await Promise.all(
 	manifest.icons.map((icon) =>

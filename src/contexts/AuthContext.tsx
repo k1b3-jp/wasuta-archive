@@ -1,13 +1,13 @@
-import { supabase } from "@/lib/supabaseClient";
 import type { Session, User } from "@supabase/supabase-js";
 import {
-	type ReactNode,
 	createContext,
+	type ReactNode,
 	useContext,
 	useEffect,
 	useRef,
 	useState,
 } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 interface AuthState {
 	user: User | null;
@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 	const [admin, setAdmin] = useState(false);
 	const authRevision = useRef(0);
+	const sessionUserId = useRef<string | null>(null);
 
 	const isLoggedIn = !!user;
 
@@ -61,6 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			const { error } = await supabase.auth.signOut();
 			if (error) throw error;
 			authRevision.current += 1;
+			sessionUserId.current = null;
 			setUser(null);
 			setSession(null);
 			setAdmin(false);
@@ -75,9 +77,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 		const applySession = async (nextSession: Session | null) => {
 			const revision = ++authRevision.current;
+			const nextUserId = nextSession?.user.id ?? null;
+			// タブ復帰・トークン更新では、確認済みの権限を維持する。
+			// 別ユーザーへの切り替え時だけ、以前の権限を即座に解除する。
+			if (sessionUserId.current !== nextUserId) {
+				setAdmin(false);
+				setLoading(true);
+			}
+			sessionUserId.current = nextUserId;
 			setSession(nextSession);
 			setUser(nextSession?.user ?? null);
-			setAdmin(false);
 			const isAdmin = await getAdminStatus(nextSession);
 			if (!active || revision !== authRevision.current) return;
 			setAdmin(isAdmin);

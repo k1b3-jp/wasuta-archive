@@ -21,7 +21,14 @@ export default function NavBar() {
 	const isActive = (href: string) => router.pathname === href.split("?")[0];
 
 	return (
-		<header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur-xl">
+		<header
+			className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur-xl"
+			style={{
+				paddingTop: "env(safe-area-inset-top, 0px)",
+				paddingLeft: "env(safe-area-inset-left, 0px)",
+				paddingRight: "env(safe-area-inset-right, 0px)",
+			}}
+		>
 			<nav className="mx-auto flex h-[66px] max-w-[1200px] items-center px-4 text-[#29262d]">
 				<Link
 					href="/"
@@ -75,7 +82,13 @@ export default function NavBar() {
 				</button>
 			</nav>
 			{open && (
-				<div className="border-t border-black/5 bg-white px-4 py-4 lg:hidden">
+				<div
+					className="overflow-y-auto overscroll-contain border-t border-black/5 bg-white px-4 py-4 lg:hidden"
+					style={{
+						maxHeight:
+							"calc(100svh - 67px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))",
+					}}
+				>
 					<div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-2">
 						{links.map((link) => (
 							<Link
