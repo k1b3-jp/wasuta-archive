@@ -70,7 +70,7 @@ jobs:
       - name: Push migrations
         env:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-        run: yes | supabase db push
+        run: supabase db push --yes --remote
 
       - name: Deploy functions (if any)
         if: ${{ hashFiles('supabase/functions/**/*.ts') != '' || hashFiles('supabase/functions/**/*.tsx') != '' || hashFiles('supabase/functions/**/*.js') != '' || hashFiles('supabase/functions/**/*.ts') != '' }}

@@ -1,6 +1,7 @@
 import ArchiveEntityDetail from "@/components/archive/ArchiveEntityDetail";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
+import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import { getCostume } from "@/lib/supabase/getCostumes";
 import type { Costume } from "@/types/archive";
 
@@ -26,6 +27,13 @@ export default function CostumeDetailPage({ costume }: { costume: Costume }) {
 			<NextSeo
 				title={costume.name}
 				description={costume.description || `${costume.name}の出典付き衣装記録`}
+				{...ogMeta(
+					buildGeneratedOgImageUrl({
+						title: costume.name,
+						image: costume.image_url,
+					}),
+					costume.name,
+				)}
 			/>
 			<DefaultLayout>
 				<ArchiveEntityDetail

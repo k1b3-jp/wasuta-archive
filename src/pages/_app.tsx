@@ -1,11 +1,34 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import PwaRegistration from "@/components/pwa/PwaRegistration";
+import { DefaultSeo } from "@/components/seo";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { getDefaultOgImageUrl } from "@/lib/ogImage";
+
+const defaultOgImage = getDefaultOgImageUrl();
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
+			<DefaultSeo
+				openGraph={{
+					images: [
+						{
+							url: defaultOgImage,
+							width: 1200,
+							height: 630,
+							alt: "わーすたアーカイブ",
+						},
+					],
+				}}
+				additionalMetaTags={[
+					{
+						name: "twitter:image",
+						content: defaultOgImage,
+						keyOverride: "twitter:image",
+					},
+				]}
+			/>
 			<Head>
 				<meta name="application-name" content="わーすたアーカイブ" />
 				<meta name="theme-color" content="#29262d" />

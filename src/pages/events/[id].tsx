@@ -4,7 +4,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import MovieCard from "@/components/events/MovieCard";
 import DefaultLayout from "@/components/layout/DefaultLayout";
@@ -12,6 +12,7 @@ import { ArticleJsonLd, NextSeo } from "@/components/seo";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useClearQueryParam } from "@/hooks/useClearQueryParam";
+import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
@@ -125,11 +126,10 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 	const id = event?.event_id;
 	const [url, setUrl] = useState("");
 
-	const ogImage = useMemo(() => {
-		return `https://www.wasuta-archive.com/api/og?title=${
-			event.event_name
-		}&image=${event.image_url || defaultImageUrl}`;
-	}, [event.event_name, event.image_url]);
+	const ogImage = buildGeneratedOgImageUrl({
+		title: event.event_name,
+		image: event.image_url || defaultImageUrl,
+	});
 
 	const [allYoutubeTags, setAllYoutubeTags] = useState<TagType[]>([]);
 	const [selectedYoutubeTags, setSelectedYoutubeTags] = useState<TagType[]>([]);
@@ -195,15 +195,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 		<>
 			<NextSeo
 				title={event.event_name}
-				openGraph={{
-					images: [
-						{
-							url: ogImage || process.env.defaultOgpImage || "",
-							width: 1200,
-							height: 630,
-						},
-					],
-				}}
+				{...ogMeta(ogImage, event.event_name)}
 			/>
 			<ArticleJsonLd
 				type="BlogPosting"
@@ -346,8 +338,13 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 												className={styles.videoTag}
 												onClick={() => handleYoutubeTagSelect(tag)}
 											>
-												<span aria-hidden="true" className={styles.videoTagIcon}>
-													{selectedYoutubeTags.some((item) => item.id === tag.id)
+												<span
+													aria-hidden="true"
+													className={styles.videoTagIcon}
+												>
+													{selectedYoutubeTags.some(
+														(item) => item.id === tag.id,
+													)
 														? "✓"
 														: "+"}
 												</span>

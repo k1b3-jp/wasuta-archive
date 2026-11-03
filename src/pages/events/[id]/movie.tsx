@@ -7,6 +7,7 @@ import { NextSeo } from "@/components/seo";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Tag from "@/components/ui/Tag";
 import { useAuth } from "@/contexts/AuthContext";
+import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import { deleteYoutubeLink } from "@/lib/supabase/deleteYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
 import { getYoutubeTags } from "@/lib/supabase/getYoutubeTags";
@@ -21,6 +22,7 @@ type EventSummary = {
 	event_name: string;
 	date: string;
 	location?: string | null;
+	image_url?: string | null;
 };
 
 export async function getServerSideProps({
@@ -32,7 +34,7 @@ export async function getServerSideProps({
 	if (!Number.isInteger(id)) return { notFound: true };
 	const { data: event, error } = await supabase
 		.from("events")
-		.select("event_id,event_name,date,location")
+		.select("event_id,event_name,date,location,image_url")
 		.eq("event_id", id)
 		.maybeSingle();
 	if (error || !event) return { notFound: true };
@@ -111,6 +113,13 @@ export default function EventMovieList({ event }: { event: EventSummary }) {
 			<NextSeo
 				title={`${event.event_name}の動画`}
 				description={`${event.event_name}に関連する映像アーカイブ`}
+				{...ogMeta(
+					buildGeneratedOgImageUrl({
+						title: `${event.event_name}の動画`,
+						image: event.image_url,
+					}),
+					event.event_name,
+				)}
 			/>
 			<DefaultLayout>
 				<div className={styles.page}>
