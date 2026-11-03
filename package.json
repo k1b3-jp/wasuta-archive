@@ -15,7 +15,7 @@
 		"check": "biome check --write src",
 		"test:react-runtime": "node scripts/check-react-runtime.mjs",
 		"test:auth": "node scripts/check-auth-state.mjs",
-		"test:api": "node scripts/check-api-contracts.mjs && node scripts/check-video-tag-state.mjs",
+		"test:api": "node scripts/check-api-contracts.mjs && node scripts/check-video-tag-state.mjs && node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-og-image.mjs",
 		"test:pwa": "node scripts/check-pwa.mjs",
 		"test:navigation": "node scripts/check-navigation-contracts.mjs",
 		"test:supabase": "supabase migration up --local && supabase db lint --local --level warning && supabase test db --local",

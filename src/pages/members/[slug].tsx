@@ -2,6 +2,7 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
+import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import {
 	getMemberArchive,
 	type MemberArchive,
@@ -103,6 +104,12 @@ export default function MemberDetailPage({
 			<NextSeo
 				title={`${member.name}のアーカイブ`}
 				description={`${member.name}に関連する、出典確認済みのイベント・動画・楽曲・衣装・節目を横断して辿れます。`}
+				{...ogMeta(
+					buildGeneratedOgImageUrl({
+						title: `${member.name}のアーカイブ`,
+					}),
+					member.name,
+				)}
 			/>
 			<DefaultLayout>
 				<div

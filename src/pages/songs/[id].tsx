@@ -1,6 +1,7 @@
 import ArchiveEntityDetail from "@/components/archive/ArchiveEntityDetail";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { NextSeo } from "@/components/seo";
+import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import { getSong } from "@/lib/supabase/getSongs";
 import type { Song } from "@/types/archive";
 
@@ -26,6 +27,13 @@ export default function SongDetailPage({ song }: { song: Song }) {
 			<NextSeo
 				title={song.title}
 				description={song.description || `${song.title}の出典付き楽曲記録`}
+				{...ogMeta(
+					buildGeneratedOgImageUrl({
+						title: song.title,
+						image: song.image_url,
+					}),
+					song.title,
+				)}
 			/>
 			<DefaultLayout>
 				<ArchiveEntityDetail
