@@ -54,7 +54,7 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-leaflet": "^5.0.0",
-		"react-share": "^5.1.0",
+		"react-share": "^6.0.0",
 		"react-toastify": "^11.0.3",
 		"sass": "^1.69.6",
 		"string-width": "^8.0.0",
