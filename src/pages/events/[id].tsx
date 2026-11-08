@@ -237,6 +237,7 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 							<section className={styles.main}>
 								<p className={styles.sectionLabel}>ABOUT THIS DAY</p>
 								<h2>この日の記録</h2>
+								{Number(id) === 167 && <p><Link href={`/events/${id}/exhibit`}>一公演の展示室で、発信と出典をたどる →</Link></p>}
 								<div
 									className={styles.description}
 									// biome-ignore lint/security/noDangerouslySetInnerHtml: content is escaped before links are added

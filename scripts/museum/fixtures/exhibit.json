@@ -1,0 +1,226 @@
+{
+	"fictional": true,
+	"cards": [
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "unknown",
+			"published_on": null,
+			"original_publication_confirmed": false,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-0",
+			"speaker": "検証公式媒体",
+			"member_id": null,
+			"phase": "day",
+			"relation_kind": "performance_report",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。0",
+			"locator": "架空の検証箇所 0",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/0",
+				"title": "架空の検証資料0",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		},
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "unknown",
+			"published_on": null,
+			"original_publication_confirmed": false,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-1",
+			"speaker": "検証話者2",
+			"member_id": 2,
+			"phase": "before",
+			"relation_kind": "announcement",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。1",
+			"locator": "架空の検証箇所 1",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/1",
+				"title": "架空の検証資料1",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		},
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "unknown",
+			"published_on": null,
+			"original_publication_confirmed": false,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-2",
+			"speaker": "検証話者4",
+			"member_id": 4,
+			"phase": "before",
+			"relation_kind": "announcement",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。2",
+			"locator": "架空の検証箇所 2",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/2",
+				"title": "架空の検証資料2",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		},
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "unknown",
+			"published_on": null,
+			"original_publication_confirmed": false,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-3",
+			"speaker": "検証話者E",
+			"member_id": null,
+			"phase": "after",
+			"relation_kind": "reflection",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。3",
+			"locator": "架空の検証箇所 3",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/3",
+				"title": "架空の検証資料3",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		},
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "unknown",
+			"published_on": null,
+			"original_publication_confirmed": false,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-4",
+			"speaker": "検証話者3",
+			"member_id": 3,
+			"phase": "after",
+			"relation_kind": "reflection",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。4",
+			"locator": "架空の検証箇所 4",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/4",
+				"title": "架空の検証資料4",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		},
+		{
+			"event_id": 167,
+			"published_at": null,
+			"date_precision": "day",
+			"published_on": "2025-03-07",
+			"original_publication_confirmed": true,
+			"review_status": "pending",
+			"usage_status": "link_only",
+			"representation_type": "paraphrase",
+			"verification_status": "supported",
+			"retrieved_on": "2026-11-08",
+			"id": "fixture-5",
+			"speaker": "検証話者3",
+			"member_id": 3,
+			"phase": "recollection",
+			"relation_kind": "reflection",
+			"summary": "架空の検証データ。実際の公演内容や本人の発言を示すものではありません。5",
+			"locator": "架空の検証箇所 5",
+			"original_date_label": "架空データの日時精度の検証",
+			"source": {
+				"url": "https://example.com/fixture/5",
+				"title": "架空の検証資料5",
+				"publisher": "検証用媒体",
+				"availability_status": "available"
+			},
+			"schema_version": "1.0",
+			"created_at": "2026-11-08T02:27:23.077853+00:00",
+			"updated_at": "2026-11-08T02:27:23.077853+00:00"
+		}
+	],
+	"people": [
+		{
+			"id": "fixture-person-1",
+			"member_id": 1,
+			"name": "検証話者1",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		},
+		{
+			"id": "fixture-person-2",
+			"member_id": 2,
+			"name": "検証話者2",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		},
+		{
+			"id": "fixture-person-3",
+			"member_id": 3,
+			"name": "検証話者3",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		},
+		{
+			"id": "fixture-person-4",
+			"member_id": 4,
+			"name": "検証話者4",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		}
+	],
+	"accounts": [
+		{
+			"id": "fixture-account",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		}
+	],
+	"songs": [
+		{
+			"id": "fixture-song",
+			"song_id": 71,
+			"event_id": 167,
+			"claim_id": "fixture-3",
+			"schema_version": "1.0",
+			"review_status": "pending"
+		}
+	]
+}

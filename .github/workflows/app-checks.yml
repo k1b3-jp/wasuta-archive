@@ -19,3 +19,4 @@ jobs:
       - run: yarn test:pwa
       - run: yarn test:api
       - run: yarn test:navigation
+      - run: yarn test:museum
