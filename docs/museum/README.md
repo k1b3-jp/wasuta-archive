@@ -66,4 +66,4 @@ node scripts/prepare-museum-import.mjs
 
 ## 続き
 
-[調査範囲と台帳](research.md)、[データ辞書](data-dictionary.md)、[確認待ち](editorial-review.md)、[検証記録](verification.md)を参照。今回の成果は公開候補ではなく編集プレビュー。本番DB、デプロイ、外部連絡、契約は行っていない。
+[調査範囲と台帳](research.md)、[データ辞書](data-dictionary.md)、[確認待ち](editorial-review.md)、[検証記録](verification.md)、[ロールバック](rollback.md)を参照。今回の成果は公開候補ではなく編集プレビュー。このブランチだけでは本番DBを変更していない。mainへのmergeは `.github/workflows/supabase-deploy.yml` が `supabase db push --yes --remote` を実行し、追加した2本のmigrationを本番へ適用する。外部連絡と契約は行っていない。
