@@ -4,6 +4,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingExcludes: {
+    "/archive/exhibit-preview/*": ["./data/research/museum/**/*"],
+  },
   experimental: {
     useTypeScriptCli: true,
   },

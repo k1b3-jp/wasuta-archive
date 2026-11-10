@@ -44,3 +44,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .gstack/
+
+# Private research payloads, API cursors and owner-supplied X exports
+/.local/museum/
+
+# Unapproved museum research and editorial screenshots stay local
+/data/research/museum/*.jsonl
+/data/research/museum/*.csv
+/data/research/museum/x/
+/data/import/museum/
+/docs/museum/screenshots/
