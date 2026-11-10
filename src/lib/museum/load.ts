@@ -16,20 +16,38 @@ function publicClient(): SupabaseClient {
 }
 
 export function isMissingMuseumRelation(
-	error: { code?: string; message?: string } | null | undefined,
+	error: { code?: string } | null | undefined,
 ) {
-	if (!error) return false;
-	const message = error.message ?? "";
-	return (
-		error.code === "PGRST205" ||
-		error.code === "42P01" ||
-		error.code === "PGRST106" ||
-		/could not find the table/i.test(message) ||
-		/does not exist/i.test(message)
-	);
+	return error?.code === "PGRST205" || error?.code === "42P01";
 }
 
-// One indexed lookup. Missing tables or RPCs mean "no public card", not a page error.
+function logAndThrow(error: { code?: string; message?: string }): never {
+	console.error(error);
+	throw error;
+}
+
+// Missing museum relations become an empty list. Every other error is logged and rethrown unchanged.
+export function museumCardsOrEmpty<T>(
+	error: { code?: string; message?: string } | null | undefined,
+	rows: T[] | null,
+): T[] {
+	if (!error) return rows ?? [];
+	if (isMissingMuseumRelation(error)) return [];
+	logAndThrow(error);
+}
+
+export function publicExhibitLinkVisible(
+	error: { code?: string; message?: string } | null | undefined,
+	rows: unknown[] | null,
+): boolean {
+	try {
+		return museumCardsOrEmpty(error, rows).length > 0;
+	} catch {
+		return false;
+	}
+}
+
+// One indexed lookup. A missing museum table means no public card, not a page error.
 export async function hasPublicExhibitCard(eventId: number): Promise<boolean> {
 	try {
 		const { data, error } = await publicClient()
@@ -39,9 +57,9 @@ export async function hasPublicExhibitCard(eventId: number): Promise<boolean> {
 			.eq("status", "published")
 			.eq("verification_status", "verified")
 			.limit(1);
-		if (error) return false;
-		return (data?.length ?? 0) > 0;
-	} catch {
+		return publicExhibitLinkVisible(error, data);
+	} catch (error) {
+		console.error(error);
 		return false;
 	}
 }
@@ -72,19 +90,11 @@ export async function loadExhibit(eventId: number): Promise<Exhibit | null> {
 			.select("relation_type,songs(song_id,title)")
 			.eq("event_id", eventId),
 	]);
-	const cardsUnavailable = isMissingMuseumRelation(cards.error);
-	if (
-		event.error ||
-		members.error ||
-		(!cardsUnavailable && cards.error) ||
-		songs.error
-	) {
-		const failure = new Error("Exhibit data could not be loaded");
-		if (cardsUnavailable) failure.cause = cards.error;
-		throw failure;
+	const cardRows = museumCardsOrEmpty(cards.error, cards.data);
+	for (const error of [event.error, members.error, songs.error]) {
+		if (error) logAndThrow(error);
 	}
 	if (!event.data) return null;
-	const cardRows = cardsUnavailable ? [] : (cards.data ?? []);
 	return {
 		event: event.data,
 		members: members.data ?? [],
