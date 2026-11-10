@@ -1,7 +1,13 @@
 begin;
-select plan(24);
+select plan(30);
 select ok(not has_schema_privilege('anon','archive_research','USAGE'),'anonymous has no research schema access');
 select ok(not has_schema_privilege('authenticated','archive_research','USAGE'),'authenticated has no research schema access');
+select ok(not has_schema_privilege('service_role','archive_research','USAGE'),'service role has no research schema access');
+select ok(not has_table_privilege('service_role','archive_research.source_versions','SELECT'),'service role cannot read source bodies');
+select ok(not has_function_privilege('service_role','archive_research.suppress_source(text,text)','EXECUTE'),'service role cannot call suppression');
+select ok(not has_sequence_privilege('public','archive_research.collection_audit_audit_id_seq','USAGE'),'public cannot use the audit sequence');
+select ok(not has_sequence_privilege('anon','archive_research.collection_audit_audit_id_seq','USAGE'),'anonymous cannot use the audit sequence');
+select ok(not has_sequence_privilege('authenticated','archive_research.collection_audit_audit_id_seq','USAGE'),'authenticated cannot use the audit sequence');
 select ok(not has_table_privilege('anon','archive_research.source_versions','SELECT'),'anonymous cannot read source bodies');
 select ok(not has_table_privilege('authenticated','archive_research.source_versions','SELECT'),'ordinary authentication cannot read source bodies');
 select ok(not has_function_privilege('anon','archive_research.suppress_source(text,text)','EXECUTE'),'anonymous cannot call suppression');

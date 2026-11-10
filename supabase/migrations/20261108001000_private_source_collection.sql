@@ -129,6 +129,7 @@ create table archive_research.collection_audit (
 );
 alter table archive_research.collection_audit enable row level security;
 revoke all on archive_research.collection_audit from public,anon,authenticated,service_role;
+revoke all on sequence archive_research.collection_audit_audit_id_seq from public, anon, authenticated;
 
 -- Different period jobs share this account lock before binding immutable identity.
 create function archive_research.lock_account(target_key text, expected_user_id text) returns void

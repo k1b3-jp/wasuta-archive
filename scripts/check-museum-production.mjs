@@ -9,7 +9,7 @@ for (const path of [
 	const response = await fetch(origin + path),
 		body = await response.text();
 	assert.equal(response.status, 404);
-	assert.ok(!body.includes("松田は自己紹介記事"));
+	assert.ok(!body.includes("MUSEUM_DUMMY_MARKER_PREVIEW"));
 }
 for (const path of [
 	"/events/167/exhibit",
@@ -18,8 +18,8 @@ for (const path of [
 	const response = await fetch(origin + path),
 		body = await response.text();
 	assert.equal(response.status, 200);
-	assert.ok(!body.includes("hazuki-year-end"));
-	assert.ok(!body.includes("松田は自己紹介記事"));
+	assert.ok(!body.includes("MUSEUM_DUMMY_MARKER_PUBLIC"));
+	assert.ok(!body.includes("MUSEUM_DUMMY_MARKER_PREVIEW"));
 }
 const trace = JSON.parse(
 	readFileSync(

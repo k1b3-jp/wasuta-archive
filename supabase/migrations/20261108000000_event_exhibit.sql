@@ -41,7 +41,7 @@ revoke insert,update,delete on public.event_exhibit_cards from anon,authenticate
 
 -- Editors can revise only unpublished passages; all mutations are audited.
 create function public.save_event_exhibit_draft(payload jsonb) returns bigint
-language plpgsql security definer set search_path=public as $$
+language plpgsql security definer set search_path = public, pg_temp as $$
 declare saved_id bigint;
 begin
   if not public.has_role_at_least('editor') then raise exception 'editor required' using errcode='42501'; end if;
@@ -62,7 +62,7 @@ begin
 end $$;
 
 create function public.transition_event_exhibit(target_id bigint, next_status text, reason text) returns void
-language plpgsql security definer set search_path=public as $$
+language plpgsql security definer set search_path = public, pg_temp as $$
 declare card public.event_exhibit_cards; required_role text;
 begin
   required_role := case when next_status='review' then 'editor' else 'reviewer' end;
@@ -94,7 +94,7 @@ grant execute on function public.save_event_exhibit_draft(jsonb),public.transiti
 
 -- Human reviewers explicitly verify the passage's typed evidence before publication.
 create function public.review_event_exhibit_evidence(target_id bigint, review_reason text) returns void
-language plpgsql security definer set search_path=public as $$
+language plpgsql security definer set search_path = public, pg_temp as $$
 declare card public.event_exhibit_cards;
 begin
   if not public.has_role_at_least('reviewer') then raise exception 'reviewer required' using errcode='42501'; end if;

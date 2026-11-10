@@ -12,6 +12,7 @@ import { ArticleJsonLd, NextSeo } from "@/components/seo";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useClearQueryParam } from "@/hooks/useClearQueryParam";
+import { hasPublicExhibitCard } from "@/lib/museum/load";
 import { buildGeneratedOgImageUrl, ogMeta } from "@/lib/ogImage";
 import { createYoutubeLink } from "@/lib/supabase/createYoutubeLink";
 import { getMovies } from "@/lib/supabase/getMovies";
@@ -26,6 +27,7 @@ import styles from "./eventDetail.module.scss";
 interface EventDetailsProps {
 	event: any;
 	youtubeLinks: any[];
+	showExhibitLink?: boolean;
 }
 
 const defaultImageUrl = "/event-placeholder.png";
@@ -73,7 +75,11 @@ export async function getServerSideProps({
 	}
 
 	if (!event) return { notFound: true };
-	return { props: { event, youtubeLinks } };
+	let showExhibitLink = false;
+	if (Number(id) === 167) {
+		showExhibitLink = await hasPublicExhibitCard(Number(id));
+	}
+	return { props: { event, youtubeLinks, showExhibitLink } };
 }
 
 // URLと改行を適切に扱う
@@ -119,7 +125,11 @@ const formatDescription = (description: string): string => {
 	return sanitizedDescription;
 };
 
-const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
+const EventDetailsPage = ({
+	event,
+	youtubeLinks,
+	showExhibitLink = false,
+}: EventDetailsProps) => {
 	const { isLoggedIn, isAdmin } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -237,7 +247,13 @@ const EventDetailsPage = ({ event, youtubeLinks }: EventDetailsProps) => {
 							<section className={styles.main}>
 								<p className={styles.sectionLabel}>ABOUT THIS DAY</p>
 								<h2>この日の記録</h2>
-								{Number(id) === 167 && <p><Link href={`/events/${id}/exhibit`}>一公演の展示室で、発信と出典をたどる →</Link></p>}
+								{showExhibitLink && (
+									<p>
+										<Link href={`/events/${id}/exhibit`}>
+											一公演の展示室で、発信と出典をたどる →
+										</Link>
+									</p>
+								)}
 								<div
 									className={styles.description}
 									// biome-ignore lint/security/noDangerouslySetInnerHtml: content is escaped before links are added
